@@ -98,6 +98,8 @@ class PopupElement extends HTMLElement {
                 backdrop.style.zIndex = '9999';
                 hello(backdrop);
 
+                this.dispatchEvent(new Event('open'));
+
             } else {
                 if (! this.menu.hidden) {
                     this.button.focus();
@@ -111,6 +113,9 @@ class PopupElement extends HTMLElement {
                     goodbye(this.menu, {
                         finish: () => this.menu.hidden = true
                     });
+
+                    this.dispatchEvent(new Event('close'));
+
                 }
 
             }

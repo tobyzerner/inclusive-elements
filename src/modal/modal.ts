@@ -85,7 +85,7 @@ class ModalElement extends HTMLElement {
 
                 const autofocus = this.querySelector<HTMLElement>('[autofocus]');
                 if (autofocus) {
-                    setTimeout(() => autofocus.focus());
+                    autofocus.focus();
                 } else {
                     (this.firstElementChild as HTMLElement)?.focus();
                 }
@@ -94,6 +94,8 @@ class ModalElement extends HTMLElement {
                     this.inertCache.set(el, (el as any).inert);
                     (el as any).inert = true;
                 });
+
+                this.dispatchEvent(new Event('open'));
 
             } else {
                 this.inertCache.forEach((inert, el) => {
@@ -112,6 +114,9 @@ class ModalElement extends HTMLElement {
                 goodbye(this, {
                     finish: () => this.hidden = true
                 });
+
+                this.dispatchEvent(new Event('close'));
+
             }
         }
     }
