@@ -12,6 +12,7 @@
     "dist",
     "README.md"
   ],
+  "sideEffects": false,
   "scripts": {
     "build": "rollup -c",
     "build:watch": "rollup -cw"
