@@ -14,10 +14,9 @@ class PopupElement extends HTMLElement {
         let shadow = this.attachShadow({ mode: 'open' });
 
         const template = document.createElement('template');
-        template.innerHTML = `
-            <div part="backdrop" hidden style="position: fixed; top: 0; left: 0; right: 0; bottom: 0"></div>
-            <slot></slot>
-        `;
+        template.innerHTML =
+            '<div part="backdrop" hidden style="position: fixed; top: 0; left: 0; right: 0; bottom: 0"></div>' +
+            '<slot></slot>';
         shadow.appendChild(template.content.cloneNode(true));
         (this.shadowRoot!.firstElementChild as HTMLElement).onclick = () => this.open = false;
     }

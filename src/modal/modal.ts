@@ -21,10 +21,9 @@ class ModalElement extends HTMLElement {
         let shadow = this.attachShadow({mode: 'open'});
 
         const template = document.createElement('template');
-        template.innerHTML = `
-            <div part="backdrop" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0"></div>
-            <div part="content" style="position: relative"><slot></slot></div>
-        `;
+        template.innerHTML =
+            '<div part="backdrop" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0"></div>' +
+            '<div part="content" style="position: relative"><slot></slot></div>';
         shadow.appendChild(template.content.cloneNode(true));
 
         shadow.querySelector('[part=backdrop]')?.addEventListener('click', () => {
