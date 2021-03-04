@@ -30,15 +30,20 @@ window.customElements.define('ui-modal', ModalElement);
 ## Behavior
 
 - The `<ui-modal>` element must be a direct child of `<body>`.
+
 - It should contain a single child with the role `dialog` and an appropriate label. The `aria-modal` attribute will be automatically set to `true`.
-- When the `hidden` attribute is removed from the `<ui-modal>` element, the dialog is opened.
+
+- When the `open` attribute is added to the `<ui-modal>` element, the dialog is opened.
+
 - Upon opening:
     - Focus will be moved to the first element inside the dialog that has the `autofocus` attribute. If none is found, focus will be moved to the dialog element itself.
     - The `inert` attribute will be added to all direct children of `<body>`.
+
 - The dialog will be closed if:
     - The Escape key is pressed.
     - The backdrop is clicked, unless the `<ui-modal>` element has the `static` attribute.
-    - The `hidden` attribute is added.
+    - The `open` attribute is removed, or the `close()` method is called.
+
 - Upon closing:
     - Focus will be returned to the element that invoked the dialog. If this element has a role of `menuitem`, its associated menu button will be focused instead.
     - The `inert` attribute on all direct children of `<body>` will be set back to their previous values.
