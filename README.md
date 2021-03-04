@@ -14,11 +14,11 @@ npm install inclusive-elements --save
 
 ## Elements
 
-- [Alerts](alerts)
-- [Menu](menu)
-- [Modal](modal)
-- [Popup](popup)
-- [Tooltip](tooltip)
+- [Alerts](src/alerts)
+- [Menu](src/menu)
+- [Modal](src/modal)
+- [Popup](src/popup)
+- [Tooltip](src/tooltip)
 
 ## Contributing
 
