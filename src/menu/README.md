@@ -13,7 +13,7 @@ window.customElements.define('ui-menu', MenuElement);
 
 ```html
 <ui-popup placement="bottom-start">
-  <button>
+  <button type="button">
     Menu <span aria-hidden="true">&#x25be;</span>
   </button>
   <ui-menu hidden>

@@ -60,7 +60,7 @@ class PopupElement extends HTMLElement {
     }
 
     private get button(): HTMLElement {
-        return this.children[0] as HTMLElement;
+        return this.querySelector('button, [role=button]') as HTMLElement;
     }
 
     private get menu(): HTMLElement {
