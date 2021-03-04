@@ -9,15 +9,21 @@ window.customElements.define('ui-tooltip', TooltipElement);
 ```
 
 ```html
+<!-- Tooltip as primary label -->
 <button>
-  <svg><!-- icon --></svg>
-  <ui-tooltip class="visually-hidden">More controls</ui-tooltip>
+  <svg><use href="#cog"/></svg>
+  <ui-tooltip class="visually-hidden">Settings</ui-tooltip>
+</button>
+
+<!-- Tooltip as auxiliary description -->
+<button aria-describedby="settings-description">
+  <svg><use href="#cog"/></svg>
+  <span class="visually-hidden">Settings</span>
+  <ui-tooltip id="settings-description" hidden>View and manage settings</ui-tooltip>
 </button>
 ```
 
 ## Behavior
-
-- The `<ui-tooltip>` element contains the primary label for the parent element. It can be hidden by applying a [`visually-hidden` class](https://www.a11yproject.com/posts/2013-01-11-how-to-hide-content/).
 
 - When the parent element (`<button>` in the example above) is hovered or focused, the contents of `<ui-tooltip>` will be cloned into a new element, appended to `<body>`, and positioned next to the parent element using [Placement.js](https://github.com/tobyzerner/placement.js) as per the `placement` attribute.
 
@@ -41,7 +47,7 @@ TooltipElement.delay = 100;
   tooltip-class="tooltip"
   placement="top"
   delay="100"
-></ui-tooltip>
+>
 ```
 
 ```css
