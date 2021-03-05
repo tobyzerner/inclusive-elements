@@ -21,7 +21,7 @@
     "@rollup/plugin-multi-entry": "^4.0.0",
     "@rollup/plugin-node-resolve": "^11.2.0",
     "@rollup/plugin-typescript": "^8.2.0",
-    "hello-goodbye": "^0.1.0-beta.2",
+    "hello-goodbye": "^0.1.0-beta.3",
     "placement.js": "^1.0.0-beta.3",
     "rollup": "^2.40.0",
     "rollup-plugin-filesize": "^9.1.1",
