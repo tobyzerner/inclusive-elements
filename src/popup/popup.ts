@@ -50,7 +50,12 @@ class PopupElement extends HTMLElement {
 
         this.menu.addEventListener('click', e => {
             const target = e.target instanceof Element ? e.target : null;
-            if (target?.getAttribute('role')?.startsWith('menuitem') || target?.closest('[role^=menuitem]')) {
+            // TODO: better criteria for closing the popup?
+            if (
+                target?.getAttribute('role') === 'menuitem'
+                || target?.getAttribute('role') === 'menuitemradio'
+                || target?.closest('[role=menuitem], [role=menuitemradio]')
+            ) {
                 this.open = false;
             }
         });
