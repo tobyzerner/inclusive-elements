@@ -51,6 +51,10 @@ class ModalElement extends HTMLElement {
         });
     }
 
+    public disconnectedCallback(): void {
+        this.undoInert();
+    }
+
     get open() {
         return this.hasAttribute('open');
     }
@@ -73,6 +77,13 @@ class ModalElement extends HTMLElement {
         if (this.dispatchEvent(event)) {
             this.open = false;
         }
+    }
+
+    private undoInert() {
+        this.inertCache.forEach((inert, el) => {
+            (el as any).inert = false;
+        });
+        this.inertCache.clear();
     }
 
     public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -98,10 +109,7 @@ class ModalElement extends HTMLElement {
                 this.dispatchEvent(new Event('open'));
 
             } else {
-                this.inertCache.forEach((inert, el) => {
-                    (el as any).inert = inert;
-                });
-                this.inertCache.clear();
+                this.undoInert();
 
                 if (this.trigger) {
                     if (this.trigger.getAttribute('role') === 'menuitem') {
@@ -116,7 +124,6 @@ class ModalElement extends HTMLElement {
                 });
 
                 this.dispatchEvent(new Event('close'));
-
             }
         }
     }
