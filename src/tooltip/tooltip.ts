@@ -8,6 +8,7 @@ class TooltipElement extends HTMLElement {
 
     private tooltip?: HTMLElement;
     private timeout?: number;
+    private observer?: MutationObserver;
 
     public connectedCallback(): void {
         if (this.parent) {
@@ -16,7 +17,23 @@ class TooltipElement extends HTMLElement {
 
             this.parent.addEventListener('mouseleave', this.afterDelay.bind(this, this.hide));
             this.parent.addEventListener('blur', this.hide.bind(this));
+            this.parent.addEventListener('click', this.hide.bind(this));
+
+            this.observer = new MutationObserver(mutations => {
+                mutations.forEach(mutation => {
+                    if (mutation.attributeName === 'disabled') {
+                        this.hide();
+                    }
+                });
+            });
+
+            this.observer.observe(this.parent, { attributes: true });
         }
+    }
+
+    public disconnectedCallback(): void {
+        this.hide();
+        this.observer.disconnect();
     }
 
     private get parent(): HTMLElement {
