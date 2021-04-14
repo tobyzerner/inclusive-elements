@@ -40,7 +40,7 @@ class PopupElement extends HTMLElement {
         });
 
         this.addEventListener('keydown', e => {
-            if (e.key === 'Escape' && ! this.menu.hidden) {
+            if (e.key === 'Escape' && this.open) {
                 e.preventDefault();
                 e.stopPropagation();
                 this.open = false;
