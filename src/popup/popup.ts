@@ -22,6 +22,9 @@ class PopupElement extends HTMLElement {
     }
 
     public connectedCallback(): void {
+        (this.shadowRoot!.firstElementChild as HTMLElement).hidden = true;
+        this.menu.hidden = true;
+
         this.button.setAttribute('aria-haspopup', 'true');
         this.button.setAttribute('aria-expanded', 'false');
 
