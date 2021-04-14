@@ -1,5 +1,5 @@
 import { place } from 'placement.js';
-import { goodbye, hello } from 'hello-goodbye';
+import { cancel, goodbye, hello } from 'hello-goodbye';
 
 class PopupElement extends HTMLElement {
     static get observedAttributes() {
@@ -56,6 +56,12 @@ class PopupElement extends HTMLElement {
         });
 
         this.open = false;
+    }
+
+    public disconnectedCallback(): void {
+        const backdrop = this.shadowRoot!.firstElementChild! as HTMLElement;
+        cancel(backdrop);
+        cancel(this.menu);
     }
 
     private get button(): HTMLElement {
