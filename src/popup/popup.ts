@@ -44,10 +44,7 @@ class PopupElement extends HTMLElement {
                 e.preventDefault();
                 e.stopPropagation();
                 this.open = false;
-            }
-
-            else if (e.key === 'Tab' && ! this.menu.hidden) {
-                this.open = false;
+                this.button.focus();
             }
         });
 
@@ -111,7 +108,6 @@ class PopupElement extends HTMLElement {
 
             } else {
                 if (! this.menu.hidden) {
-                    this.button.focus();
                     this.button.setAttribute('aria-expanded', 'false');
 
                     const backdrop = this.shadowRoot!.firstElementChild! as HTMLElement;
@@ -124,9 +120,7 @@ class PopupElement extends HTMLElement {
                     });
 
                     this.dispatchEvent(new Event('close'));
-
                 }
-
             }
         }
     }
