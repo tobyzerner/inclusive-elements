@@ -15,19 +15,35 @@
   "sideEffects": false,
   "scripts": {
     "build": "rollup -c",
-    "build:watch": "rollup -cw"
+    "build:watch": "rollup -cw",
+    "release": "release-it"
   },
   "devDependencies": {
+    "@release-it/keep-a-changelog": "^2.2.2",
     "@rollup/plugin-multi-entry": "^4.0.0",
     "@rollup/plugin-node-resolve": "^11.2.0",
     "@rollup/plugin-typescript": "^8.2.0",
     "hello-goodbye": "^0.1.0-beta.3",
-    "placement.js": "^1.0.0-beta.3",
+    "placement.js": "^1.0.0-beta.4",
+    "release-it": "^14.6.1",
     "rollup": "^2.40.0",
     "rollup-plugin-filesize": "^9.1.1",
     "rollup-plugin-terser": "^7.0.2",
     "tslib": "^2.1.0",
     "typescript": "^4.2.2",
     "wicg-inert": "^3.1.1"
+  },
+  "release-it": {
+    "github": {
+      "release": true
+    },
+    "plugins": {
+      "@release-it/keep-a-changelog": {
+        "filename": "CHANGELOG.md"
+      }
+    },
+    "hooks": {
+      "after:bump": "npm run build"
+    }
   }
 }
