@@ -1,5 +1,5 @@
 import { goodbye, hello } from 'hello-goodbye';
-import { place } from 'placement.js';
+import placement from 'placement.js';
 
 class TooltipElement extends HTMLElement {
     public static delay: number = 100;
@@ -49,8 +49,8 @@ class TooltipElement extends HTMLElement {
         hello(tooltip);
         tooltip.innerHTML = this.innerHTML;
 
-        place(this.parent, tooltip, {
-            placement: this.getAttribute('placement') as any || TooltipElement.placement
+        placement(this.parent, tooltip, {
+            placement: this.getAttribute('placement') as any || TooltipElement.placement,
         });
     }
 

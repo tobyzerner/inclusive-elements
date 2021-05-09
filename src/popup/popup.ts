@@ -1,4 +1,4 @@
-import { place } from 'placement.js';
+import placement from 'placement.js';
 import { cancel, goodbye, hello } from 'hello-goodbye';
 
 class PopupElement extends HTMLElement {
@@ -100,8 +100,8 @@ class PopupElement extends HTMLElement {
                 this.menu.style.zIndex = '10000';
                 this.button.setAttribute('aria-expanded', 'true');
 
-                place(this.button, this.menu, {
-                    placement: this.getAttribute('placement') as any
+                placement(this.button, this.menu, {
+                    placement: this.getAttribute('placement') as any || 'bottom'
                 });
 
                 const backdrop = this.shadowRoot!.firstElementChild! as HTMLElement;
