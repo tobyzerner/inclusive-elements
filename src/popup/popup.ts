@@ -97,7 +97,6 @@ class PopupElement extends HTMLElement {
                 this.menu.hidden = false;
                 hello(this.menu);
 
-                this.menu.style.zIndex = '10000';
                 this.button.setAttribute('aria-expanded', 'true');
 
                 placement(this.button, this.menu, {
@@ -106,7 +105,6 @@ class PopupElement extends HTMLElement {
 
                 const backdrop = this.shadowRoot!.firstElementChild! as HTMLElement;
                 backdrop.hidden = false;
-                backdrop.style.zIndex = '9999';
                 hello(backdrop);
 
                 this.dispatchEvent(new Event('open'));
