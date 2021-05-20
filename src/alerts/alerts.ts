@@ -6,7 +6,7 @@ type AlertOptions = {
 }
 
 class AlertsElement extends HTMLElement {
-    public static duration: number = 5000;
+    public static duration: number = 10000;
 
     private timeouts: WeakMap<HTMLElement, number> = new Map();
 
