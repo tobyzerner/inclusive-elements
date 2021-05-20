@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Tooltip: Fix behavior on touch devices.
+- Update Placement.js to fix incorrect positions when horizontally scrolled.
 
 ## [0.1.0-beta.5] - 2021-05-18
 ### Changed
