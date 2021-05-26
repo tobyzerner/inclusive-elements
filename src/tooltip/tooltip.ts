@@ -47,13 +47,15 @@ class TooltipElement extends HTMLElement {
         this.hide();
         this.observer.disconnect();
 
-        this.parent.removeEventListener('touchstart', this.handleTouch);
-        this.parent.removeEventListener('mouseenter', this.handleMouseEnter);
-        this.parent.removeEventListener('focus', this.handleFocus);
+        if (this.parent) {
+            this.parent.removeEventListener('touchstart', this.handleTouch);
+            this.parent.removeEventListener('mouseenter', this.handleMouseEnter);
+            this.parent.removeEventListener('focus', this.handleFocus);
 
-        this.parent.removeEventListener('mouseleave', this.handleMouseLeave);
-        this.parent.removeEventListener('blur', this.handleBlur);
-        this.parent.removeEventListener('click', this.handleBlur);
+            this.parent.removeEventListener('mouseleave', this.handleMouseLeave);
+            this.parent.removeEventListener('blur', this.handleBlur);
+            this.parent.removeEventListener('click', this.handleBlur);
+        }
 
         document.removeEventListener('touchstart', this.handleBlur);
     }
