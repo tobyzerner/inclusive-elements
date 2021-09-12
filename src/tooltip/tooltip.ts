@@ -15,16 +15,12 @@ class TooltipElement extends HTMLElement {
     private handleFocus = this.show.bind(this);
     private handleMouseLeave = this.afterDelay.bind(this, this.hide);
     private handleBlur = this.hide.bind(this);
-    private handleTouch = this.touched.bind(this);
-
-    private wasTouched = false;
 
     public connectedCallback(): void {
         this.parent = this.parentNode as HTMLElement;
 
         if (this.parent) {
             this.parent.tabIndex = this.parent.tabIndex || 0;
-            this.parent.addEventListener('touchstart', this.handleTouch);
             this.parent.addEventListener('mouseenter', this.handleMouseEnter);
             this.parent.addEventListener('focus', this.handleFocus);
 
@@ -42,8 +38,6 @@ class TooltipElement extends HTMLElement {
 
             this.observer.observe(this.parent, { attributes: true });
         }
-
-        document.addEventListener('touchstart', this.handleBlur);
     }
 
     public disconnectedCallback(): void {
@@ -51,7 +45,6 @@ class TooltipElement extends HTMLElement {
         this.observer.disconnect();
 
         if (this.parent) {
-            this.parent.removeEventListener('touchstart', this.handleTouch);
             this.parent.removeEventListener('mouseenter', this.handleMouseEnter);
             this.parent.removeEventListener('focus', this.handleFocus);
 
@@ -63,13 +56,6 @@ class TooltipElement extends HTMLElement {
         }
 
         document.removeEventListener('touchstart', this.handleBlur);
-    }
-
-    private touched(e) {
-        e.stopPropagation()
-
-        this.show();
-        this.wasTouched = true;
     }
 
     private show() {
@@ -87,10 +73,6 @@ class TooltipElement extends HTMLElement {
     }
 
     private hide() {
-        if (this.wasTouched) {
-            this.wasTouched = false;
-            return;
-        }
         clearTimeout(this.timeout);
         if (this.tooltip) {
             goodbye(this.tooltip, {
