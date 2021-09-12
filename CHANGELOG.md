@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Tooltip: Hide tooltip when Escape key is pressed. (3bcdfcc8)
+
+### Removed
+- Tooltip: Remove support for touch devices. (7e1c0e69)
+
+### Fixed
+- Tooltip: Fix parent event listeners not being removed properly on disconnect. (a75b6997)
 
 ## [0.1.0-beta.7] - 2021-05-27
 ### Fixed

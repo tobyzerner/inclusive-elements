@@ -16,7 +16,7 @@
   "scripts": {
     "build": "rollup -c",
     "build:watch": "rollup -cw",
-    "release": "release-it"
+    "release": "release-it --npm.tag=latest"
   },
   "devDependencies": {
     "@release-it/keep-a-changelog": "^2.2.2",
