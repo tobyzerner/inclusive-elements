@@ -6,6 +6,7 @@ class TooltipElement extends HTMLElement {
     public static placement: string = 'top';
     public static tooltipClass: string = 'tooltip';
 
+    private parent?: HTMLElement;
     private tooltip?: HTMLElement;
     private timeout?: number;
     private observer?: MutationObserver;
@@ -19,6 +20,8 @@ class TooltipElement extends HTMLElement {
     private wasTouched = false;
 
     public connectedCallback(): void {
+        this.parent = this.parentNode as HTMLElement;
+
         if (this.parent) {
             this.parent.tabIndex = this.parent.tabIndex || 0;
             this.parent.addEventListener('touchstart', this.handleTouch);
@@ -55,13 +58,11 @@ class TooltipElement extends HTMLElement {
             this.parent.removeEventListener('mouseleave', this.handleMouseLeave);
             this.parent.removeEventListener('blur', this.handleBlur);
             this.parent.removeEventListener('click', this.handleBlur);
+
+            this.parent = null;
         }
 
         document.removeEventListener('touchstart', this.handleBlur);
-    }
-
-    private get parent(): HTMLElement {
-        return this.parentNode as HTMLElement;
     }
 
     private touched(e) {
