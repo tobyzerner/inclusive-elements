@@ -15,6 +15,7 @@ class TooltipElement extends HTMLElement {
     private handleFocus = this.show.bind(this);
     private handleMouseLeave = this.afterDelay.bind(this, this.hide);
     private handleBlur = this.hide.bind(this);
+    private handleKeyDown = this.keyDown.bind(this);
 
     public connectedCallback(): void {
         this.parent = this.parentNode as HTMLElement;
@@ -38,6 +39,8 @@ class TooltipElement extends HTMLElement {
 
             this.observer.observe(this.parent, { attributes: true });
         }
+
+        document.addEventListener('keydown', this.handleKeyDown);
     }
 
     public disconnectedCallback(): void {
@@ -55,7 +58,13 @@ class TooltipElement extends HTMLElement {
             this.parent = null;
         }
 
-        document.removeEventListener('touchstart', this.handleBlur);
+        document.removeEventListener('keydown', this.handleKeyDown);
+    }
+
+    private keyDown(e) {
+        if (e.key === 'Escape') {
+            this.hide();
+        }
     }
 
     private show() {
