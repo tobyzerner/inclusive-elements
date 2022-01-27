@@ -1,7 +1,7 @@
+import { computePosition, flip, shift } from '@floating-ui/dom';
 import { goodbye, hello } from 'hello-goodbye';
-import placement from 'placement.js';
 
-class TooltipElement extends HTMLElement {
+export default class TooltipElement extends HTMLElement {
     public static delay: number = 100;
     public static placement: string = 'top';
     public static tooltipClass: string = 'tooltip';
@@ -10,24 +10,22 @@ class TooltipElement extends HTMLElement {
     private tooltip?: HTMLElement;
     private timeout?: number;
     private observer?: MutationObserver;
+    private showing: boolean = false;
 
-    private handleMouseEnter = this.afterDelay.bind(this, this.show);
-    private handleFocus = this.show.bind(this);
-    private handleMouseLeave = this.afterDelay.bind(this, this.hide);
-    private handleBlur = this.hide.bind(this);
-    private handleKeyDown = this.keyDown.bind(this);
+    private onMouseEnter = this.afterDelay.bind(this, this.show);
+    private onFocus = this.show.bind(this);
+    private onMouseLeave = this.afterDelay.bind(this, this.hide);
+    private onBlur = this.hide.bind(this);
 
     public connectedCallback(): void {
         this.parent = this.parentNode as HTMLElement;
 
         if (this.parent) {
-            this.parent.tabIndex = this.parent.tabIndex || 0;
-            this.parent.addEventListener('mouseenter', this.handleMouseEnter);
-            this.parent.addEventListener('focus', this.handleFocus);
-
-            this.parent.addEventListener('mouseleave', this.handleMouseLeave);
-            this.parent.addEventListener('blur', this.handleBlur);
-            this.parent.addEventListener('click', this.handleBlur);
+            this.parent.addEventListener('mouseenter', this.onMouseEnter);
+            this.parent.addEventListener('focus', this.onFocus);
+            this.parent.addEventListener('mouseleave', this.onMouseLeave);
+            this.parent.addEventListener('blur', this.onBlur);
+            this.parent.addEventListener('click', this.onBlur);
 
             this.observer = new MutationObserver(mutations => {
                 mutations.forEach(mutation => {
@@ -40,53 +38,94 @@ class TooltipElement extends HTMLElement {
             this.observer.observe(this.parent, { attributes: true });
         }
 
-        document.addEventListener('keydown', this.handleKeyDown);
+        document.addEventListener('keydown', this.onKeyDown);
+        document.addEventListener('scroll', this.onBlur);
     }
 
     public disconnectedCallback(): void {
-        this.hide();
-        this.observer.disconnect();
-
-        if (this.parent) {
-            this.parent.removeEventListener('mouseenter', this.handleMouseEnter);
-            this.parent.removeEventListener('focus', this.handleFocus);
-
-            this.parent.removeEventListener('mouseleave', this.handleMouseLeave);
-            this.parent.removeEventListener('blur', this.handleBlur);
-            this.parent.removeEventListener('click', this.handleBlur);
-
-            this.parent = null;
+        if (this.tooltip) {
+            this.tooltip.remove();
+            this.tooltip = undefined;
         }
 
-        document.removeEventListener('keydown', this.handleKeyDown);
+        if (this.parent) {
+            this.parent.removeEventListener('mouseenter', this.onMouseEnter);
+            this.parent.removeEventListener('focus', this.onFocus);
+            this.parent.removeEventListener('mouseleave', this.onMouseLeave);
+            this.parent.removeEventListener('blur', this.onBlur);
+            this.parent.removeEventListener('click', this.onBlur);
+            this.parent = undefined;
+        }
+
+        document.removeEventListener('keydown', this.onKeyDown);
+        document.removeEventListener('scroll', this.onBlur);
+
+        this.observer.disconnect();
     }
 
-    private keyDown(e) {
+    get disabled() {
+        return this.hasAttribute('disabled');
+    }
+
+    set disabled(val) {
+        if (val) {
+            this.setAttribute('disabled', '');
+        } else {
+            this.removeAttribute('disabled');
+        }
+    }
+
+    private onKeyDown = (e: KeyboardEvent): void => {
         if (e.key === 'Escape') {
             this.hide();
         }
     }
 
     private show() {
+        if (this.disabled) return;
+
         const tooltip = this.createTooltip();
 
         clearTimeout(this.timeout);
 
-        tooltip.hidden = false;
-        hello(tooltip);
-        tooltip.innerHTML = this.innerHTML;
+        if (! this.showing) {
+            tooltip.hidden = false;
+            hello(tooltip);
+            this.showing = true;
+        }
 
-        placement(this.parent, tooltip, {
+        if (tooltip.innerHTML !== this.innerHTML) {
+            tooltip.innerHTML = this.innerHTML;
+        }
+
+        tooltip.style.position = 'absolute';
+
+        computePosition(this.parent, tooltip, {
             placement: this.getAttribute('placement') as any || TooltipElement.placement,
+            middleware: [
+                shift(),
+                flip(),
+            ]
+        }).then(({ x, y, placement }) => {
+            Object.assign(tooltip.style, {
+                left: `${x}px`,
+                top: `${y}px`,
+            });
+            tooltip.dataset.placement = placement;
         });
     }
 
     private hide() {
         clearTimeout(this.timeout);
-        if (this.tooltip) {
+
+        if (this.showing) {
+            this.showing = false;
+
             goodbye(this.tooltip, {
                 finish: () => {
-                    this.tooltip && (this.tooltip.hidden = true);
+                    if (this.tooltip) {
+                        this.tooltip.hidden = true;
+                    }
                 }
             });
         }
@@ -103,11 +142,13 @@ class TooltipElement extends HTMLElement {
             this.tooltip = document.createElement('div');
             this.tooltip.className = this.getAttribute('tooltip-class') || TooltipElement.tooltipClass;
             this.tooltip.hidden = true;
+
+            this.tooltip.addEventListener('mouseenter', this.show.bind(this));
+            this.tooltip.addEventListener('mouseleave', this.afterDelay.bind(this, this.hide));
+
             document.body.appendChild(this.tooltip);
         }
 
         return this.tooltip;
     }
 }
-
-export default TooltipElement;

@@ -2,6 +2,10 @@
 
 **A custom element for building accessible tooltips.**
 
+A tooltip is a popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.
+
+## Example
+
 ```js
 import { TooltipElement } from 'inclusive-elements';
 
@@ -25,7 +29,7 @@ window.customElements.define('ui-tooltip', TooltipElement);
 
 ## Behavior
 
-- When the parent element (`<button>` in the example above) is hovered or focused, the contents of `<ui-tooltip>` will be cloned into a new element, appended to `<body>`, and positioned next to the parent element using [Placement.js](https://github.com/tobyzerner/placement.js) as per the `placement` attribute.
+- When the parent element (`<button>` in the example above) is hovered or focused, the contents of `<ui-tooltip>` will be cloned into a new element, appended to `<body>`, and positioned next to the parent element using [Floating UI](https://floating-ui.com) as per the `placement` attribute.
 
 ## API
 
@@ -59,16 +63,18 @@ TooltipElement.delay = 100;
   pointer-events: none;
 }
 
-/* Transitions using hello-goodbye */
-.tooltip.enter-active,
-.tooltip.leave-active {
-  transition: all .2s;
-}
-
-.tooltip.enter-from,
-.tooltip.leave-to {
-  transform: scale(0.5);
-  opacity: 0;
+/* Transitions can be applied to the tooltip using hello-goodbye */
+@media (prefers-reduced-motion: no-preference) {
+  .tooltip.enter-active,
+  .tooltip.leave-active {
+    transition: all .2s;
+  }
+  
+  .tooltip.enter-from,
+  .tooltip.leave-to {
+    transform: scale(0.5);
+    opacity: 0;
+  }
 }
 ```
 

@@ -1,74 +1,78 @@
-class MenuElement extends HTMLElement {
+export default class MenuElement extends HTMLElement {
     public static searchDelay: number = 800;
 
     private search: string = '';
     private searchTimeout?: number;
 
     public connectedCallback(): void {
-        this.setAttribute('role', 'menu');
+        if (! this.hasAttribute('role')) {
+            this.setAttribute('role', 'menu');
+        }
 
-        // todo: mutation observer
-        Array.from(this.focusableItems).forEach(el => {
-            el.setAttribute('tabindex', '-1');
+        if (! this.hasAttribute('tabindex')) {
+            this.setAttribute('tabindex', '-1');
+        }
+
+        this.items.forEach(el => {
+            if (! el.hasAttribute('tabindex')) {
+                el.setAttribute('tabindex', '-1');
+            }
         });
 
-        document.addEventListener('keydown', this.handleKeydown);
+        this.addEventListener('keydown', this.onKeyDown);
     }
 
     public disconnectedCallback(): void {
-        document.removeEventListener('keydown', this.handleKeydown);
+        this.removeEventListener('keydown', this.onKeyDown);
     }
 
-    private handleKeydown = (e): void => {
+    get items() {
+        return Array.from(this.querySelectorAll<HTMLElement>('[role^=menuitem]'));
+    }
+
+    private onKeyDown = (e: KeyboardEvent): void => {
         if (this.hidden) return;
+
         if (e.key === 'ArrowUp') {
             this.navigate(-1);
             e.preventDefault();
-        } else if (e.key === 'ArrowDown') {
+            return;
+        }
+
+        if (e.key === 'ArrowDown') {
             this.navigate(1);
             e.preventDefault();
-        } else {
-            // Only respond to letter keys
-            if (e.key.length > 1) return;
-
-            // If the letter key is part of a key combo,
-            // let it do whatever it was going to do
-            if (e.ctrlKey || e.metaKey || e.altKey) return;
-
-            e.preventDefault();
-
-            this.search += e.key.toLowerCase();
-
-            clearTimeout(this.searchTimeout);
-            this.searchTimeout = window.setTimeout(() => {
-                this.search = '';
-            }, MenuElement.searchDelay);
-
-            this.focusableItems.some(el => {
-                if (el.textContent?.trim().toLowerCase().indexOf(this.search) === 0) {
-                    el.focus();
-                    return true;
-                }
-            });
+            return;
         }
+
+        // Search with letter keys that aren't part of a combo.
+        if (e.key.length > 1 || e.ctrlKey || e.metaKey || e.altKey) return;
+
+        this.search += e.key.toLowerCase();
+        e.preventDefault();
+
+        clearTimeout(this.searchTimeout);
+        this.searchTimeout = window.setTimeout(() => {
+            this.search = '';
+        }, MenuElement.searchDelay);
+
+        this.items.some(el => {
+            if (el.textContent?.trim().toLowerCase().indexOf(this.search) === 0) {
+                el.focus();
+                return true;
+            }
+        });
     }
 
     private navigate(step: number) {
-        const items = this.focusableItems;
-        let index = document.activeElement instanceof HTMLElement ? items.indexOf(document.activeElement) : -1;
-        index += step;
+        const items = this.items;
+        let index = (document.activeElement instanceof HTMLElement ? items.indexOf(document.activeElement) : -1) + step;
         if (index < 0) {
             index = items.length - 1;
         }
         if (index >= items.length) {
             index = 0;
         }
-        if (items[index]) items[index].focus();
-    }
-
-    get focusableItems() {
-        return Array.from(this.querySelectorAll<HTMLElement>('[role^=menuitem]'));
+        items[index]?.focus();
     }
 }
-
-export default MenuElement;

@@ -2,6 +2,14 @@
 
 **A custom element for building accessible alerts.**
 
+An alert is an element that displays a brief, important message in a way that attracts the user's attention without interrupting the user's task.
+
+The Alerts element provides a container to push alerts into, ensuring they are announced appropriately. It also manages automatic disappearance of alerts after a certain period of time.
+
+It may be styled as a "toasts" container, but careful consideration should be given to the accessibility implications of this pattern (see [Further Reading](#further-reading)).
+
+## Example
+
 ```js
 import { AlertsElement } from 'inclusive-elements';
 
@@ -34,6 +42,7 @@ alerts.speak('There was an error');
 
 ```ts
 // The default number of milliseconds that alerts will be visible for.
+// If -1, alerts will not automatically disappear.
 AlertsElement.duration = 10000;
 
 const alerts = document.querySelector('ui-alerts');
@@ -74,22 +83,26 @@ ui-alerts {
   align-items: flex-end;
 }
 
-/* Transitions using hello-goodbye */
-ui-alerts > .enter-active,
-ui-alerts > .leave-active,
-ui-alerts > .move {
-  transition: all .5s;
-}
+/* Transitions can be applied to alerts using hello-goodbye */
+@media (prefers-reduced-motion: no-preference) {
+  ui-alerts > .enter-active,
+  ui-alerts > .leave-active,
+  ui-alerts > .move {
+    transition: all .5s;
+  }
 
-ui-alerts > .enter-from {
-  transform: translateY(-100%);
-}
+  ui-alerts > .enter-from {
+    transform: translateY(-100%);
+  }
 
-ui-alerts > .leave-to {
-  opacity: 0;
+  ui-alerts > .leave-to {
+    opacity: 0;
+  }
 }
 ```
 
 ## Further Reading
 
 - [WAI-ARIA Authoring Practices: Alert](https://w3c.github.io/aria-practices/#alert)
+- [Scott O'Hara: A toast to an accessible toast...](https://www.scottohara.me/blog/2019/07/08/a-toast-to-a11y-toasts.html)
+- [Adrian Roselli: Defining 'Toast' Messages](https://adrianroselli.com/2020/01/defining-toast-messages.html)

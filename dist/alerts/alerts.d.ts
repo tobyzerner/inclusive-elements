@@ -1,16 +1,17 @@
-declare type AlertOptions = {
+export declare type AlertOptions = {
     key?: string;
     duration?: number;
 };
-declare class AlertsElement extends HTMLElement {
+export default class AlertsElement extends HTMLElement {
     static duration: number;
     private timeouts;
     private index;
     connectedCallback(): void;
     show(el: HTMLElement, options?: AlertOptions): string;
-    dismiss(elOrKey: HTMLElement | string): void;
+    dismiss(el: HTMLElement): void;
+    dismiss(key: string): void;
+    clear(): void;
     speak(message: string): void;
     private startTimeout;
     private clearTimeout;
 }
-export default AlertsElement;

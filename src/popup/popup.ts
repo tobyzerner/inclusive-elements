@@ -1,41 +1,51 @@
-import placement from 'placement.js';
+import { computePosition, flip, shift, size } from '@floating-ui/dom';
 import { cancel, goodbye, hello } from 'hello-goodbye';
+import { focusable } from 'tabbable';
 
-class PopupElement extends HTMLElement {
+export default class PopupElement extends HTMLElement {
     static get observedAttributes() {
         return ['open'];
     }
 
-    private overlay?: HTMLElement;
-
     public constructor() {
         super();
 
-        let shadow = this.attachShadow({ mode: 'open' });
-
         const template = document.createElement('template');
-        template.innerHTML =
-            '<div part="backdrop" hidden style="position: fixed; top: 0; left: 0; right: 0; bottom: 0"></div>' +
-            '<slot></slot>';
+        template.innerHTML = `
+            <div part="backdrop" hidden style="position: fixed; top: 0; left: 0; right: 0; bottom: 0"></div>
+            <slot></slot>
+        `;
+
+        const shadow = this.attachShadow({ mode: 'open' });
         shadow.appendChild(template.content.cloneNode(true));
-        (this.shadowRoot!.firstElementChild as HTMLElement).onclick = () => this.open = false;
+
+        this.backdrop!.onclick = () => this.open = false;
     }
 
     public connectedCallback(): void {
-        (this.shadowRoot!.firstElementChild as HTMLElement).hidden = true;
-        this.menu.hidden = true;
+        this.backdrop.hidden = true;
+        this.content.hidden = true;
+        this.open = false;
 
-        this.button.setAttribute('aria-haspopup', 'true');
         this.button.setAttribute('aria-expanded', 'false');
 
+        // Wait a tick before checking to see if the content is a menu, to give
+        // the Menu element time to be constructed and set the role.
+        setTimeout(() => {
+            if (this.content.getAttribute('role') === 'menu') {
+                this.button.setAttribute('aria-haspopup', 'true');
+            }
+        });
+
         this.button.addEventListener('click', () => {
-            this.open = true;
+            this.open = ! this.open;
         });
 
         this.button.addEventListener('keydown', e => {
             if (e.key === 'ArrowDown') {
                 e.preventDefault();
                 this.open = true;
+                focusable(this.content)[0]?.focus();
             }
         });
 
@@ -48,33 +58,25 @@ class PopupElement extends HTMLElement {
             }
         });
 
-        this.menu.addEventListener('click', e => {
-            const target = e.target instanceof Element ? e.target : null;
-            // TODO: better criteria for closing the popup?
-            if (
-                target?.getAttribute('role') === 'menuitem'
-                || target?.getAttribute('role') === 'menuitemradio'
-                || target?.closest('[role=menuitem], [role=menuitemradio]')
-            ) {
+        this.addEventListener('focusout', e => {
+            if (! (e.relatedTarget instanceof Node) || ! this.contains(e.relatedTarget)) {
                 this.open = false;
             }
         });
 
-        this.open = false;
+        this.content.addEventListener('click', e => {
+            if (! (e.target instanceof Element)) return;
+
+            if (e.target.closest('[role=menuitem], [role=menuitemradio]')) {
+                this.open = false;
+                this.button.focus();
+            }
+        });
     }
 
     public disconnectedCallback(): void {
-        const backdrop = this.shadowRoot!.firstElementChild! as HTMLElement;
-        cancel(backdrop);
-        cancel(this.menu);
-    }
-
-    private get button(): HTMLElement {
-        return this.querySelector('button, [role=button]') as HTMLElement;
-    }
-
-    private get menu(): HTMLElement {
-        return this.children[1] as HTMLElement;
+        cancel(this.backdrop);
+        cancel(this.content);
     }
 
     get open() {
@@ -90,43 +92,78 @@ class PopupElement extends HTMLElement {
     }
 
     public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-        if (name === 'open') {
-            if (newValue !== null) {
-                if (! this.menu.hidden) return;
+        if (name !== 'open') return;
 
-                this.menu.hidden = false;
-                hello(this.menu);
-
-                this.button.setAttribute('aria-expanded', 'true');
-
-                placement(this.button, this.menu, {
-                    placement: this.getAttribute('placement') as any || 'bottom'
-                });
-
-                const backdrop = this.shadowRoot!.firstElementChild! as HTMLElement;
-                backdrop.hidden = false;
-                hello(backdrop);
-
-                this.dispatchEvent(new Event('open'));
-
-            } else {
-                if (! this.menu.hidden) {
-                    this.button.setAttribute('aria-expanded', 'false');
-
-                    const backdrop = this.shadowRoot!.firstElementChild! as HTMLElement;
-                    goodbye(backdrop, {
-                        finish: () => backdrop.hidden = true
-                    });
-
-                    goodbye(this.menu, {
-                        finish: () => this.menu.hidden = true
-                    });
-
-                    this.dispatchEvent(new Event('close'));
-                }
-            }
+        if (newValue !== null) {
+            this.wasOpened();
+        } else {
+            this.wasClosed();
         }
     }
-}
 
-export default PopupElement;
+    private wasOpened() {
+        if (! this.content.hidden) return;
+
+        this.content.hidden = false;
+        this.backdrop.hidden = false;
+
+        hello(this.content);
+        hello(this.backdrop);
+
+        this.button.setAttribute('aria-expanded', 'true');
+
+        this.content.style.position = 'absolute';
+
+        computePosition(this.button, this.content, {
+            placement: this.getAttribute('placement') as any || 'bottom',
+            middleware: [
+                shift(),
+                flip(),
+                size(),
+            ]
+        }).then(({ x, y, placement }) => {
+            Object.assign(this.content.style, {
+                left: `${x}px`,
+                top: `${y}px`,
+            });
+            this.content.dataset.placement = placement;
+        });
+
+        const autofocus = this.content.querySelector<HTMLElement>('[autofocus]');
+        if (autofocus) {
+            autofocus.focus();
+        } else {
+            this.content.focus();
+        }
+
+        this.dispatchEvent(new Event('open'));
+    }
+
+    private wasClosed() {
+        if (this.content.hidden) return;
+
+        this.button.setAttribute('aria-expanded', 'false');
+
+        goodbye(this.backdrop, {
+            finish: () => this.backdrop.hidden = true
+        });
+
+        goodbye(this.content, {
+            finish: () => this.content.hidden = true
+        });
+
+        this.dispatchEvent(new Event('close'));
+    }
+
+    private get backdrop(): HTMLElement | undefined {
+        return this.shadowRoot?.firstElementChild as HTMLElement;
+    }
+
+    private get button(): HTMLElement | undefined {
+        return this.children[0] as HTMLElement;
+    }
+
+    private get content(): HTMLElement | undefined {
+        return this.children[1] as HTMLElement;
+    }
+}

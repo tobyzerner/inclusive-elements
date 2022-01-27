@@ -1,21 +1,28 @@
 import { hello, goodbye, move } from 'hello-goodbye';
 
-type AlertOptions = {
+export type AlertOptions = {
     key?: string,
     duration?: number,
 }
 
-class AlertsElement extends HTMLElement {
+export default class AlertsElement extends HTMLElement {
     public static duration: number = 10000;
 
     private timeouts: WeakMap<HTMLElement, number> = new Map();
-
     private index: number = 0;
 
     public connectedCallback(): void {
-        this.setAttribute('role', 'status');
-        this.setAttribute('aria-live', 'polite');
-        this.setAttribute('aria-relevant', 'additions');
+        if (! this.hasAttribute('role')) {
+            this.setAttribute('role', 'status');
+        }
+
+        if (! this.hasAttribute('aria-live')) {
+            this.setAttribute('aria-live', 'polite');
+        }
+
+        if (! this.hasAttribute('aria-relevant')) {
+            this.setAttribute('aria-relevant', 'additions');
+        }
     }
 
     public show(el: HTMLElement, options: AlertOptions = {}) {
@@ -45,10 +52,14 @@ class AlertsElement extends HTMLElement {
         return key;
     }
 
+    public dismiss(el: HTMLElement): void;
+    public dismiss(key: string): void;
     public dismiss(elOrKey: HTMLElement | string): void {
         if (typeof elOrKey === 'string') {
             const existing = this.querySelector<HTMLElement>(`[data-key="${elOrKey}"]`);
-            existing && this.dismiss(existing);
+            if (existing) {
+                this.dismiss(existing);
+            }
             return;
         }
 
@@ -59,6 +70,12 @@ class AlertsElement extends HTMLElement {
         });
 
         this.clearTimeout(elOrKey);
+    }
+
+    public clear(): void {
+        for (const child of this.children) {
+            this.dismiss(child as HTMLElement);
+        }
     }
 
     public speak(message: string): void {
@@ -89,5 +106,3 @@ class AlertsElement extends HTMLElement {
         }
     }
 }
-
-export default AlertsElement;

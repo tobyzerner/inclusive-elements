@@ -6,6 +6,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- New element: Toolbar.
+- Support for tree-shaking so unused elements won't be included in the bundle.
+- Use `prefers-reduced-motion` media queries for transition CSS examples.
+- Alerts: New `clear` method to dismiss all alerts.
+- Popup: Additional discussion and demonstration of use-cases.
+- Tooltip: Support for hovering over tooltip contents (opt-out with `pointer-events: none`).
+
+### Changed
+- External dependencies are no longer included in the bundle, meaning a bundler is required for use.
+- Modal: Use [focus-trap](https://github.com/focus-trap/focus-trap) instead of `inert` so that modals do not have to be placed as a direct child of the `<body>`.
+- Popup, Tooltip: Use [Floating UI](https://floating-ui.com) instead of Placement.js for element positioning.
+
+### Fixed
+- Set various ARIA attributes less aggressively – only if they haven't already been set.
+- Alerts: Export the `AlertOptions` type definition.
+- Menu: Attach event listeners to menu element rather than document.
+- Popup: Only add `aria-haspopup="true"` if the content has the `menu` role.
+- Popup: Close the popup if the user tabs away from it.
+- Tooltip: Hide the tooltip when the page is scrolled.
 
 ## [0.1.0-beta.8] - 2021-09-12
 ### Added

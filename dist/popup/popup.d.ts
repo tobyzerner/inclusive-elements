@@ -1,12 +1,14 @@
-declare class PopupElement extends HTMLElement {
+export default class PopupElement extends HTMLElement {
     static get observedAttributes(): string[];
-    private overlay?;
     constructor();
     connectedCallback(): void;
-    private get button();
-    private get menu();
+    disconnectedCallback(): void;
     get open(): boolean;
     set open(val: boolean);
     attributeChangedCallback(name: string, oldValue: string, newValue: string): void;
+    private wasOpened;
+    private wasClosed;
+    private get backdrop();
+    private get button();
+    private get content();
 }
-export default PopupElement;

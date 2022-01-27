@@ -1,8 +1,12 @@
 # Menu
 
-**A custom element for building accessible action menus.**
+**A custom element for building accessible menus.**
+
+A menu is a widget that offers a list of choices to the user, such as a set of actions or functions.
 
 Usually you will want to compose this element with the [Popup](../popup) element to create a "menu button". This use-case is demonstrated in the markup below.
+
+## Example
 
 ```js
 import { PopupElement, MenuElement } from 'inclusive-elements';
@@ -16,6 +20,7 @@ window.customElements.define('ui-menu', MenuElement);
   <button type="button">
     Menu <span aria-hidden="true">&#x25be;</span>
   </button>
+  
   <ui-menu hidden>
     <button role="menuitem">Item 1</button>
     <button role="menuitem">Item 2</button>

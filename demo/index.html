@@ -16,6 +16,10 @@
       box-sizing: border-box;
     }
 
+    [tabindex="-1"]:focus {
+      outline: none;
+    }
+
     [hidden] {
       display: none !important;
     }
@@ -50,7 +54,6 @@
       border: 2px solid;
       padding: .5em;
       border-radius: .5em;
-      transition: transform .2s, opacity .2s;
       transform-origin: top left;
       background: white;
       position: relative;
@@ -64,15 +67,17 @@
       margin-top: 5px;
     }
 
-    .popup.enter-active,
-    .popup.leave-active {
-      transition: transform .2s, opacity .2s;
-    }
+    @media (prefers-reduced-motion: no-preference) {
+      .popup.enter-active,
+      .popup.leave-active {
+        transition: transform .2s, opacity .2s;
+      }
 
-    .popup.enter-from,
-    .popup.leave-to {
-      transform: scale(0.5);
-      opacity: 0;
+      .popup.enter-from,
+      .popup.leave-to {
+        transform: scale(0.5);
+        opacity: 0;
+      }
     }
 
     .visually-hidden {
@@ -90,18 +95,19 @@
       padding: .5em 1em;
       border-radius: 999px;
       color: white;
-      pointer-events: none;
     }
 
-    .tooltip.enter-active,
-    .tooltip.leave-active {
-      transition: transform .2s, opacity .2s;
-    }
+    @media (prefers-reduced-motion: no-preference) {
+      .tooltip.enter-active,
+      .tooltip.leave-active {
+        transition: transform .2s, opacity .2s;
+      }
 
-    .tooltip.enter-from,
-    .tooltip.leave-to {
-      transform: scale(0.5);
-      opacity: 0;
+      .tooltip.enter-from,
+      .tooltip.leave-to {
+        transform: scale(0.5);
+        opacity: 0;
+      }
     }
 
     .menu button {
@@ -133,24 +139,26 @@
       background: rgba(0, 0, 0, 0.5);
     }
 
-    ui-modal.enter-active,
-    ui-modal.leave-active {
-      transition: opacity .2s;
-    }
+    @media (prefers-reduced-motion: no-preference) {
+      ui-modal.enter-active,
+      ui-modal.leave-active {
+        transition: opacity .2s;
+      }
 
-    ui-modal.enter-from,
-    ui-modal.leave-to {
-      opacity: 0;
-    }
+      ui-modal.enter-from,
+      ui-modal.leave-to {
+        opacity: 0;
+      }
 
-    ui-modal.enter-active::part(content),
-    ui-modal.leave-active::part(content) {
-      transition: transform .2s;
-    }
+      ui-modal.enter-active::part(content),
+      ui-modal.leave-active::part(content) {
+        transition: transform .2s;
+      }
 
-    ui-modal.enter-from::part(content),
-    ui-modal.leave-to::part(content) {
-      transform: scale(0.5);
+      ui-modal.enter-from::part(content),
+      ui-modal.leave-to::part(content) {
+        transform: scale(0.5);
+      }
     }
 
     ui-alerts {
@@ -178,26 +186,42 @@
       color: white;
     }
 
-    .alert.enter-active,
-    .alert.leave-active {
-      transition: opacity .5s, transform .5s;
+    @media (prefers-reduced-motion: no-preference) {
+      .alert.enter-active,
+      .alert.leave-active {
+        transition: opacity .5s, transform .5s;
+      }
+
+      .alert.enter-from,
+      .alert.leave-to {
+        opacity: 0;
+        transform: translateY(-100%);
+      }
+
+      .alert.move {
+        transition: transform .5s;
+      }
     }
 
-    .alert.enter-from,
-    .alert.leave-to {
-      opacity: 0;
-      transform: translateY(-100%);
-    }
-
-    .alert.move {
-      transition: transform .5s;
+    ui-toolbar {
+      display: block;
+      border: 2px solid #ccc;
+      padding: 10px;
     }
   </style>
 </head>
 <body>
 
   <ui-popup placement="bottom-start">
-    <button>Open Popup <span aria-hidden="true">&#x25be;</span></button>
+    <button>Popup <span aria-hidden="true">&#x25be;</span></button>
+    <div class="popup" hidden>
+      Hello, world!
+      <a href="#">Here is a link.</a>
+    </div>
+  </ui-popup>
+
+  <ui-popup placement="bottom-start">
+    <button>Menu <span aria-hidden="true">&#x25be;</span></button>
     <ui-menu class="popup menu" hidden>
       <button role="menuitem">One</button>
       <button role="menuitem">Two</button>
@@ -244,22 +268,15 @@
     </div>
   </template>
 
-  <script src="/node_modules/wicg-inert/dist/inert.min.js"></script>
-  <script type="module">
-    import {
-      PopupElement,
-      TooltipElement,
-      MenuElement,
-      ModalElement,
-      AlertsElement
-    } from './dist/index.js';
+  <ui-toolbar>
+    <button>One</button>
+    <button>Two</button>
+    <button>Three</button>
+    <button>Four</button>
+    <button>Five</button>
+  </ui-toolbar>
 
-    window.customElements.define('ui-popup', PopupElement);
-    window.customElements.define('ui-tooltip', TooltipElement);
-    window.customElements.define('ui-menu', MenuElement);
-    window.customElements.define('ui-modal', ModalElement);
-    window.customElements.define('ui-alerts', AlertsElement);
-  </script>
+  <script src="demo.js"></script>
 
   <script>
     function createAlert(type, message) {

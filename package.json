@@ -14,24 +14,27 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "build": "rollup -c",
+    "build": "tsc && rollup -c",
     "build:watch": "rollup -cw",
+    "build:demo": "rollup -c demo/rollup.config.js",
     "release": "release-it --npm.tag=latest"
+  },
+  "dependencies": {
+    "@floating-ui/dom": "^0.2.0",
+    "focus-trap": "^6.7.2",
+    "hello-goodbye": "^0.1.0-beta.5",
+    "tabbable": "^5.2.1"
   },
   "devDependencies": {
     "@release-it/keep-a-changelog": "^2.2.2",
-    "@rollup/plugin-multi-entry": "^4.0.0",
     "@rollup/plugin-node-resolve": "^11.2.0",
     "@rollup/plugin-typescript": "^8.2.0",
-    "hello-goodbye": "^0.1.0-beta.5",
-    "placement.js": "^1.0.0-beta.5",
     "release-it": "^14.6.1",
     "rollup": "^2.40.0",
     "rollup-plugin-filesize": "^9.1.1",
     "rollup-plugin-terser": "^7.0.2",
     "tslib": "^2.1.0",
-    "typescript": "^4.2.2",
-    "wicg-inert": "^3.1.1"
+    "typescript": "^4.2.2"
   },
   "release-it": {
     "github": {
