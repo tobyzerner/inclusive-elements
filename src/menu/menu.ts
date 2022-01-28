@@ -1,3 +1,5 @@
+import { isFocusable } from 'tabbable';
+
 export default class MenuElement extends HTMLElement {
     public static searchDelay: number = 800;
 
@@ -26,8 +28,9 @@ export default class MenuElement extends HTMLElement {
         this.removeEventListener('keydown', this.onKeyDown);
     }
 
-    get items() {
-        return Array.from(this.querySelectorAll<HTMLElement>('[role^=menuitem]'));
+    private get items() {
+        return Array.from(this.querySelectorAll<HTMLElement>('[role^=menuitem]'))
+            .filter(item => isFocusable(item));
     }
 
     private onKeyDown = (e: KeyboardEvent): void => {

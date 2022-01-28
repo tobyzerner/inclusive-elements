@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- Menu: Ensure that Arrow keys only navigate to items that are focusable.
 
 ## [0.1.0-beta.9] - 2022-01-27
 ### Added
@@ -22,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Popup, Tooltip: Use [Floating UI](https://floating-ui.com) instead of Placement.js for element positioning.
 
 ### Fixed
-- Set various ARIA attributes less aggressively – only if they haven't already been set.
+- Set various ARIA attributes less aggressively (ie. only if they haven't already been set).
 - Alerts: Export the `AlertOptions` type definition.
 - Menu: Attach event listeners to menu element rather than document.
 - Popup: Only add `aria-haspopup="true"` if the content has the `menu` role.
