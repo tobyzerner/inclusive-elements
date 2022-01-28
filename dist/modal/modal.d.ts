@@ -11,6 +11,7 @@ export default class ModalElement extends HTMLElement {
     attributeChangedCallback(name: string, oldValue: string, newValue: string): void;
     private wasOpened;
     private wasClosed;
+    private focusContent;
     private get backdrop();
     private get content();
 }

@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - Menu: Ensure that Arrow keys only navigate to items that are focusable.
+- Modal: Fix focus not being placed correctly when modal is open on creation.
 
 ## [0.1.0-beta.9] - 2022-01-27
 ### Added

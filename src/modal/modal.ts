@@ -61,6 +61,13 @@ export default class ModalElement extends HTMLElement {
                 this.close();
             }
         });
+
+        // If the modal is already open, the attributeChangedCallback will
+        // already have been called. But we've only just set the content's
+        // tabindex, so it might not have been focused yet.
+        if (this.open) {
+            this.focusContent();
+        }
     }
 
     get open() {
@@ -103,12 +110,7 @@ export default class ModalElement extends HTMLElement {
 
         this.focusTrap.activate();
 
-        const autofocus = this.querySelector<HTMLElement>('[autofocus]');
-        if (autofocus) {
-            autofocus.focus();
-        } else {
-            this.content?.focus();
-        }
+        this.focusContent();
 
         this.dispatchEvent(new Event('open'));
     }
@@ -123,6 +125,15 @@ export default class ModalElement extends HTMLElement {
         });
 
         this.dispatchEvent(new Event('close'));
+    }
+
+    private focusContent(): void {
+        const autofocus = this.querySelector<HTMLElement>('[autofocus]');
+        if (autofocus) {
+            autofocus.focus();
+        } else {
+            this.content?.focus();
+        }
     }
 
     private get backdrop(): HTMLElement | undefined {
