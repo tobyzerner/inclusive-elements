@@ -4,7 +4,7 @@ export default class MenuElement extends HTMLElement {
     private searchTimeout?;
     connectedCallback(): void;
     disconnectedCallback(): void;
-    get items(): HTMLElement[];
+    private get items();
     private onKeyDown;
     private navigate;
 }
