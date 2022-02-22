@@ -119,7 +119,14 @@ export default class PopupElement extends HTMLElement {
             middleware: [
                 shift(),
                 flip(),
-                size(),
+                size({
+                    apply: ({ width, height }) => {
+                        Object.assign(this.content.style, {
+                            maxWidth: `${width}px`,
+                            maxHeight: `${height}px`,
+                        });
+                    },
+                }),
             ]
         }).then(({ x, y, placement }) => {
             Object.assign(this.content.style, {
