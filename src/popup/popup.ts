@@ -122,9 +122,19 @@ export default class PopupElement extends HTMLElement {
                 size({
                     apply: ({ width, height }) => {
                         Object.assign(this.content.style, {
-                            maxWidth: `${width}px`,
-                            maxHeight: `${height}px`,
+                            maxWidth: '',
+                            maxHeight: '',
                         });
+
+                        const computed = getComputedStyle(this.content);
+
+                        if (! computed.maxWidth || width < parseInt(computed.maxWidth)) {
+                            this.content.style.maxWidth = `${width}px`;
+                        }
+
+                        if (! computed.maxHeight || height < parseInt(computed.maxHeight)) {
+                            this.content.style.maxHeight = `${height}px`;
+                        }
                     },
                 }),
             ]
