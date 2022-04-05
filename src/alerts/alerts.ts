@@ -56,10 +56,9 @@ export default class AlertsElement extends HTMLElement {
     public dismiss(key: string): void;
     public dismiss(elOrKey: HTMLElement | string): void {
         if (typeof elOrKey === 'string') {
-            const existing = this.querySelector<HTMLElement>(`[data-key="${elOrKey}"]`);
-            if (existing) {
-                this.dismiss(existing);
-            }
+            this.querySelectorAll<HTMLElement>(`[data-key="${elOrKey}"]`).forEach(el => {
+                this.dismiss(el);
+            });
             return;
         }
 
