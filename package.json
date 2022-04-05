@@ -14,7 +14,7 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "build": "tsc && rollup -c",
+    "build": "tsc && rollup -c && npm run build:demo",
     "build:watch": "rollup -cw",
     "build:demo": "rollup -c demo/rollup.config.js",
     "release": "release-it --npm.tag=latest"
