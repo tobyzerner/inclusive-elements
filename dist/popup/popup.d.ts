@@ -1,4 +1,5 @@
 export default class PopupElement extends HTMLElement {
+    cleanup?: () => void;
     static get observedAttributes(): string[];
     constructor();
     connectedCallback(): void;

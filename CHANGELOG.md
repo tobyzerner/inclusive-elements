@@ -6,8 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Popup: Update popup position on resize.
+
 ### Fixed
-- Alert: Dismiss all alerts by key, not just the first one.
+- Alerts: Dismiss all alerts by key, not just the first one.
+- Modal: Fix some focus issues.
+- Popup: Fix max size not being applied.
+- Tooltip: Clear timeout on disconnect.
 
 ## [0.1.2] - 2022-03-03
 ### Fixed
