@@ -2,11 +2,15 @@ import { createFocusTrap, FocusTrap } from 'focus-trap';
 import { goodbye, hello } from 'hello-goodbye';
 
 export default class ModalElement extends HTMLElement {
-    public static attention: (el: Element) => void = el => el.animate([
-        { transform: 'scale(1)' },
-        { transform: 'scale(1.1)' },
-        { transform: 'scale(1)' }
-    ], 300);
+    public static attention: (el: Element) => void = (el) =>
+        el.animate(
+            [
+                { transform: 'scale(1)' },
+                { transform: 'scale(1.1)' },
+                { transform: 'scale(1)' },
+            ],
+            300
+        );
 
     static get observedAttributes() {
         return ['open'];
@@ -44,19 +48,19 @@ export default class ModalElement extends HTMLElement {
     public connectedCallback(): void {
         this.connected = true;
 
-        if (! this.content?.hasAttribute('role')) {
+        if (!this.content?.hasAttribute('role')) {
             this.content?.setAttribute('role', 'dialog');
         }
 
-        if (! this.content?.hasAttribute('aria-modal')) {
+        if (!this.content?.hasAttribute('aria-modal')) {
             this.content?.setAttribute('aria-modal', 'true');
         }
 
-        if (! this.content?.hasAttribute('tabindex')) {
+        if (!this.content?.hasAttribute('tabindex')) {
             this.content?.setAttribute('tabindex', '-1');
         }
 
-        this.addEventListener('keydown', e => {
+        this.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && this.open) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -86,7 +90,7 @@ export default class ModalElement extends HTMLElement {
     }
 
     public close() {
-        if (! this.open) return;
+        if (!this.open) return;
 
         const event = new Event('beforeclose', { cancelable: true });
 
@@ -95,8 +99,12 @@ export default class ModalElement extends HTMLElement {
         }
     }
 
-    public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-        if (name !== 'open' || ! this.connected) return;
+    public attributeChangedCallback(
+        name: string,
+        oldValue: string,
+        newValue: string
+    ): void {
+        if (name !== 'open' || !this.connected) return;
 
         if (newValue !== null) {
             this.wasOpened();
@@ -120,7 +128,7 @@ export default class ModalElement extends HTMLElement {
         this.focusTrap.deactivate();
 
         goodbye(this, {
-            finish: () => this.hidden = true,
+            finish: () => (this.hidden = true),
         });
 
         this.dispatchEvent(new Event('close'));

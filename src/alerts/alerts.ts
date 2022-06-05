@@ -1,9 +1,9 @@
 import { hello, goodbye, move } from 'hello-goodbye';
 
 export type AlertOptions = {
-    key?: string,
-    duration?: number,
-}
+    key?: string;
+    duration?: number;
+};
 
 export default class AlertsElement extends HTMLElement {
     public static duration: number = 10000;
@@ -12,15 +12,15 @@ export default class AlertsElement extends HTMLElement {
     private index: number = 0;
 
     public connectedCallback(): void {
-        if (! this.hasAttribute('role')) {
+        if (!this.hasAttribute('role')) {
             this.setAttribute('role', 'status');
         }
 
-        if (! this.hasAttribute('aria-live')) {
+        if (!this.hasAttribute('aria-live')) {
             this.setAttribute('aria-live', 'polite');
         }
 
-        if (! this.hasAttribute('aria-relevant')) {
+        if (!this.hasAttribute('aria-relevant')) {
             this.setAttribute('aria-relevant', 'additions');
         }
     }
@@ -37,7 +37,10 @@ export default class AlertsElement extends HTMLElement {
             hello(el);
         });
 
-        const duration = typeof options.duration !== 'undefined' ? Number(options.duration) : AlertsElement.duration;
+        const duration =
+            typeof options.duration !== 'undefined'
+                ? Number(options.duration)
+                : AlertsElement.duration;
 
         if (duration > 0) {
             this.startTimeout(el, duration);
@@ -45,8 +48,14 @@ export default class AlertsElement extends HTMLElement {
             el.addEventListener('mouseenter', this.clearTimeout.bind(this, el));
             el.addEventListener('focusin', this.clearTimeout.bind(this, el));
 
-            el.addEventListener('mouseleave', this.startTimeout.bind(this, el, duration));
-            el.addEventListener('focusout', this.startTimeout.bind(this, el, duration));
+            el.addEventListener(
+                'mouseleave',
+                this.startTimeout.bind(this, el, duration)
+            );
+            el.addEventListener(
+                'focusout',
+                this.startTimeout.bind(this, el, duration)
+            );
         }
 
         return key;
@@ -56,7 +65,9 @@ export default class AlertsElement extends HTMLElement {
     public dismiss(key: string): void;
     public dismiss(elOrKey: HTMLElement | string): void {
         if (typeof elOrKey === 'string') {
-            this.querySelectorAll<HTMLElement>(`[data-key="${elOrKey}"]`).forEach(el => {
+            this.querySelectorAll<HTMLElement>(
+                `[data-key="${elOrKey}"]`
+            ).forEach((el) => {
                 this.dismiss(el);
             });
             return;
@@ -64,7 +75,7 @@ export default class AlertsElement extends HTMLElement {
 
         move(this.children, () => {
             goodbye(elOrKey, {
-                finish: () => this.removeChild(elOrKey)
+                finish: () => this.removeChild(elOrKey),
             });
         });
 
@@ -86,7 +97,7 @@ export default class AlertsElement extends HTMLElement {
             overflow: 'hidden',
             position: 'absolute',
             whiteSpace: 'nowrap',
-            width: '1px'
+            width: '1px',
         });
         el.textContent = message;
         this.show(el);
@@ -94,9 +105,12 @@ export default class AlertsElement extends HTMLElement {
 
     private startTimeout(el: HTMLElement, duration: number) {
         this.clearTimeout(el);
-        this.timeouts.set(el, window.setTimeout(() => {
-            this.dismiss(el);
-        }, duration));
+        this.timeouts.set(
+            el,
+            window.setTimeout(() => {
+                this.dismiss(el);
+            }, duration)
+        );
     }
 
     private clearTimeout(el: HTMLElement) {

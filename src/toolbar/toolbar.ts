@@ -2,7 +2,7 @@ import { focusable } from 'tabbable';
 
 export default class ToolbarElement extends HTMLElement {
     connectedCallback(): void {
-        if (! this.hasAttribute('role')) {
+        if (!this.hasAttribute('role')) {
             this.setAttribute('role', 'toolbar');
         }
 
@@ -18,10 +18,16 @@ export default class ToolbarElement extends HTMLElement {
     private onInitialFocus = (e: FocusEvent): void => {
         this.removeAttribute('tabindex');
         this.focusControlAtIndex(0);
-    }
+    };
 
     private onKeyDown = (e: KeyboardEvent): void => {
-        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft' && e.key !== 'Home' && e.key !== 'End') return;
+        if (
+            e.key !== 'ArrowRight' &&
+            e.key !== 'ArrowLeft' &&
+            e.key !== 'Home' &&
+            e.key !== 'End'
+        )
+            return;
 
         const controls = this.controls;
         const length = this.controls.length;
@@ -38,7 +44,7 @@ export default class ToolbarElement extends HTMLElement {
         this.focusControlAtIndex(n);
 
         e.preventDefault();
-    }
+    };
 
     private focusControlAtIndex(index: number): void {
         this.controls.forEach((control, i) => {

@@ -1,4 +1,10 @@
-import { autoUpdate, computePosition, flip, shift, size } from '@floating-ui/dom';
+import {
+    autoUpdate,
+    computePosition,
+    flip,
+    shift,
+    size,
+} from '@floating-ui/dom';
 import { cancel, goodbye, hello } from 'hello-goodbye';
 import { focusable } from 'tabbable';
 
@@ -21,7 +27,7 @@ export default class PopupElement extends HTMLElement {
         const shadow = this.attachShadow({ mode: 'open' });
         shadow.appendChild(template.content.cloneNode(true));
 
-        this.backdrop!.onclick = () => this.open = false;
+        this.backdrop!.onclick = () => (this.open = false);
     }
 
     public connectedCallback(): void {
@@ -40,10 +46,10 @@ export default class PopupElement extends HTMLElement {
         });
 
         this.button.addEventListener('click', () => {
-            this.open = ! this.open;
+            this.open = !this.open;
         });
 
-        this.button.addEventListener('keydown', e => {
+        this.button.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowDown') {
                 e.preventDefault();
                 this.open = true;
@@ -51,7 +57,7 @@ export default class PopupElement extends HTMLElement {
             }
         });
 
-        this.addEventListener('keydown', e => {
+        this.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && this.open) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -60,14 +66,17 @@ export default class PopupElement extends HTMLElement {
             }
         });
 
-        this.addEventListener('focusout', e => {
-            if (! (e.relatedTarget instanceof Node) || ! this.contains(e.relatedTarget)) {
+        this.addEventListener('focusout', (e) => {
+            if (
+                !(e.relatedTarget instanceof Node) ||
+                !this.contains(e.relatedTarget)
+            ) {
                 this.open = false;
             }
         });
 
-        this.content.addEventListener('click', e => {
-            if (! (e.target instanceof Element)) return;
+        this.content.addEventListener('click', (e) => {
+            if (!(e.target instanceof Element)) return;
 
             if (e.target.closest('[role=menuitem], [role=menuitemradio]')) {
                 this.open = false;
@@ -93,7 +102,11 @@ export default class PopupElement extends HTMLElement {
         }
     }
 
-    public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+    public attributeChangedCallback(
+        name: string,
+        oldValue: string,
+        newValue: string
+    ): void {
         if (name !== 'open') return;
 
         if (newValue !== null) {
@@ -104,7 +117,7 @@ export default class PopupElement extends HTMLElement {
     }
 
     private wasOpened() {
-        if (! this.content.hidden) return;
+        if (!this.content.hidden) return;
 
         this.content.hidden = false;
         this.backdrop.hidden = false;
@@ -116,41 +129,55 @@ export default class PopupElement extends HTMLElement {
 
         this.content.style.position = 'absolute';
 
-        this.cleanup = autoUpdate(this.button, this.content, () => {
-            computePosition(this.button, this.content, {
-                placement: this.getAttribute('placement') as any || 'bottom',
-                middleware: [
-                    shift(),
-                    flip(),
-                    size({
-                        apply: ({ availableWidth, availableHeight }) => {
-                            Object.assign(this.content.style, {
-                                maxWidth: '',
-                                maxHeight: '',
-                            });
+        this.cleanup = autoUpdate(
+            this.button,
+            this.content,
+            () => {
+                computePosition(this.button, this.content, {
+                    placement:
+                        (this.getAttribute('placement') as any) || 'bottom',
+                    middleware: [
+                        shift(),
+                        flip(),
+                        size({
+                            apply: ({ availableWidth, availableHeight }) => {
+                                Object.assign(this.content.style, {
+                                    maxWidth: '',
+                                    maxHeight: '',
+                                });
 
-                            const computed = getComputedStyle(this.content);
+                                const computed = getComputedStyle(this.content);
 
-                            if (computed.maxWidth === 'none' || availableWidth < parseInt(computed.maxWidth)) {
-                                this.content.style.maxWidth = `${availableWidth}px`;
-                            }
+                                if (
+                                    computed.maxWidth === 'none' ||
+                                    availableWidth < parseInt(computed.maxWidth)
+                                ) {
+                                    this.content.style.maxWidth = `${availableWidth}px`;
+                                }
 
-                            if (computed.maxHeight === 'none' || availableHeight < parseInt(computed.maxHeight)) {
-                                this.content.style.maxHeight = `${availableHeight}px`;
-                            }
-                        },
-                    }),
-                ]
-            }).then(({ x, y, placement }) => {
-                Object.assign(this.content.style, {
-                    left: `${x}px`,
-                    top: `${y}px`,
+                                if (
+                                    computed.maxHeight === 'none' ||
+                                    availableHeight <
+                                        parseInt(computed.maxHeight)
+                                ) {
+                                    this.content.style.maxHeight = `${availableHeight}px`;
+                                }
+                            },
+                        }),
+                    ],
+                }).then(({ x, y, placement }) => {
+                    Object.assign(this.content.style, {
+                        left: `${x}px`,
+                        top: `${y}px`,
+                    });
+                    this.content.dataset.placement = placement;
                 });
-                this.content.dataset.placement = placement;
-            });
-        }, { ancestorScroll: false });
+            },
+            { ancestorScroll: false }
+        );
 
-        const autofocus = this.content.querySelector<HTMLElement>('[autofocus]');
+        const autofocus =
+            this.content.querySelector<HTMLElement>('[autofocus]');
         if (autofocus) {
             autofocus.focus();
         } else {
@@ -168,11 +195,11 @@ export default class PopupElement extends HTMLElement {
         this.cleanup?.();
 
         goodbye(this.backdrop, {
-            finish: () => this.backdrop.hidden = true
+            finish: () => (this.backdrop.hidden = true),
         });
 
         goodbye(this.content, {
-            finish: () => this.content.hidden = true
+            finish: () => (this.content.hidden = true),
         });
 
         this.dispatchEvent(new Event('close'));

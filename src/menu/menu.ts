@@ -7,16 +7,16 @@ export default class MenuElement extends HTMLElement {
     private searchTimeout?: number;
 
     public connectedCallback(): void {
-        if (! this.hasAttribute('role')) {
+        if (!this.hasAttribute('role')) {
             this.setAttribute('role', 'menu');
         }
 
-        if (! this.hasAttribute('tabindex')) {
+        if (!this.hasAttribute('tabindex')) {
             this.setAttribute('tabindex', '-1');
         }
 
-        this.items.forEach(el => {
-            if (! el.hasAttribute('tabindex')) {
+        this.items.forEach((el) => {
+            if (!el.hasAttribute('tabindex')) {
                 el.setAttribute('tabindex', '-1');
             }
         });
@@ -29,8 +29,9 @@ export default class MenuElement extends HTMLElement {
     }
 
     private get items() {
-        return Array.from(this.querySelectorAll<HTMLElement>('[role^=menuitem]'))
-            .filter(item => isFocusable(item));
+        return Array.from(
+            this.querySelectorAll<HTMLElement>('[role^=menuitem]')
+        ).filter((item) => isFocusable(item));
     }
 
     private onKeyDown = (e: KeyboardEvent): void => {
@@ -59,17 +60,22 @@ export default class MenuElement extends HTMLElement {
             this.search = '';
         }, MenuElement.searchDelay);
 
-        this.items.some(el => {
-            if (el.textContent?.trim().toLowerCase().indexOf(this.search) === 0) {
+        this.items.some((el) => {
+            if (
+                el.textContent?.trim().toLowerCase().indexOf(this.search) === 0
+            ) {
                 el.focus();
                 return true;
             }
         });
-    }
+    };
 
     private navigate(step: number) {
         const items = this.items;
-        let index = (document.activeElement instanceof HTMLElement ? items.indexOf(document.activeElement) : -1) + step;
+        let index =
+            (document.activeElement instanceof HTMLElement
+                ? items.indexOf(document.activeElement)
+                : -1) + step;
         if (index < 0) {
             index = items.length - 1;
         }

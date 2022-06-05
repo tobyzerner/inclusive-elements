@@ -1,299 +1,315 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, user-scalable=no">
-  <title>inclusive-elements demo</title>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <title>inclusive-elements demo</title>
 
-  <style>
-    body {
-      font-family: sans-serif;
-      font-size: 120%;
-      font-weight: bold;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    [tabindex="-1"]:focus {
-      outline: none;
-    }
-
-    [hidden] {
-      display: none !important;
-    }
-
-    ui-popup {
-      display: inline-block;
-    }
-
-    button {
-      all: unset;
-      box-sizing: border-box;
-      display: inline-block;
-      border: 2px solid black;
-      background: black;
-      color: white;
-      border-radius: .5em;
-      padding: .5em .8em;
-      margin-bottom: 10px;
-    }
-
-    button:focus {
-      background: blue;
-    }
-
-    button svg {
-      width: 1em;
-      vertical-align: -.2em;
-    }
-
-    .popup,
-    .dialog {
-      border: 2px solid;
-      padding: .5em;
-      border-radius: .5em;
-      transform-origin: top left;
-      background: white;
-      position: relative;
-    }
-
-    [data-placement^="top"] {
-      margin-bottom: 5px;
-    }
-
-    [data-placement^="bottom"] {
-      margin-top: 5px;
-    }
-
-    @media (prefers-reduced-motion: no-preference) {
-      .popup.enter-active,
-      .popup.leave-active {
-        transition: transform .2s, opacity .2s;
+    <style>
+      body {
+        font-family: sans-serif;
+        font-size: 120%;
+        font-weight: bold;
       }
 
-      .popup.enter-from,
-      .popup.leave-to {
-        transform: scale(0.5);
-        opacity: 0;
-      }
-    }
-
-    .visually-hidden {
-      clip: rect(0 0 0 0);
-      clip-path: inset(50%);
-      height: 1px;
-      overflow: hidden;
-      position: absolute;
-      white-space: nowrap;
-      width: 1px;
-    }
-
-    .tooltip {
-      background: black;
-      padding: .5em 1em;
-      border-radius: 999px;
-      color: white;
-    }
-
-    @media (prefers-reduced-motion: no-preference) {
-      .tooltip.enter-active,
-      .tooltip.leave-active {
-        transition: transform .2s, opacity .2s;
+      * {
+        box-sizing: border-box;
       }
 
-      .tooltip.enter-from,
-      .tooltip.leave-to {
-        transform: scale(0.5);
-        opacity: 0;
-      }
-    }
-
-    .menu button {
-      all: unset;
-      box-sizing: border-box;
-      display: block;
-      padding: .5em 1em;
-      width: 100%;
-    }
-
-    .menu button:hover,
-    .menu button:focus {
-      background: #ddd;
-    }
-
-    ui-modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: opacity .2s;
-    }
-
-    ui-modal::part(backdrop) {
-      background: rgba(0, 0, 0, 0.5);
-    }
-
-    @media (prefers-reduced-motion: no-preference) {
-      ui-modal.enter-active,
-      ui-modal.leave-active {
-        transition: opacity .2s;
+      [tabindex='-1']:focus {
+        outline: none;
       }
 
-      ui-modal.enter-from,
-      ui-modal.leave-to {
-        opacity: 0;
+      [hidden] {
+        display: none !important;
       }
 
-      ui-modal.enter-active::part(content),
-      ui-modal.leave-active::part(content) {
-        transition: transform .2s;
+      ui-popup {
+        display: inline-block;
       }
 
-      ui-modal.enter-from::part(content),
-      ui-modal.leave-to::part(content) {
-        transform: scale(0.5);
-      }
-    }
-
-    ui-alerts {
-      position: fixed;
-      top: 0;
-      right: 0;
-      display: flex;
-      flex-direction: column-reverse;
-      align-items: flex-end;
-      padding: .5em;
-    }
-
-    ui-alerts > * + * {
-      margin-bottom: .5em;
-    }
-
-    .alert {
-      background: #eee;
-      border-radius: .5em;
-      padding: .8em 1em;
-    }
-
-    .alert.error {
-      background: red;
-      color: white;
-    }
-
-    @media (prefers-reduced-motion: no-preference) {
-      .alert.enter-active,
-      .alert.leave-active {
-        transition: opacity .5s, transform .5s;
+      button {
+        all: unset;
+        box-sizing: border-box;
+        display: inline-block;
+        border: 2px solid black;
+        background: black;
+        color: white;
+        border-radius: 0.5em;
+        padding: 0.5em 0.8em;
+        margin-bottom: 10px;
       }
 
-      .alert.enter-from,
-      .alert.leave-to {
-        opacity: 0;
-        transform: translateY(-100%);
+      button:focus {
+        background: blue;
       }
 
-      .alert.move {
-        transition: transform .5s;
+      button svg {
+        width: 1em;
+        vertical-align: -0.2em;
       }
-    }
 
-    ui-toolbar {
-      display: block;
-      border: 2px solid #ccc;
-      padding: 10px;
-    }
-  </style>
-</head>
-<body>
+      .popup,
+      .dialog {
+        border: 2px solid;
+        padding: 0.5em;
+        border-radius: 0.5em;
+        transform-origin: top left;
+        background: white;
+        position: relative;
+      }
 
-  <ui-popup placement="bottom-start">
-    <button>Popup <span aria-hidden="true">&#x25be;</span></button>
-    <div class="popup" hidden>
-      Hello, world!
-      <a href="#">Here is a link.</a>
-    </div>
-  </ui-popup>
+      [data-placement^='top'] {
+        margin-bottom: 5px;
+      }
 
-  <ui-popup placement="bottom-start">
-    <button>Menu <span aria-hidden="true">&#x25be;</span></button>
-    <ui-menu class="popup menu" hidden>
-      <button role="menuitem">One</button>
-      <button role="menuitem">Two</button>
-      <button role="menuitem">Three</button>
-    </ui-menu>
-  </ui-popup>
+      [data-placement^='bottom'] {
+        margin-top: 5px;
+      }
 
-  <button>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-      <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
-    </svg>
-    <ui-tooltip class="visually-hidden" placement="bottom">Tooltip</ui-tooltip>
-  </button>
+      @media (prefers-reduced-motion: no-preference) {
+        .popup.enter-active,
+        .popup.leave-active {
+          transition: transform 0.2s, opacity 0.2s;
+        }
 
-  <button onclick="alerts.show(createAlert('error', 'There was an error'))">Show Alert</button>
-  <button onclick="alerts.speak('This is a message')">Speak Message</button>
+        .popup.enter-from,
+        .popup.leave-to {
+          transform: scale(0.5);
+          opacity: 0;
+        }
+      }
 
-  <button onclick="document.getElementById('modal').open = true">Open Modal</button>
+      .visually-hidden {
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        height: 1px;
+        overflow: hidden;
+        position: absolute;
+        white-space: nowrap;
+        width: 1px;
+      }
 
-  <ui-modal hidden id="modal" static>
-    <div class="dialog" role="dialog" aria-labelledby="your-dialog-title-id">
-      <button type="button" onclick="this.closest('ui-modal').close()">
-        <span aria-hidden="true">&times;</span>
-        <span class="visually-hidden">Close dialog</span>
-      </button>
+      .tooltip {
+        background: black;
+        padding: 0.5em 1em;
+        border-radius: 999px;
+        color: white;
+      }
 
-      <h2 id="your-dialog-title-id">Your dialog title</h2>
+      @media (prefers-reduced-motion: no-preference) {
+        .tooltip.enter-active,
+        .tooltip.leave-active {
+          transition: transform 0.2s, opacity 0.2s;
+        }
 
-      <ui-popup placement="bottom-start">
-        <button autofocus>Open Popup <span aria-hidden="true">&#x25be;</span></button>
-        <ui-menu class="popup menu" hidden>
-          <button role="menuitem">One</button>
-          <button role="menuitem">Two</button>
-          <button role="menuitem">Three</button>
-        </ui-menu>
-      </ui-popup>
-    </div>
-  </ui-modal>
+        .tooltip.enter-from,
+        .tooltip.leave-to {
+          transform: scale(0.5);
+          opacity: 0;
+        }
+      }
 
-  <template id="alertTemplate">
-    <div class="alert">
-      <span class="visually-hidden"></span>
-      <span></span>
-    </div>
-  </template>
+      .menu button {
+        all: unset;
+        box-sizing: border-box;
+        display: block;
+        padding: 0.5em 1em;
+        width: 100%;
+      }
 
-  <ui-toolbar>
-    <button>One</button>
-    <button>Two</button>
-    <button>Three</button>
-    <button>Four</button>
-    <button>Five</button>
-  </ui-toolbar>
+      .menu button:hover,
+      .menu button:focus {
+        background: #ddd;
+      }
 
-  <script src="demo.js"></script>
+      ui-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.2s;
+      }
 
-  <script>
-    function createAlert(type, message) {
-      const el = document.getElementById('alertTemplate').content.firstElementChild.cloneNode(true);
-      el.classList.add(type);
-      el.children[0].textContent = type;
-      el.children[1].textContent = message;
-      return el;
-    }
+      ui-modal::part(backdrop) {
+        background: rgba(0, 0, 0, 0.5);
+      }
 
-    const alerts = document.createElement('ui-alerts');
-    document.body.appendChild(alerts);
+      @media (prefers-reduced-motion: no-preference) {
+        ui-modal.enter-active,
+        ui-modal.leave-active {
+          transition: opacity 0.2s;
+        }
 
-    document.getElementById('modal').addEventListener('beforeclose', e => {
-      confirm('Are you sure?') || e.preventDefault();
-    })
-  </script>
+        ui-modal.enter-from,
+        ui-modal.leave-to {
+          opacity: 0;
+        }
 
-</body>
+        ui-modal.enter-active::part(content),
+        ui-modal.leave-active::part(content) {
+          transition: transform 0.2s;
+        }
+
+        ui-modal.enter-from::part(content),
+        ui-modal.leave-to::part(content) {
+          transform: scale(0.5);
+        }
+      }
+
+      ui-alerts {
+        position: fixed;
+        top: 0;
+        right: 0;
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: flex-end;
+        padding: 0.5em;
+      }
+
+      ui-alerts > * + * {
+        margin-bottom: 0.5em;
+      }
+
+      .alert {
+        background: #eee;
+        border-radius: 0.5em;
+        padding: 0.8em 1em;
+      }
+
+      .alert.error {
+        background: red;
+        color: white;
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        .alert.enter-active,
+        .alert.leave-active {
+          transition: opacity 0.5s, transform 0.5s;
+        }
+
+        .alert.enter-from,
+        .alert.leave-to {
+          opacity: 0;
+          transform: translateY(-100%);
+        }
+
+        .alert.move {
+          transition: transform 0.5s;
+        }
+      }
+
+      ui-toolbar {
+        display: block;
+        border: 2px solid #ccc;
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <ui-popup placement="bottom-start">
+      <button>Popup <span aria-hidden="true">&#x25be;</span></button>
+      <div class="popup" hidden>
+        Hello, world!
+        <a href="#">Here is a link.</a>
+      </div>
+    </ui-popup>
+
+    <ui-popup placement="bottom-start">
+      <button>Menu <span aria-hidden="true">&#x25be;</span></button>
+      <ui-menu class="popup menu" hidden>
+        <button role="menuitem">One</button>
+        <button role="menuitem">Two</button>
+        <button role="menuitem">Three</button>
+      </ui-menu>
+    </ui-popup>
+
+    <button>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
+          clip-rule="evenodd"
+        />
+      </svg>
+      <ui-tooltip class="visually-hidden" placement="bottom"
+        >Tooltip</ui-tooltip
+      >
+    </button>
+
+    <button onclick="alerts.show(createAlert('error', 'There was an error'))">
+      Show Alert
+    </button>
+    <button onclick="alerts.speak('This is a message')">Speak Message</button>
+
+    <button onclick="document.getElementById('modal').open = true">
+      Open Modal
+    </button>
+
+    <ui-modal hidden id="modal" static>
+      <div class="dialog" role="dialog" aria-labelledby="your-dialog-title-id">
+        <button type="button" onclick="this.closest('ui-modal').close()">
+          <span aria-hidden="true">&times;</span>
+          <span class="visually-hidden">Close dialog</span>
+        </button>
+
+        <h2 id="your-dialog-title-id">Your dialog title</h2>
+
+        <ui-popup placement="bottom-start">
+          <button autofocus>
+            Open Popup <span aria-hidden="true">&#x25be;</span>
+          </button>
+          <ui-menu class="popup menu" hidden>
+            <button role="menuitem">One</button>
+            <button role="menuitem">Two</button>
+            <button role="menuitem">Three</button>
+          </ui-menu>
+        </ui-popup>
+      </div>
+    </ui-modal>
+
+    <template id="alertTemplate">
+      <div class="alert">
+        <span class="visually-hidden"></span>
+        <span></span>
+      </div>
+    </template>
+
+    <ui-toolbar>
+      <button>One</button>
+      <button>Two</button>
+      <button>Three</button>
+      <button>Four</button>
+      <button>Five</button>
+    </ui-toolbar>
+
+    <script src="demo.js"></script>
+
+    <script>
+      function createAlert(type, message) {
+        const el = document
+          .getElementById('alertTemplate')
+          .content.firstElementChild.cloneNode(true);
+        el.classList.add(type);
+        el.children[0].textContent = type;
+        el.children[1].textContent = message;
+        return el;
+      }
+
+      const alerts = document.createElement('ui-alerts');
+      document.body.appendChild(alerts);
+
+      document.getElementById('modal').addEventListener('beforeclose', (e) => {
+        confirm('Are you sure?') || e.preventDefault();
+      });
+    </script>
+  </body>
 </html>

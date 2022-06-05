@@ -27,8 +27,8 @@ export default class TooltipElement extends HTMLElement {
             this.parent.addEventListener('blur', this.onBlur);
             this.parent.addEventListener('click', this.onBlur);
 
-            this.observer = new MutationObserver(mutations => {
-                mutations.forEach(mutation => {
+            this.observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
                     if (mutation.attributeName === 'disabled') {
                         this.hide();
                     }
@@ -80,7 +80,7 @@ export default class TooltipElement extends HTMLElement {
         if (e.key === 'Escape') {
             this.hide();
         }
-    }
+    };
 
     private show() {
         if (this.disabled) return;
@@ -89,7 +89,7 @@ export default class TooltipElement extends HTMLElement {
 
         clearTimeout(this.timeout);
 
-        if (! this.showing) {
+        if (!this.showing) {
             tooltip.hidden = false;
             hello(tooltip);
             this.showing = true;
@@ -102,11 +102,10 @@ export default class TooltipElement extends HTMLElement {
         tooltip.style.position = 'absolute';
 
         computePosition(this.parent, tooltip, {
-            placement: this.getAttribute('placement') as any || TooltipElement.placement,
-            middleware: [
-                shift(),
-                flip(),
-            ]
+            placement:
+                (this.getAttribute('placement') as any) ||
+                TooltipElement.placement,
+            middleware: [shift(), flip()],
         }).then(({ x, y, placement }) => {
             Object.assign(tooltip.style, {
                 left: `${x}px`,
@@ -127,7 +126,7 @@ export default class TooltipElement extends HTMLElement {
                     if (this.tooltip) {
                         this.tooltip.hidden = true;
                     }
-                }
+                },
             });
         }
     }
@@ -135,17 +134,25 @@ export default class TooltipElement extends HTMLElement {
     private afterDelay(callback: Function) {
         clearTimeout(this.timeout);
         const delay = parseInt(this.getAttribute('delay') || '');
-        this.timeout = window.setTimeout(callback.bind(this), isNaN(delay) ? TooltipElement.delay : delay);
+        this.timeout = window.setTimeout(
+            callback.bind(this),
+            isNaN(delay) ? TooltipElement.delay : delay
+        );
     }
 
     private createTooltip() {
-        if (! this.tooltip) {
+        if (!this.tooltip) {
             this.tooltip = document.createElement('div');
-            this.tooltip.className = this.getAttribute('tooltip-class') || TooltipElement.tooltipClass;
+            this.tooltip.className =
+                this.getAttribute('tooltip-class') ||
+                TooltipElement.tooltipClass;
             this.tooltip.hidden = true;
 
             this.tooltip.addEventListener('mouseenter', this.show.bind(this));
-            this.tooltip.addEventListener('mouseleave', this.afterDelay.bind(this, this.hide));
+            this.tooltip.addEventListener(
+                'mouseleave',
+                this.afterDelay.bind(this, this.hide)
+            );
 
             document.body.appendChild(this.tooltip);
         }

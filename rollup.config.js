@@ -5,22 +5,17 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 import filesize from 'rollup-plugin-filesize';
 
 export default {
-  input: 'src/index.ts',
-  output: {
-    file: pkg.main,
-  },
-  external: [
-    '@floating-ui/dom',
-    'focus-trap',
-    'hello-goodbye',
-    'tabbable',
-  ],
-  plugins: [
-    nodeResolve({
-      exportConditions: ['production'],
-    }),
-    typescript(),
-    terser(),
-    filesize(),
-  ]
+    input: 'src/index.ts',
+    output: {
+        file: pkg.main,
+    },
+    external: ['@floating-ui/dom', 'focus-trap', 'hello-goodbye', 'tabbable'],
+    plugins: [
+        nodeResolve({
+            exportConditions: ['production'],
+        }),
+        typescript(),
+        terser(),
+        filesize(),
+    ],
 };

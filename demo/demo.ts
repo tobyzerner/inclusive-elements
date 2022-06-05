@@ -1,10 +1,10 @@
 import {
-  	PopupElement,
-  	TooltipElement,
-  	MenuElement,
-  	ModalElement,
-  	AlertsElement,
-	ToolbarElement
+    PopupElement,
+    TooltipElement,
+    MenuElement,
+    ModalElement,
+    AlertsElement,
+    ToolbarElement,
 } from '../dist/index';
 
 window.customElements.define('ui-popup', PopupElement);

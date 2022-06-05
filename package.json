@@ -1,54 +1,58 @@
 {
-  "name": "inclusive-elements",
-  "version": "0.1.2",
-  "description": "Accessible, lightweight, unstyled implementations of common UI controls.",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "type": "module",
-  "types": "dist/index.d.ts",
-  "license": "MIT",
-  "repository": "tobyzerner/inclusive-elements",
-  "files": [
-    "dist",
-    "README.md"
-  ],
-  "sideEffects": false,
-  "scripts": {
-    "build": "tsc && rollup -c && npm run build:demo",
-    "build:watch": "rollup -cw",
-    "build:demo": "rollup -c demo/rollup.config.js",
-    "release": "release-it --npm.tag=latest"
-  },
-  "dependencies": {
-    "@floating-ui/dom": "^0.5.2",
-    "focus-trap": "^6.7.2",
-    "hello-goodbye": "^0.1.0-beta.5",
-    "tabbable": "^5.2.1"
-  },
-  "devDependencies": {
-    "@release-it/keep-a-changelog": "^2.3.0",
-    "@rollup/plugin-node-resolve": "^11.2.1",
-    "@rollup/plugin-typescript": "^8.3.0",
-    "release-it": "^14.12.4",
-    "rollup": "^2.66.1",
-    "rollup-plugin-filesize": "^9.1.2",
-    "rollup-plugin-terser": "^7.0.2",
-    "tslib": "^2.3.1",
-    "typescript": "^4.5.5"
-  },
-  "release-it": {
-    "github": {
-      "release": true
+    "name": "inclusive-elements",
+    "version": "0.1.2",
+    "description": "Accessible, lightweight, unstyled implementations of common UI controls.",
+    "main": "dist/index.js",
+    "module": "dist/index.js",
+    "type": "module",
+    "types": "dist/index.d.ts",
+    "license": "MIT",
+    "repository": "tobyzerner/inclusive-elements",
+    "files": [
+        "dist",
+        "README.md"
+    ],
+    "sideEffects": false,
+    "scripts": {
+        "build": "tsc && rollup -c && npm run build:demo",
+        "build:watch": "rollup -cw",
+        "build:demo": "rollup -c demo/rollup.config.js",
+        "release": "release-it --npm.tag=latest"
     },
-    "plugins": {
-      "@release-it/keep-a-changelog": {
-        "filename": "CHANGELOG.md",
-        "addUnreleased": true,
-        "addVersionUrl": true
-      }
+    "dependencies": {
+        "@floating-ui/dom": "^0.5.2",
+        "focus-trap": "^6.7.2",
+        "hello-goodbye": "^0.1.0-beta.5",
+        "tabbable": "^5.2.1"
     },
-    "hooks": {
-      "after:bump": "npm run build"
+    "devDependencies": {
+        "@release-it/keep-a-changelog": "^2.3.0",
+        "@rollup/plugin-node-resolve": "^11.2.1",
+        "@rollup/plugin-typescript": "^8.3.0",
+        "prettier": "^2.6.2",
+        "release-it": "^14.12.4",
+        "rollup": "^2.66.1",
+        "rollup-plugin-filesize": "^9.1.2",
+        "rollup-plugin-terser": "^7.0.2",
+        "tslib": "^2.3.1",
+        "typescript": "^4.5.5"
+    },
+    "release-it": {
+        "github": {
+            "release": true
+        },
+        "plugins": {
+            "@release-it/keep-a-changelog": {
+                "filename": "CHANGELOG.md",
+                "addUnreleased": true,
+                "addVersionUrl": true
+            }
+        },
+        "hooks": {
+            "after:bump": "npm run build"
+        }
+    },
+    "prettier": {
+        "singleQuote": true
     }
-  }
 }

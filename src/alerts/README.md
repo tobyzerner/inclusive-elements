@@ -21,10 +21,10 @@ document.body.appendChild(alerts);
 
 // 2. Create your own alert template
 function createAlert(type, message) {
-  const el = document.createElement('div');
-  el.className = type;
-  el.textContent = message;
-  return el;
+    const el = document.createElement('div');
+    el.className = type;
+    el.textContent = message;
+    return el;
 }
 
 // 3. Show an alert
@@ -36,7 +36,7 @@ alerts.speak('There was an error');
 
 ## Behavior
 
-- The `<ui-alerts>` container is given the attributes `role="status"`, `aria-live="polite"` and `aria-relevant="additions"` so that any content additions will be announced.
+-   The `<ui-alerts>` container is given the attributes `role="status"`, `aria-live="polite"` and `aria-relevant="additions"` so that any content additions will be announced.
 
 ## API
 
@@ -49,7 +49,7 @@ const alerts = document.querySelector('ui-alerts');
 
 // Show an alert
 alerts.show(
-    el: HTMLElement, 
+    el: HTMLElement,
     options?: AlertOptions
 );
 
@@ -75,34 +75,34 @@ alerts.speak(message: string);
 ```css
 /* Basic styles for the alert container */
 ui-alerts {
-  position: fixed;
-  top: 0;
-  right: 0;
-  display: flex;
-  flex-direction: column-reverse;
-  align-items: flex-end;
+    position: fixed;
+    top: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-end;
 }
 
 /* Transitions can be applied to alerts using hello-goodbye */
 @media (prefers-reduced-motion: no-preference) {
-  ui-alerts > .enter-active,
-  ui-alerts > .leave-active,
-  ui-alerts > .move {
-    transition: all .5s;
-  }
+    ui-alerts > .enter-active,
+    ui-alerts > .leave-active,
+    ui-alerts > .move {
+        transition: all 0.5s;
+    }
 
-  ui-alerts > .enter-from {
-    transform: translateY(-100%);
-  }
+    ui-alerts > .enter-from {
+        transform: translateY(-100%);
+    }
 
-  ui-alerts > .leave-to {
-    opacity: 0;
-  }
+    ui-alerts > .leave-to {
+        opacity: 0;
+    }
 }
 ```
 
 ## Further Reading
 
-- [WAI-ARIA Authoring Practices: Alert](https://w3c.github.io/aria-practices/#alert)
-- [Scott O'Hara: A toast to an accessible toast...](https://www.scottohara.me/blog/2019/07/08/a-toast-to-a11y-toasts.html)
-- [Adrian Roselli: Defining 'Toast' Messages](https://adrianroselli.com/2020/01/defining-toast-messages.html)
+-   [WAI-ARIA Authoring Practices: Alert](https://w3c.github.io/aria-practices/#alert)
+-   [Scott O'Hara: A toast to an accessible toast...](https://www.scottohara.me/blog/2019/07/08/a-toast-to-a11y-toasts.html)
+-   [Adrian Roselli: Defining 'Toast' Messages](https://adrianroselli.com/2020/01/defining-toast-messages.html)

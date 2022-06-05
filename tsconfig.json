@@ -1,20 +1,16 @@
 {
-  "compilerOptions": {
-    "rootDir": "src",
-    "declaration": true,
-    "declarationDir": "./dist",
-    "module": "es6",
-    "moduleResolution": "node",
-    "noImplicitAny": false,
-    "outDir": "./dist",
-    "target": "esnext",
-    "esModuleInterop": true,
-    "emitDeclarationOnly": true
-  },
-  "include": [
-    "src/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+    "compilerOptions": {
+        "rootDir": "src",
+        "declaration": true,
+        "declarationDir": "./dist",
+        "module": "es6",
+        "moduleResolution": "node",
+        "noImplicitAny": false,
+        "outDir": "./dist",
+        "target": "esnext",
+        "esModuleInterop": true,
+        "emitDeclarationOnly": true
+    },
+    "include": ["src/**/*.ts"],
+    "exclude": ["node_modules"]
 }

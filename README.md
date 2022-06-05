@@ -8,10 +8,10 @@ Basic interactive UI patterns like popup menus, tooltips, and modals are surpris
 
 `inclusive-elements` provides those basic behaviors in the form of Custom Elements, without any of the cruft. They are:
 
-- **🦮 Accessible.** Designed following the [WAI-ARIA Authoring Practices](https://w3c.github.io/aria-practices) so everyone can use them.
-- **🌳 Lightweight.** 3kB gzipped with minimal dependencies. Less if you tree-shake only the elements you need.
-- **🎨 Unstyled.** Easily integrate with your design bottom-up without having to fight defaults.
-- **🚀 Easy to use.** Simple API, works with any framework that supports Custom Elements.
+-   **🦮 Accessible.** Designed following the [WAI-ARIA Authoring Practices](https://w3c.github.io/aria-practices) so everyone can use them.
+-   **🌳 Lightweight.** 3kB gzipped with minimal dependencies. Less if you tree-shake only the elements you need.
+-   **🎨 Unstyled.** Easily integrate with your design bottom-up without having to fight defaults.
+-   **🚀 Easy to use.** Simple API, works with any framework that supports Custom Elements.
 
 ## Installation
 
@@ -23,12 +23,12 @@ npm install inclusive-elements --save
 
 Detailed descriptions and usage instructions are contained within each element:
 
-- [Alerts](src/alerts)
-- [Menu](src/menu)
-- [Modal](src/modal)
-- [Popup](src/popup)
-- [Toolbar](src/toolbar)
-- [Tooltip](src/tooltip)
+-   [Alerts](src/alerts)
+-   [Menu](src/menu)
+-   [Modal](src/modal)
+-   [Popup](src/popup)
+-   [Toolbar](src/toolbar)
+-   [Tooltip](src/tooltip)
 
 ## Contributing
 
