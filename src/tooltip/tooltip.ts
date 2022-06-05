@@ -61,6 +61,7 @@ export default class TooltipElement extends HTMLElement {
         document.removeEventListener('scroll', this.onBlur);
 
         this.observer.disconnect();
+        clearTimeout(this.timeout);
     }
 
     get disabled() {
