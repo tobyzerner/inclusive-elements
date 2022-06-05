@@ -12,8 +12,8 @@ export default class ModalElement extends HTMLElement {
         return ['open'];
     }
 
-    private trigger?: HTMLElement;
     private focusTrap?: FocusTrap;
+    private connected: boolean = false;
 
     public constructor() {
         super();
@@ -42,6 +42,8 @@ export default class ModalElement extends HTMLElement {
     }
 
     public connectedCallback(): void {
+        this.connected = true;
+
         if (! this.content?.hasAttribute('role')) {
             this.content?.setAttribute('role', 'dialog');
         }
@@ -62,12 +64,13 @@ export default class ModalElement extends HTMLElement {
             }
         });
 
-        // If the modal is already open, the attributeChangedCallback will
-        // already have been called. But we've only just set the content's
-        // tabindex, so it might not have been focused yet.
         if (this.open) {
-            this.focusContent();
+            this.wasOpened();
         }
+    }
+
+    public disconnectedCallback(): void {
+        this.connected = false;
     }
 
     get open() {
@@ -93,7 +96,7 @@ export default class ModalElement extends HTMLElement {
     }
 
     public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-        if (name !== 'open') return;
+        if (name !== 'open' || ! this.connected) return;
 
         if (newValue !== null) {
             this.wasOpened();
@@ -103,14 +106,12 @@ export default class ModalElement extends HTMLElement {
     }
 
     private wasOpened() {
-        this.trigger = document.activeElement as HTMLElement;
-
         this.hidden = false;
         hello(this);
 
         this.focusTrap.activate();
 
-        this.focusContent();
+        this.querySelector<HTMLElement>('[autofocus]')?.focus();
 
         this.dispatchEvent(new Event('open'));
     }
@@ -118,22 +119,11 @@ export default class ModalElement extends HTMLElement {
     private wasClosed() {
         this.focusTrap.deactivate();
 
-        this.trigger?.focus();
-
         goodbye(this, {
             finish: () => this.hidden = true,
         });
 
         this.dispatchEvent(new Event('close'));
-    }
-
-    private focusContent(): void {
-        const autofocus = this.querySelector<HTMLElement>('[autofocus]');
-        if (autofocus) {
-            autofocus.focus();
-        } else {
-            this.content?.focus();
-        }
     }
 
     private get backdrop(): HTMLElement | undefined {
