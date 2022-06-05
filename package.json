@@ -20,7 +20,7 @@
     "release": "release-it --npm.tag=latest"
   },
   "dependencies": {
-    "@floating-ui/dom": "^0.2.0",
+    "@floating-ui/dom": "^0.5.2",
     "focus-trap": "^6.7.2",
     "hello-goodbye": "^0.1.0-beta.5",
     "tabbable": "^5.2.1"

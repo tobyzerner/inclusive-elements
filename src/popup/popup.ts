@@ -1,8 +1,10 @@
-import { computePosition, flip, shift, size } from '@floating-ui/dom';
+import { autoUpdate, computePosition, flip, shift, size } from '@floating-ui/dom';
 import { cancel, goodbye, hello } from 'hello-goodbye';
 import { focusable } from 'tabbable';
 
 export default class PopupElement extends HTMLElement {
+    cleanup?: () => void;
+
     static get observedAttributes() {
         return ['open'];
     }
@@ -114,37 +116,39 @@ export default class PopupElement extends HTMLElement {
 
         this.content.style.position = 'absolute';
 
-        computePosition(this.button, this.content, {
-            placement: this.getAttribute('placement') as any || 'bottom',
-            middleware: [
-                shift(),
-                flip(),
-                size({
-                    apply: ({ width, height }) => {
-                        Object.assign(this.content.style, {
-                            maxWidth: '',
-                            maxHeight: '',
-                        });
+        this.cleanup = autoUpdate(this.button, this.content, () => {
+            computePosition(this.button, this.content, {
+                placement: this.getAttribute('placement') as any || 'bottom',
+                middleware: [
+                    shift(),
+                    flip(),
+                    size({
+                        apply: ({ availableWidth, availableHeight }) => {
+                            Object.assign(this.content.style, {
+                                maxWidth: '',
+                                maxHeight: '',
+                            });
 
-                        const computed = getComputedStyle(this.content);
+                            const computed = getComputedStyle(this.content);
 
-                        if (! computed.maxWidth || width < parseInt(computed.maxWidth)) {
-                            this.content.style.maxWidth = `${width}px`;
-                        }
+                            if (computed.maxWidth === 'none' || availableWidth < parseInt(computed.maxWidth)) {
+                                this.content.style.maxWidth = `${availableWidth}px`;
+                            }
 
-                        if (! computed.maxHeight || height < parseInt(computed.maxHeight)) {
-                            this.content.style.maxHeight = `${height}px`;
-                        }
-                    },
-                }),
-            ]
-        }).then(({ x, y, placement }) => {
-            Object.assign(this.content.style, {
-                left: `${x}px`,
-                top: `${y}px`,
+                            if (computed.maxHeight === 'none' || availableHeight < parseInt(computed.maxHeight)) {
+                                this.content.style.maxHeight = `${availableHeight}px`;
+                            }
+                        },
+                    }),
+                ]
+            }).then(({ x, y, placement }) => {
+                Object.assign(this.content.style, {
+                    left: `${x}px`,
+                    top: `${y}px`,
+                });
+                this.content.dataset.placement = placement;
             });
-            this.content.dataset.placement = placement;
-        });
+        }, { ancestorScroll: false });
 
         const autofocus = this.content.querySelector<HTMLElement>('[autofocus]');
         if (autofocus) {
@@ -160,6 +164,8 @@ export default class PopupElement extends HTMLElement {
         if (this.content.hidden) return;
 
         this.button.setAttribute('aria-expanded', 'false');
+
+        this.cleanup?.();
 
         goodbye(this.backdrop, {
             finish: () => this.backdrop.hidden = true
