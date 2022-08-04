@@ -2,15 +2,12 @@
     "name": "inclusive-elements",
     "version": "0.2.0",
     "description": "Accessible, lightweight, unstyled implementations of common UI controls.",
-    "module": "./dist/inclusive-elements.js",
+    "module": "dist/inclusive-elements.js",
     "type": "module",
-    "types": "./dist/types/index.d.ts",
+    "types": "dist/types/index.d.ts",
     "license": "MIT",
     "repository": "tobyzerner/inclusive-elements",
-    "files": [
-        "./dist",
-        "./README.md"
-    ],
+    "files": ["dist"],
     "sideEffects": false,
     "scripts": {
         "dev": "vite",
