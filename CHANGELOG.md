@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.2.0] - 2022-08-05
 ### Changed
 - Upgrade to `@floating-ui/dom` 1.0.0.
 - Switch build tool from Rollup to Vite.
@@ -103,7 +105,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Mark package as side-effect free.
 
 
-[Unreleased]: https://github.com/tobyzerner/inclusive-elements/compare/v0.1.3...HEAD
+[unreleased]: https://github.com/tobyzerner/inclusive-elements/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/tobyzerner/inclusive-elements/compare/v0.1.3...v0.2.0
 [0.1.3]: https://github.com/tobyzerner/inclusive-elements/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/tobyzerner/inclusive-elements/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/tobyzerner/inclusive-elements/compare/v0.1.0...v0.1.1
