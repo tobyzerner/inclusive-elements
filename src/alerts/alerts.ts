@@ -83,9 +83,9 @@ export default class AlertsElement extends HTMLElement {
     }
 
     public clear(): void {
-        for (const child of this.children) {
+        Array.from(this.children).forEach((child) => {
             this.dismiss(child as HTMLElement);
-        }
+        });
     }
 
     public speak(message: string): void {

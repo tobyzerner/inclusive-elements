@@ -27,7 +27,7 @@ export default class PopupElement extends HTMLElement {
         const shadow = this.attachShadow({ mode: 'open' });
         shadow.appendChild(template.content.cloneNode(true));
 
-        this.backdrop!.onclick = () => (this.open = false);
+        this.backdrop.onclick = () => (this.open = false);
     }
 
     public connectedCallback(): void {
@@ -205,15 +205,15 @@ export default class PopupElement extends HTMLElement {
         this.dispatchEvent(new Event('close'));
     }
 
-    private get backdrop(): HTMLElement | undefined {
+    private get backdrop(): HTMLElement {
         return this.shadowRoot?.firstElementChild as HTMLElement;
     }
 
-    private get button(): HTMLElement | undefined {
+    private get button(): HTMLElement {
         return this.children[0] as HTMLElement;
     }
 
-    private get content(): HTMLElement | undefined {
+    private get content(): HTMLElement {
         return this.children[1] as HTMLElement;
     }
 }

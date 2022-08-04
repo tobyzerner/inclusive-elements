@@ -67,6 +67,7 @@ export default class MenuElement extends HTMLElement {
                 el.focus();
                 return true;
             }
+            return false;
         });
     };
 

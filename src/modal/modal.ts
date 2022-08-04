@@ -117,7 +117,7 @@ export default class ModalElement extends HTMLElement {
         this.hidden = false;
         hello(this);
 
-        this.focusTrap.activate();
+        this.focusTrap?.activate();
 
         this.querySelector<HTMLElement>('[autofocus]')?.focus();
 
@@ -125,7 +125,7 @@ export default class ModalElement extends HTMLElement {
     }
 
     private wasClosed() {
-        this.focusTrap.deactivate();
+        this.focusTrap?.deactivate();
 
         goodbye(this, {
             finish: () => (this.hidden = true),

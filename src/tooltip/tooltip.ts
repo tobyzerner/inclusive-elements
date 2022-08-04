@@ -60,7 +60,7 @@ export default class TooltipElement extends HTMLElement {
         document.removeEventListener('keydown', this.onKeyDown);
         document.removeEventListener('scroll', this.onBlur);
 
-        this.observer.disconnect();
+        this.observer?.disconnect();
         clearTimeout(this.timeout);
     }
 
@@ -101,7 +101,7 @@ export default class TooltipElement extends HTMLElement {
 
         tooltip.style.position = 'absolute';
 
-        computePosition(this.parent, tooltip, {
+        computePosition(this.parent!, tooltip, {
             placement:
                 (this.getAttribute('placement') as any) ||
                 TooltipElement.placement,
@@ -121,7 +121,7 @@ export default class TooltipElement extends HTMLElement {
         if (this.showing) {
             this.showing = false;
 
-            goodbye(this.tooltip, {
+            goodbye(this.tooltip!, {
                 finish: () => {
                     if (this.tooltip) {
                         this.tooltip.hidden = true;

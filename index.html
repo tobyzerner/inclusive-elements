@@ -291,7 +291,24 @@
       <button>Five</button>
     </ui-toolbar>
 
-    <script src="demo.js"></script>
+    <script type="module">
+      import {
+        PopupElement,
+        TooltipElement,
+        MenuElement,
+        ModalElement,
+        AlertsElement,
+        ToolbarElement,
+      } from 'https://unpkg.com/inclusive-elements';
+      // } from './src/index.ts';
+
+      window.customElements.define('ui-popup', PopupElement);
+      window.customElements.define('ui-tooltip', TooltipElement);
+      window.customElements.define('ui-menu', MenuElement);
+      window.customElements.define('ui-modal', ModalElement);
+      window.customElements.define('ui-alerts', AlertsElement);
+      window.customElements.define('ui-toolbar', ToolbarElement);
+    </script>
 
     <script>
       function createAlert(type, message) {

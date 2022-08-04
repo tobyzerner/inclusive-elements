@@ -2,7 +2,7 @@
 
 **Accessible, lightweight, unstyled implementations of common UI controls.**
 
-[**Demo**](https://tobyzerner.github.io/inclusive-elements/demo/index.html)
+[**Demo**](https://tobyzerner.github.io/inclusive-elements/index.html)
 
 Basic interactive UI patterns like popup menus, tooltips, and modals are surprisingly hard to get right on the web. Component libraries tend to be weighty, opinionated, and come tightly coupled with styles you don't want. On the other hand, rolling your own components feels like you're reinventing the wheel and puts accessibility at risk.
 

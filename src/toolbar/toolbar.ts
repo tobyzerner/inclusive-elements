@@ -15,7 +15,7 @@ export default class ToolbarElement extends HTMLElement {
         this.removeEventListener('keydown', this.onKeyDown);
     }
 
-    private onInitialFocus = (e: FocusEvent): void => {
+    private onInitialFocus = (): void => {
         this.removeAttribute('tabindex');
         this.focusControlAtIndex(0);
     };
