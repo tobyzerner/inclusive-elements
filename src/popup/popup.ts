@@ -7,6 +7,7 @@ import {
 } from '@floating-ui/dom';
 import { cancel, goodbye, hello } from 'hello-goodbye';
 import { focusable } from 'tabbable';
+import { shouldOpenInNewTab } from '../utils';
 
 export default class PopupElement extends HTMLElement {
     cleanup?: () => void;
@@ -45,50 +46,71 @@ export default class PopupElement extends HTMLElement {
             }
         });
 
-        this.button.addEventListener('click', () => {
-            this.open = !this.open;
-        });
+        this.button.addEventListener('click', this.onButtonClick);
+        this.button.addEventListener('keydown', this.onButtonKeyDown);
 
-        this.button.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowDown') {
-                e.preventDefault();
-                this.open = true;
-                focusable(this.content)[0]?.focus();
-            }
-        });
+        this.addEventListener('keydown', this.onKeyDown);
+        this.addEventListener('focusout', this.onFocusOut);
 
-        this.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && this.open) {
-                e.preventDefault();
-                e.stopPropagation();
-                this.open = false;
-                this.button.focus();
-            }
-        });
-
-        this.addEventListener('focusout', (e) => {
-            if (
-                !(e.relatedTarget instanceof Node) ||
-                !this.contains(e.relatedTarget)
-            ) {
-                this.open = false;
-            }
-        });
-
-        this.content.addEventListener('click', (e) => {
-            if (!(e.target instanceof Element)) return;
-
-            if (e.target.closest('[role=menuitem], [role=menuitemradio]')) {
-                this.open = false;
-                this.button.focus();
-            }
-        });
+        this.content.addEventListener('click', this.onContentClick);
     }
 
     public disconnectedCallback(): void {
         cancel(this.backdrop);
         cancel(this.content);
+
+        this.button.removeAttribute('aria-expanded');
+        this.button.removeAttribute('aria-haspopup');
+        this.button.removeEventListener('click', this.onButtonClick);
+        this.button.removeEventListener('keydown', this.onButtonKeyDown);
+
+        this.removeEventListener('keydown', this.onKeyDown);
+        this.removeEventListener('focusout', this.onFocusOut);
+
+        this.content.removeEventListener('click', this.onContentClick);
     }
+
+    private onButtonClick = (e: MouseEvent) => {
+        if (!shouldOpenInNewTab(e) && !this.disabled) {
+            this.open = !this.open;
+            e.preventDefault();
+        }
+    };
+
+    private onButtonKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'ArrowDown' && !this.disabled) {
+            e.preventDefault();
+            this.open = true;
+            focusable(this.content)[0]?.focus();
+        }
+    };
+
+    private onKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape' && this.open) {
+            e.preventDefault();
+            e.stopPropagation();
+            this.open = false;
+            this.button.focus();
+        }
+    };
+
+    private onFocusOut = (e: FocusEvent) => {
+        if (
+            !(e.relatedTarget instanceof Node) ||
+            !this.contains(e.relatedTarget)
+        ) {
+            this.open = false;
+        }
+    };
+
+    private onContentClick = (e: MouseEvent) => {
+        if (!(e.target instanceof Element)) return;
+
+        if (e.target.closest('[role=menuitem], [role=menuitemradio]')) {
+            this.open = false;
+            this.button.focus();
+        }
+    };
 
     get open() {
         return this.hasAttribute('open');
@@ -100,6 +122,10 @@ export default class PopupElement extends HTMLElement {
         } else {
             this.removeAttribute('open');
         }
+    }
+
+    get disabled() {
+        return this.hasAttribute('disabled');
     }
 
     public attributeChangedCallback(
@@ -147,6 +173,8 @@ export default class PopupElement extends HTMLElement {
                                 });
 
                                 const computed = getComputedStyle(this.content);
+
+                                // TODO: subtract margins
 
                                 if (
                                     computed.maxWidth === 'none' ||

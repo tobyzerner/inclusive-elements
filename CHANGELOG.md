@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Alerts: Handle pre-existing children and any subsequently added to the container. Options can be specified as `[data-*]` attributes.
+- Popup: Allow popups to be disabled using the `[disabled]` attribute.
+- Popup: Don't open popup if modifier keys are pressed. This allows link popup triggers to be opened in a new tab.
+
+### Fixed
+- Popup: Clean up event listeners when popup element is disconnected.
 
 ## [0.2.1] - 2022-08-05
 ### Fixed
