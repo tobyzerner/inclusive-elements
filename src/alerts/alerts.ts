@@ -3,6 +3,7 @@ import { hello, goodbye, move } from 'hello-goodbye';
 export type AlertOptions = {
     key?: string;
     duration?: number;
+    animate?: boolean;
 };
 
 export default class AlertsElement extends HTMLElement {
@@ -10,6 +11,20 @@ export default class AlertsElement extends HTMLElement {
 
     private timeouts: WeakMap<HTMLElement, number> = new Map();
     private index: number = 0;
+
+    constructor() {
+        super();
+
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                mutation.addedNodes.forEach((node) => {
+                    if (node instanceof HTMLElement) this.show(node);
+                });
+            });
+        });
+
+        observer.observe(this, { childList: true });
+    }
 
     public connectedCallback(): void {
         if (!this.hasAttribute('role')) {
@@ -23,24 +38,35 @@ export default class AlertsElement extends HTMLElement {
         if (!this.hasAttribute('aria-relevant')) {
             this.setAttribute('aria-relevant', 'additions');
         }
+
+        for (const child of this.children) {
+            this.show(child as HTMLElement, { animate: false });
+        }
     }
 
     public show(el: HTMLElement, options: AlertOptions = {}) {
-        const key = options.key || String(this.index++);
-
-        this.dismiss(key);
+        const key = options.key || el.dataset.key || String(this.index++);
 
         el.dataset.key = key;
 
-        move(this.children, () => {
-            this.append(el);
+        if (!this.contains(el)) {
+            if (options.animate === false) {
+                this.append(el);
+            } else {
+                move(this.children, () => {
+                    this.append(el);
+                    hello(el);
+                });
+            }
+        } else {
             hello(el);
-        });
+        }
 
-        const duration =
-            typeof options.duration !== 'undefined'
-                ? Number(options.duration)
-                : AlertsElement.duration;
+        const duration = Number(
+            options.duration !== undefined
+                ? options.duration
+                : el.dataset.duration || AlertsElement.duration
+        );
 
         if (duration > 0) {
             this.startTimeout(el, duration);

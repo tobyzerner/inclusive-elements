@@ -56,13 +56,21 @@ alerts.show(
 type AlertOptions = {
     // A unique key that represents this alert. Any previous alerts with the
     // same key will be dismissed before the new one is shown.
-    key?: string,
+    key?: string;
 
     // The number of milliseconds to show the alert for.
     // If -1, the alert will not automatically disappear.
     // If undefined, the default value will be used.
-    duration?: number
+    duration?: number;
+    
+    // Whether or not to animate the alert in, using a hello-goodbye transition.
+    // Defaults to true.
+    animate?: boolean;
 };
+
+// The `key` and `duration` options can also be specified as [data-*] attributes
+// on the alert element being shown. eg:
+// <div data-key="foo" data-duration="1000">Alert</div>
 
 // Dismiss an alert by passing its element or unique key
 alerts.dismiss(el: HTMLElement);
