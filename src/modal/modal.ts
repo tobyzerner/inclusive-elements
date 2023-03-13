@@ -42,6 +42,7 @@ export default class ModalElement extends HTMLElement {
         this.focusTrap = createFocusTrap(this, {
             escapeDeactivates: false,
             allowOutsideClick: true,
+            preventScroll: true,
         });
     }
 
