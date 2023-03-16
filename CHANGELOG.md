@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.3.0](https://github.com/tobyzerner/inclusive-elements/compare/v0.2.2...v0.3.0) (2023-03-16)
+
+
+### Features
+
+* add Disclosure and Accordion elements ([0df80d3](https://github.com/tobyzerner/inclusive-elements/commit/0df80d30e776ea9ecd149da61c96932a39786386))
+
+
+### Bug Fixes
+
+* **modal:** prevent scroll on focus trap (de)activation ([4e09d5f](https://github.com/tobyzerner/inclusive-elements/commit/4e09d5f331fb2a0b6b07b5dcfae9d87a4945b128))
+* **popup:** allow popup trigger button to be nested ([6c62efd](https://github.com/tobyzerner/inclusive-elements/commit/6c62efd39b6f8e628d78711202cf0915f1f733ef))
+
 ## [0.2.2] - 2023-03-05
 ### Added
 - Alerts: Handle pre-existing children and any subsequently added to the container. Options can be specified as `[data-*]` attributes.
