@@ -53,5 +53,5 @@ disclosure.addEventListener('close', callback);
 
 ## Further Reading
 
--   [WAI-ARIA Authoring Practices: Disclosure](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/)
+-   [ARIA Authoring Practices Guide: Disclosure Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/)
 -   [Scott O'Hara: The details and summary elements, again](https://www.scottohara.me/blog/2022/09/12/details-summary.html)

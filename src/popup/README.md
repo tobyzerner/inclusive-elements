@@ -69,6 +69,6 @@ ui-popup::part(backdrop) {
 
 ## Further Reading
 
--   [WAI-ARIA Authoring Practices: Disclosure](https://w3c.github.io/aria-practices/#disclosure)
--   [WAI-ARIA Authoring Practices: Menu Button](https://w3c.github.io/aria-practices/#menubutton)
+-   [ARIA Authoring Practices Guide: Disclosure Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/)
+-   [ARIA Authoring Practices Guide: Menu Button Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/)
 -   [Adrian Roselli: Stop Using 'Pop-up'](https://adrianroselli.com/2021/07/stop-using-pop-up.html)

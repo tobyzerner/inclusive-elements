@@ -45,6 +45,6 @@ MenuElement.searchDelay = 800;
 
 ## Further Reading
 
--   [WAI-ARIA Authoring Practices: Menu](https://w3c.github.io/aria-practices/#menu)
+-   [ARIA Authoring Practices Guide: Menu Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/)
 -   [Inclusive Components: Menus & Menu Buttons](https://inclusive-components.design/menus-menu-buttons/)
 -   [Adrian Roselli: Don’t Use ARIA Menu Roles for Site Nav](https://adrianroselli.com/2017/10/dont-use-aria-menu-roles-for-site-nav.html)

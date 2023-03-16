@@ -78,5 +78,5 @@ TooltipElement.delay = 100;
 
 ## Further Reading
 
--   [WAI-ARIA Authoring Practices: Tooltip](https://w3c.github.io/aria-practices/#tooltip)
+-   [ARIA Authoring Practices Guide: Tooltip Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/)
 -   [Inclusive Components: Tooltips & Toggletips](https://inclusive-components.design/tooltips-toggletips/)

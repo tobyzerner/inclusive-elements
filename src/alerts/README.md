@@ -111,6 +111,6 @@ ui-alerts {
 
 ## Further Reading
 
--   [WAI-ARIA Authoring Practices: Alert](https://w3c.github.io/aria-practices/#alert)
+-   [ARIA Authoring Practices Guide: Alert Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/alert/)
 -   [Scott O'Hara: A toast to an accessible toast...](https://www.scottohara.me/blog/2019/07/08/a-toast-to-a11y-toasts.html)
 -   [Adrian Roselli: Defining 'Toast' Messages](https://adrianroselli.com/2020/01/defining-toast-messages.html)

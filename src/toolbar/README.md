@@ -28,4 +28,4 @@ window.customElements.define('ui-toolbar', ToolbarElement);
 
 ## Further Reading
 
--   [WAI-ARIA Authoring Practices: Toolbar](https://www.w3.org/TR/wai-aria-practices-1.1/#toolbar)
+-   [ARIA Authoring Practices Guide: Toolbar Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/)

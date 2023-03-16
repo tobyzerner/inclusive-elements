@@ -42,4 +42,4 @@ window.customElements.define('ui-accordion', AccordionElement);
 
 ## Further Reading
 
--   [WAI-ARIA Authoring Practices: Accordion](https://www.w3.org/WAI/ARIA/apg/patterns/accordion/)
+-   [ARIA Authoring Practices Guide: Accordion Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/accordion/)

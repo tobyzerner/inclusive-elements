@@ -128,4 +128,4 @@ ui-modal::part(backdrop) {
 
 ## Further Reading
 
--   [WAI-ARIA Authoring Practices: Dialog (Modal)](https://w3c.github.io/aria-practices/#dialog_modal)
+-   [ARIA Authoring Practices Guide: Dialog (Modal) Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)
