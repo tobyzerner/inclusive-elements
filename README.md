@@ -23,7 +23,9 @@ npm install inclusive-elements --save
 
 Detailed descriptions and usage instructions are contained within each element:
 
+-   [Accordion](src/accordion)
 -   [Alerts](src/alerts)
+-   [Disclosure](src/disclosure)
 -   [Menu](src/menu)
 -   [Modal](src/modal)
 -   [Popup](src/popup)
