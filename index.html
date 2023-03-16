@@ -203,10 +203,29 @@
         }
       }
 
-      ui-toolbar {
+      ui-toolbar,
+      ui-accordion {
         display: block;
         border: 2px solid #ccc;
         padding: 10px;
+        margin-top: 10px;
+      }
+
+      ui-accordion h5 {
+        margin: 0;
+      }
+
+      ui-accordion button {
+        width: 100%;
+      }
+
+      .panel.enter-active {
+        transition: opacity 0.2s, transform 0.2s;
+      }
+
+      .panel.enter-from {
+        opacity: 0;
+        transform: translateY(-10px);
       }
     </style>
   </head>
@@ -291,6 +310,25 @@
       <button>Five</button>
     </ui-toolbar>
 
+    <ui-accordion>
+      <ui-disclosure>
+        <h5><button>Section A</button></h5>
+        <div class="panel">
+          <p>Section A content</p>
+          <p>Section A content</p>
+          <p>Section A content</p>
+        </div>
+      </ui-disclosure>
+      <ui-disclosure>
+        <h5><button>Section B</button></h5>
+        <div class="panel">
+          <p>Section B content</p>
+          <p>Section B content</p>
+          <p>Section B content</p>
+        </div>
+      </ui-disclosure>
+    </ui-accordion>
+
     <script type="module">
       import {
         PopupElement,
@@ -299,6 +337,8 @@
         ModalElement,
         AlertsElement,
         ToolbarElement,
+        AccordionElement,
+        DisclosureElement,
       } from 'https://unpkg.com/inclusive-elements?module';
       // } from './src/index.ts';
 
@@ -308,6 +348,8 @@
       window.customElements.define('ui-modal', ModalElement);
       window.customElements.define('ui-alerts', AlertsElement);
       window.customElements.define('ui-toolbar', ToolbarElement);
+      window.customElements.define('ui-accordion', AccordionElement);
+      window.customElements.define('ui-disclosure', DisclosureElement);
     </script>
 
     <script>
