@@ -15,30 +15,35 @@
         "dev": "vite",
         "build": "tsc --noEmit && vite build && tsc --emitDeclarationOnly",
         "preview": "vite preview",
-        "release": "release-it --npm.tag=latest"
+        "release": "release-it"
     },
     "dependencies": {
-        "@floating-ui/dom": "^1.0.0",
-        "focus-trap": "^6.7.2",
-        "hello-goodbye": "^0.1.0-beta.5",
-        "tabbable": "^5.2.1"
+        "@floating-ui/dom": "^1.2.4",
+        "focus-trap": "^6.9.4",
+        "hello-goodbye": "^0.1.1",
+        "tabbable": "^5.3.3"
     },
     "devDependencies": {
-        "@release-it/keep-a-changelog": "^2.3.0",
-        "prettier": "^2.6.2",
-        "release-it": "^14.12.4",
-        "typescript": "^4.5.5",
-        "vite": "^3.0.4"
+        "@release-it/conventional-changelog": "^5.1.1",
+        "prettier": "^2.8.4",
+        "release-it": "^15.9.0",
+        "typescript": "^5.0.2",
+        "vite": "^4.2.0"
     },
     "release-it": {
+        "git": {
+            "commitMessage": "release: v${version}",
+            "tagName": "v${version}"
+        },
         "github": {
-            "release": true
+            "release": true,
+            "releaseName": "v${version}"
         },
         "plugins": {
-            "@release-it/keep-a-changelog": {
-                "filename": "CHANGELOG.md",
-                "addUnreleased": true,
-                "addVersionUrl": true
+            "@release-it/conventional-changelog": {
+                "preset": "conventionalcommits",
+                "infile": "CHANGELOG.md",
+                "header": "# Changelog"
             }
         },
         "hooks": {
