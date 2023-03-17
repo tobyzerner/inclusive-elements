@@ -146,14 +146,14 @@ export default class PopupElement extends HTMLElement {
         if (!this.content.hidden) return;
 
         this.content.hidden = false;
+        this.content.style.position = 'absolute';
+
         this.backdrop.hidden = false;
 
         hello(this.content);
         hello(this.backdrop);
 
         this.button.setAttribute('aria-expanded', 'true');
-
-        this.content.style.position = 'absolute';
 
         this.cleanup = autoUpdate(
             this.button,
