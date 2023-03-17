@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.3.1](https://github.com/tobyzerner/inclusive-elements/compare/v0.3.0...v0.3.1) (2023-03-17)
+
+
+### Bug Fixes
+
+* **tooltip:** show tooltip on touch ([d421649](https://github.com/tobyzerner/inclusive-elements/commit/d4216490099133c038d4557fcff5297f7072a937))
+
 ## [0.3.0](https://github.com/tobyzerner/inclusive-elements/compare/v0.2.2...v0.3.0) (2023-03-16)
 
 
