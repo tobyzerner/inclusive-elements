@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.3.2](https://github.com/tobyzerner/inclusive-elements/compare/v0.3.1...v0.3.2) (2023-03-17)
+
+
+### Bug Fixes
+
+* **tooltip:** prevent tooltip flicker on touch scroll ([2e461de](https://github.com/tobyzerner/inclusive-elements/commit/2e461de11124f57d5d64f49626d8a36ad1fb7ec4))
+
 ### [0.3.1](https://github.com/tobyzerner/inclusive-elements/compare/v0.3.0...v0.3.1) (2023-03-17)
 
 
