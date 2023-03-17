@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.3.3](https://github.com/tobyzerner/inclusive-elements/compare/v0.3.2...v0.3.3) (2023-03-17)
+
+
+### Bug Fixes
+
+* **popup:** fix layout flicker when opening popup ([42a397b](https://github.com/tobyzerner/inclusive-elements/commit/42a397bd80dce342d34b56d22c26f659c7f7f8f0))
+
 ### [0.3.2](https://github.com/tobyzerner/inclusive-elements/compare/v0.3.1...v0.3.2) (2023-03-17)
 
 
