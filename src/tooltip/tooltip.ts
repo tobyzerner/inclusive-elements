@@ -18,6 +18,7 @@ export default class TooltipElement extends HTMLElement {
     private onBlur = this.hide.bind(this);
     private onPointerUp = (e: PointerEvent) => {
         if (e.pointerType === 'mouse') this.hide();
+        else this.show();
     };
 
     public connectedCallback(): void {
@@ -26,7 +27,6 @@ export default class TooltipElement extends HTMLElement {
         if (this.parent) {
             this.parent.addEventListener('mouseenter', this.onMouseEnter);
             this.parent.addEventListener('focus', this.onFocus);
-            this.parent.addEventListener('touchstart', this.onFocus);
             this.parent.addEventListener('mouseleave', this.onMouseLeave);
             this.parent.addEventListener('blur', this.onBlur);
             this.parent.addEventListener('pointerup', this.onPointerUp);
@@ -55,7 +55,6 @@ export default class TooltipElement extends HTMLElement {
         if (this.parent) {
             this.parent.removeEventListener('mouseenter', this.onMouseEnter);
             this.parent.removeEventListener('focus', this.onFocus);
-            this.parent.removeEventListener('touchstart', this.onFocus);
             this.parent.removeEventListener('mouseleave', this.onMouseLeave);
             this.parent.removeEventListener('blur', this.onBlur);
             this.parent.removeEventListener('pointerup', this.onPointerUp);
