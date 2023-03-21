@@ -222,13 +222,8 @@ export default class PopupElement extends HTMLElement {
 
         this.cleanup?.();
 
-        goodbye(this.backdrop, {
-            finish: () => (this.backdrop.hidden = true),
-        });
-
-        goodbye(this.content, {
-            finish: () => (this.content.hidden = true),
-        });
+        goodbye(this.backdrop).then(() => (this.backdrop.hidden = true));
+        goodbye(this.content).then(() => (this.content.hidden = true));
 
         this.dispatchEvent(new Event('close'));
     }

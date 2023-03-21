@@ -128,9 +128,7 @@ export default class ModalElement extends HTMLElement {
     private wasClosed() {
         this.focusTrap?.deactivate();
 
-        goodbye(this, {
-            finish: () => (this.hidden = true),
-        });
+        goodbye(this).then(() => (this.hidden = true));
 
         this.dispatchEvent(new Event('close'));
     }

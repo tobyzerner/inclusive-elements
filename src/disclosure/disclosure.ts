@@ -75,9 +75,7 @@ export default class DisclosureElement extends HTMLElement {
 
         this.button.setAttribute('aria-expanded', 'false');
 
-        goodbye(this.content, {
-            finish: () => (this.content.hidden = true),
-        });
+        goodbye(this.content).then(() => (this.content.hidden = true));
 
         this.dispatchEvent(new Event('close'));
     }

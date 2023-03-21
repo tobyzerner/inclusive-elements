@@ -125,12 +125,8 @@ export default class TooltipElement extends HTMLElement {
         if (this.showing) {
             this.showing = false;
 
-            goodbye(this.tooltip!, {
-                finish: () => {
-                    if (this.tooltip) {
-                        this.tooltip.hidden = true;
-                    }
-                },
+            goodbye(this.tooltip!).then(() => {
+                if (this.tooltip) this.tooltip.hidden = true;
             });
         }
     }

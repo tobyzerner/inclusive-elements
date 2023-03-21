@@ -100,9 +100,7 @@ export default class AlertsElement extends HTMLElement {
         }
 
         move(this.children, () => {
-            goodbye(elOrKey, {
-                finish: () => this.removeChild(elOrKey),
-            });
+            goodbye(elOrKey).then(() => this.removeChild(elOrKey));
         });
 
         this.clearTimeout(elOrKey);
