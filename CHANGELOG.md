@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.3.4](https://github.com/tobyzerner/inclusive-elements/compare/v0.3.3...v0.3.4) (2023-03-21)
+
+
+### Bug Fixes
+
+* **disclosure:** fix issue with widget not closing in some cases ([cb3ae5d](https://github.com/tobyzerner/inclusive-elements/commit/cb3ae5d21be1fdadc284b510924b64e5e58e3137))
+
 ### [0.3.3](https://github.com/tobyzerner/inclusive-elements/compare/v0.3.2...v0.3.3) (2023-03-17)
 
 
