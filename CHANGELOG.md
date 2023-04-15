@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.4.1](https://github.com/tobyzerner/inclusive-elements/compare/v0.4.0...v0.4.1) (2023-04-15)
+
+
+### Bug Fixes
+
+* attempt to fix tree shaking ([ac1f1b1](https://github.com/tobyzerner/inclusive-elements/commit/ac1f1b17268f2fd592605ae575632d1d10da1d30))
+
 ## [0.4.0](https://github.com/tobyzerner/inclusive-elements/compare/v0.3.4...v0.4.0) (2023-04-15)
 
 
