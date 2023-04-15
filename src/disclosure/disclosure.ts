@@ -59,25 +59,24 @@ export default class DisclosureElement extends HTMLElement {
     }
 
     private wasOpened() {
-        if (!this.content.hidden) return;
-
-        this.content.hidden = false;
-
-        hello(this.content);
+        if (this.content.hidden) {
+            this.content.hidden = false;
+            hello(this.content);
+        }
 
         this.button.setAttribute('aria-expanded', 'true');
 
-        this.dispatchEvent(new Event('open'));
+        this.dispatchEvent(new Event('toggle'));
     }
 
     private wasClosed() {
-        if (this.content.hidden) return;
+        if (!this.content.hidden) {
+            goodbye(this.content).then(() => (this.content.hidden = true));
+        }
 
         this.button.setAttribute('aria-expanded', 'false');
 
-        goodbye(this.content).then(() => (this.content.hidden = true));
-
-        this.dispatchEvent(new Event('close'));
+        this.dispatchEvent(new Event('toggle'));
     }
 
     private get button(): HTMLElement {

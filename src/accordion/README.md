@@ -36,7 +36,7 @@ window.customElements.define('ui-accordion', AccordionElement);
 
 ## Behavior
 
--   Whenever a direct child `<ui-disclosure>` element is opened, sibling `<ui-disclosure>` elements will be closed.
+-   Whenever a direct child `<ui-disclosure>` or `<details>` element is opened, sibling `<ui-disclosure>` and `<details>` elements will be closed.
 
 -   If the `required` attribute is present, the `<ui-disclosure>` element that is currently open will be `disabled`.
 

@@ -31,8 +31,7 @@ const disclosure = document.querySelector('ui-disclosure');
 // Programatically open and close the widget.
 disclosure.open = true;
 
-disclosure.addEventListener('open', callback);
-disclosure.addEventListener('close', callback);
+disclosure.addEventListener('toggle', callback);
 ```
 
 ```css
