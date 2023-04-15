@@ -9,7 +9,7 @@ Basic interactive UI patterns like popup menus, tooltips, and modals are surpris
 `inclusive-elements` provides those basic behaviors in the form of Custom Elements, without any of the cruft. They are:
 
 -   **🦮 Accessible.** Designed following the [ARIA Authoring Practices Guide](https://www.w3.org/WAI/ARIA/apg/) so everyone can use them.
--   **🌳 Lightweight.** 3kB gzipped with minimal dependencies. Less if you tree-shake only the elements you need.
+-   **🌳 Lightweight.** Tree-shake only the elements you need.
 -   **🎨 Unstyled.** Easily integrate with your design bottom-up without having to fight defaults.
 -   **🚀 Easy to use.** Simple API, works with any framework that supports Custom Elements.
 
