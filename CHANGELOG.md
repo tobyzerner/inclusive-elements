@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.4.0](https://github.com/tobyzerner/inclusive-elements/compare/v0.3.4...v0.4.0) (2023-04-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* **disclosure:** `open` and `close` events have been removed - use `toggle` instead
+
+### Features
+
+* **disclosure:** add `toggle` event for consistency with `<details>` ([9fc7f74](https://github.com/tobyzerner/inclusive-elements/commit/9fc7f74aebea1b3e48dd99a3000b91258f5ffcea))
+* **tabs:** new `tabs` element ([4097e73](https://github.com/tobyzerner/inclusive-elements/commit/4097e7364e3787740d038967d99c25079f65b9ad))
+
 ### [0.3.4](https://github.com/tobyzerner/inclusive-elements/compare/v0.3.3...v0.3.4) (2023-03-21)
 
 
