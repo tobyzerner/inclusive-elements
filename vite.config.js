@@ -15,6 +15,9 @@ export default defineConfig({
                 'hello-goodbye',
                 'tabbable',
             ],
+            output: {
+                preserveModules: true,
+            },
         },
     },
 });
