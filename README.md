@@ -29,6 +29,7 @@ Detailed descriptions and usage instructions are contained within each element:
 -   [Menu](src/menu)
 -   [Modal](src/modal)
 -   [Popup](src/popup)
+-   [Tabs](src/tabs)
 -   [Toolbar](src/toolbar)
 -   [Tooltip](src/tooltip)
 
