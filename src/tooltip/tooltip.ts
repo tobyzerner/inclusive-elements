@@ -1,4 +1,4 @@
-import { computePosition, flip, shift } from '@floating-ui/dom';
+import { autoUpdate, computePosition, flip, shift } from '@floating-ui/dom';
 import { goodbye, hello } from 'hello-goodbye';
 
 export default class TooltipElement extends HTMLElement {
@@ -9,8 +9,9 @@ export default class TooltipElement extends HTMLElement {
     private parent?: HTMLElement;
     private tooltip?: HTMLElement;
     private timeout?: number;
-    private observer?: MutationObserver;
+    private disabledObserver?: MutationObserver;
     private showing: boolean = false;
+    private cleanup?: () => void;
 
     private onMouseEnter = this.afterDelay.bind(this, this.show);
     private onFocus = this.show.bind(this);
@@ -31,7 +32,7 @@ export default class TooltipElement extends HTMLElement {
             this.parent.addEventListener('blur', this.onBlur);
             this.parent.addEventListener('pointerup', this.onPointerUp);
 
-            this.observer = new MutationObserver((mutations) => {
+            this.disabledObserver = new MutationObserver((mutations) => {
                 mutations.forEach((mutation) => {
                     if (mutation.attributeName === 'disabled') {
                         this.hide();
@@ -39,7 +40,7 @@ export default class TooltipElement extends HTMLElement {
                 });
             });
 
-            this.observer.observe(this.parent, { attributes: true });
+            this.disabledObserver.observe(this.parent, { attributes: true });
         }
 
         document.addEventListener('keydown', this.onKeyDown);
@@ -64,7 +65,7 @@ export default class TooltipElement extends HTMLElement {
         document.removeEventListener('keydown', this.onKeyDown);
         document.removeEventListener('scroll', this.onBlur);
 
-        this.observer?.disconnect();
+        this.disabledObserver?.disconnect();
         clearTimeout(this.timeout);
     }
 
@@ -105,22 +106,26 @@ export default class TooltipElement extends HTMLElement {
 
         tooltip.style.position = 'absolute';
 
-        computePosition(this.parent!, tooltip, {
-            placement:
-                (this.getAttribute('placement') as any) ||
-                TooltipElement.placement,
-            middleware: [shift(), flip()],
-        }).then(({ x, y, placement }) => {
-            Object.assign(tooltip.style, {
-                left: `${x}px`,
-                top: `${y}px`,
-            });
-            tooltip.dataset.placement = placement;
-        });
+        this.cleanup = autoUpdate(this.parent!, tooltip, () =>
+            computePosition(this.parent!, tooltip, {
+                placement:
+                    (this.getAttribute('placement') as any) ||
+                    TooltipElement.placement,
+                middleware: [shift(), flip()],
+            }).then(({ x, y, placement }) => {
+                Object.assign(tooltip.style, {
+                    left: `${x}px`,
+                    top: `${y}px`,
+                });
+                tooltip.dataset.placement = placement;
+            })
+        );
     }
 
     private hide() {
         clearTimeout(this.timeout);
+
+        this.cleanup?.();
 
         if (this.showing) {
             this.showing = false;
