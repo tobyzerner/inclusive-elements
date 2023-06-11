@@ -100,8 +100,8 @@ export default class TooltipElement extends HTMLElement {
             this.showing = true;
         }
 
-        if (tooltip.innerHTML !== this.innerHTML) {
-            tooltip.innerHTML = this.innerHTML;
+        if (this.innerHTML !== this.prevInnerHTML) {
+            this.prevInnerHTML = tooltip.innerHTML = this.innerHTML;
         }
 
         tooltip.style.position = 'absolute';
