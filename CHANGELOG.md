@@ -1,5 +1,17 @@
 # Changelog
 
+### [0.4.2](https://github.com/tobyzerner/inclusive-elements/compare/v0.4.1...v0.4.2) (2023-06-11)
+
+
+### Features
+
+* **tooltip:** auto-update position on scroll, resize, etc ([587de3b](https://github.com/tobyzerner/inclusive-elements/commit/587de3bfa5937b63ec9117b382e241ea48bb174a))
+
+
+### Bug Fixes
+
+* **tooltip:** only update tooltip content if original element content has changed ([62ad220](https://github.com/tobyzerner/inclusive-elements/commit/62ad220cff2e0fed09fd47f04c4ab9ac4e90c21e))
+
 ### [0.4.1](https://github.com/tobyzerner/inclusive-elements/compare/v0.4.0...v0.4.1) (2023-04-15)
 
 
