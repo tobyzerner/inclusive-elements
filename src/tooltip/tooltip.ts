@@ -12,6 +12,7 @@ export default class TooltipElement extends HTMLElement {
     private disabledObserver?: MutationObserver;
     private showing: boolean = false;
     private cleanup?: () => void;
+    private prevInnerHTML?: string;
 
     private onMouseEnter = this.afterDelay.bind(this, this.show);
     private onFocus = this.show.bind(this);
