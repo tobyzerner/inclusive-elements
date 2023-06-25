@@ -47,6 +47,8 @@ export default class AlertsElement extends HTMLElement {
     public show(el: HTMLElement, options: AlertOptions = {}) {
         const key = options.key || el.dataset.key || String(this.index++);
 
+        this.dismiss(key);
+
         el.dataset.key = key;
 
         if (!this.contains(el)) {
