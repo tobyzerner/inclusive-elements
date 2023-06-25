@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.4.4](https://github.com/tobyzerner/inclusive-elements/compare/v0.4.3...v0.4.4) (2023-06-25)
+
+
+### Bug Fixes
+
+* **alerts:** fix regression causing alerts not to show ([da0b283](https://github.com/tobyzerner/inclusive-elements/commit/da0b2838dc6e253fce11f7374d88a366e95f237b))
+
 ### [0.4.3](https://github.com/tobyzerner/inclusive-elements/compare/v0.4.2...v0.4.3) (2023-06-25)
 
 
