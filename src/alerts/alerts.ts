@@ -9,6 +9,7 @@ export type AlertOptions = {
 export default class AlertsElement extends HTMLElement {
     public static duration: number = 10000;
 
+    private added: Set<HTMLElement> = new Set();
     private timeouts: WeakMap<HTMLElement, number> = new Map();
     private index: number = 0;
 
@@ -18,7 +19,8 @@ export default class AlertsElement extends HTMLElement {
         const observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 mutation.addedNodes.forEach((node) => {
-                    if (node instanceof HTMLElement) this.show(node);
+                    if (node instanceof HTMLElement && !this.added.has(node))
+                        this.show(node);
                 });
             });
         });
@@ -64,6 +66,8 @@ export default class AlertsElement extends HTMLElement {
             hello(el);
         }
 
+        this.added.add(el);
+
         const duration = Number(
             options.duration !== undefined
                 ? options.duration
@@ -95,15 +99,15 @@ export default class AlertsElement extends HTMLElement {
         if (typeof elOrKey === 'string') {
             this.querySelectorAll<HTMLElement>(
                 `[data-key="${elOrKey}"]`
-            ).forEach((el) => {
-                this.dismiss(el);
-            });
+            ).forEach((el) => this.dismiss(el));
             return;
         }
 
-        move(this.children, () => {
-            goodbye(elOrKey).then(() => this.removeChild(elOrKey));
-        });
+        this.added.delete(elOrKey);
+
+        move(this.children, () =>
+            goodbye(elOrKey).then(() => elOrKey.remove())
+        );
 
         this.clearTimeout(elOrKey);
     }
