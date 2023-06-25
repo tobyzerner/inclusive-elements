@@ -1,5 +1,13 @@
 # Changelog
 
+### [0.4.3](https://github.com/tobyzerner/inclusive-elements/compare/v0.4.2...v0.4.3) (2023-06-25)
+
+
+### Bug Fixes
+
+* **alerts:** fix previous alert with same key not being dismissed ([356e028](https://github.com/tobyzerner/inclusive-elements/commit/356e02867ac9f8c8755a4acf2d0b1d5355be1c6b))
+* update hello-goodbye to fix transitions not running reliably ([89f23df](https://github.com/tobyzerner/inclusive-elements/commit/89f23df5a896e912a7ddc52b23842a3ba39be027))
+
 ### [0.4.2](https://github.com/tobyzerner/inclusive-elements/compare/v0.4.1...v0.4.2) (2023-06-11)
 
 

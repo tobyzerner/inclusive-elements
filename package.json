@@ -1,6 +1,6 @@
 {
     "name": "inclusive-elements",
-    "version": "0.4.2",
+    "version": "0.4.3",
     "description": "Accessible, lightweight, unstyled implementations of common UI controls.",
     "module": "dist/inclusive-elements.js",
     "type": "module",
