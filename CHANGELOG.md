@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.4.5](https://github.com/tobyzerner/inclusive-elements/compare/v0.4.4...v0.4.5) (2023-06-29)
+
+
+### Bug Fixes
+
+* **tooltip:** clean up tooltip positioner on disconnect ([a163ad7](https://github.com/tobyzerner/inclusive-elements/commit/a163ad768364400c48ea7fa024fde2c639cded75))
+
 ### [0.4.4](https://github.com/tobyzerner/inclusive-elements/compare/v0.4.3...v0.4.4) (2023-06-25)
 
 
