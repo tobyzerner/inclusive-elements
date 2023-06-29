@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.4.6](https://github.com/tobyzerner/inclusive-elements/compare/v0.4.5...v0.4.6) (2023-06-29)
+
+
+### Bug Fixes
+
+* **tooltip:** prevent creating multiple positioners ([4dfc42d](https://github.com/tobyzerner/inclusive-elements/commit/4dfc42df3bfc14399107c9f187fd0b14ab1e4d0d))
+
 ### [0.4.5](https://github.com/tobyzerner/inclusive-elements/compare/v0.4.4...v0.4.5) (2023-06-29)
 
 
