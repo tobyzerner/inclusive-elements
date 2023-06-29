@@ -49,6 +49,8 @@ export default class TooltipElement extends HTMLElement {
     }
 
     public disconnectedCallback(): void {
+        this.cleanup?.();
+
         if (this.tooltip) {
             this.tooltip.remove();
             this.tooltip = undefined;
