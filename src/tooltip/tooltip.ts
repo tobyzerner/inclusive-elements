@@ -109,6 +109,7 @@ export default class TooltipElement extends HTMLElement {
 
         tooltip.style.position = 'absolute';
 
+        this.cleanup?.();
         this.cleanup = autoUpdate(this.parent!, tooltip, () =>
             computePosition(this.parent!, tooltip, {
                 placement:
