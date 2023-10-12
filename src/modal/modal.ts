@@ -43,6 +43,7 @@ export default class ModalElement extends HTMLElement {
             escapeDeactivates: false,
             allowOutsideClick: true,
             preventScroll: true,
+            initialFocus: () => this.querySelector<HTMLElement>('[autofocus]'),
         });
     }
 
@@ -114,13 +115,11 @@ export default class ModalElement extends HTMLElement {
         }
     }
 
-    private wasOpened() {
+    private async wasOpened() {
         this.hidden = false;
-        hello(this);
+        await hello(this);
 
         this.focusTrap?.activate();
-
-        this.querySelector<HTMLElement>('[autofocus]')?.focus();
 
         this.dispatchEvent(new Event('open'));
     }
