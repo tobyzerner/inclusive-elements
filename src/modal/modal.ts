@@ -117,9 +117,10 @@ export default class ModalElement extends HTMLElement {
 
     private async wasOpened() {
         this.hidden = false;
-        await hello(this);
 
-        this.focusTrap?.activate();
+        hello(this);
+
+        requestAnimationFrame(() => this.focusTrap?.activate());
 
         this.dispatchEvent(new Event('open'));
     }
