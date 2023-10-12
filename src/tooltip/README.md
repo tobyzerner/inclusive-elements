@@ -23,9 +23,9 @@ window.customElements.define('ui-tooltip', TooltipElement);
 <button aria-describedby="settings-description">
     <svg><use href="#cog" /></svg>
     <span class="visually-hidden">Settings</span>
-    <ui-tooltip id="settings-description" hidden
-        >View and manage settings</ui-tooltip
-    >
+    <ui-tooltip id="settings-description" hidden>
+        View and manage settings
+    </ui-tooltip>
 </button>
 ```
 
