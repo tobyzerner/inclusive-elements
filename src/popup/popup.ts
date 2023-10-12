@@ -166,7 +166,13 @@ export default class PopupElement extends HTMLElement {
                         shift(),
                         flip(),
                         size({
-                            apply: ({ availableWidth, availableHeight }) => {
+                            apply: ({
+                                availableWidth,
+                                availableHeight,
+                                placement,
+                            }) => {
+                                this.content.dataset.placement = placement;
+
                                 Object.assign(this.content.style, {
                                     maxWidth: '',
                                     maxHeight: '',
@@ -174,7 +180,9 @@ export default class PopupElement extends HTMLElement {
 
                                 const computed = getComputedStyle(this.content);
 
-                                // TODO: subtract margins
+                                availableWidth -=
+                                    parseInt(computed.marginLeft) +
+                                    parseInt(computed.marginRight);
 
                                 if (
                                     computed.maxWidth === 'none' ||
@@ -182,6 +190,10 @@ export default class PopupElement extends HTMLElement {
                                 ) {
                                     this.content.style.maxWidth = `${availableWidth}px`;
                                 }
+
+                                availableHeight -=
+                                    parseInt(computed.marginTop) +
+                                    parseInt(computed.marginBottom);
 
                                 if (
                                     computed.maxHeight === 'none' ||
@@ -193,12 +205,11 @@ export default class PopupElement extends HTMLElement {
                             },
                         }),
                     ],
-                }).then(({ x, y, placement }) => {
+                }).then(({ x, y }) => {
                     Object.assign(this.content.style, {
                         left: `${x}px`,
                         top: `${y}px`,
                     });
-                    this.content.dataset.placement = placement;
                 });
             },
             { ancestorScroll: false }
