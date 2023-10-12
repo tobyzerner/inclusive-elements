@@ -18,10 +18,6 @@ export default class TooltipElement extends HTMLElement {
     private onFocus = this.show.bind(this);
     private onMouseLeave = this.afterDelay.bind(this, this.hide);
     private onBlur = this.hide.bind(this);
-    private onPointerUp = (e: PointerEvent) => {
-        if (e.pointerType === 'mouse') this.hide();
-        else this.show();
-    };
 
     public connectedCallback(): void {
         this.parent = this.parentNode as HTMLElement;
@@ -31,7 +27,7 @@ export default class TooltipElement extends HTMLElement {
             this.parent.addEventListener('focus', this.onFocus);
             this.parent.addEventListener('mouseleave', this.onMouseLeave);
             this.parent.addEventListener('blur', this.onBlur);
-            this.parent.addEventListener('pointerup', this.onPointerUp);
+            this.parent.addEventListener('click', this.onBlur);
 
             this.disabledObserver = new MutationObserver((mutations) => {
                 mutations.forEach((mutation) => {
@@ -61,7 +57,7 @@ export default class TooltipElement extends HTMLElement {
             this.parent.removeEventListener('focus', this.onFocus);
             this.parent.removeEventListener('mouseleave', this.onMouseLeave);
             this.parent.removeEventListener('blur', this.onBlur);
-            this.parent.removeEventListener('pointerup', this.onPointerUp);
+            this.parent.removeEventListener('click', this.onBlur);
             this.parent = undefined;
         }
 
