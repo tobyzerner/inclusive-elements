@@ -117,6 +117,8 @@ export default class ModalElement extends HTMLElement {
     }
 
     private async wasOpened() {
+        document.documentElement.style.overflow = 'hidden';
+
         this.hidden = false;
 
         hello(this);
@@ -127,6 +129,8 @@ export default class ModalElement extends HTMLElement {
     }
 
     private wasClosed() {
+        document.documentElement.style.overflow = '';
+
         this.focusTrap?.deactivate();
 
         goodbye(this).then(() => (this.hidden = true));
