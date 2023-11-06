@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.5.0-beta.1](https://github.com/tobyzerner/inclusive-elements/compare/v0.4.6...v0.5.0-beta.1) (2023-11-06)
+
+
+### Features
+
+* **alerts:** remove hello-goodbye ([8e6583a](https://github.com/tobyzerner/inclusive-elements/commit/8e6583a04b211de7830d1e5d4a98afc1a9c34780))
+* **modal:** lock body scrolling while modal is open ([59e693d](https://github.com/tobyzerner/inclusive-elements/commit/59e693dd1d44840fd0e1bc77b7224738efdd0e07))
+* **popup:** use fixed positioning strategy instead of absolute ([d00137f](https://github.com/tobyzerner/inclusive-elements/commit/d00137f04bc60ba4f56bb817c7c0e022e38c71e7))
+* **tooltip:** don't show tooltip on touch ([c8998bc](https://github.com/tobyzerner/inclusive-elements/commit/c8998bceae5ef066c8d80e20b324361b8513ff35))
+* **tooltip:** only show tooltip on focus via Tab key ([bb9b0ce](https://github.com/tobyzerner/inclusive-elements/commit/bb9b0ced0aa25b1eac667c19cbfe7fc0f4f31879))
+
+
+### Bug Fixes
+
+* **modal:** activate focus trap after transition and fix autofocus ([66e0ca1](https://github.com/tobyzerner/inclusive-elements/commit/66e0ca19d1443e7eefa6acb500da415a0fb22943))
+* **modal:** activate focus trap reliably at start of transition ([5036a4f](https://github.com/tobyzerner/inclusive-elements/commit/5036a4fd74d054e3c2dec3367e2bcd1f1d8f0b59))
+* **modal:** fall back to default focus strategy if there is no autofocus element ([fe57357](https://github.com/tobyzerner/inclusive-elements/commit/fe5735724fcf4ab3bbf128ce793e2a37ec16067a))
+* **popup:** subtract margins when calculating max popup size ([f842b6d](https://github.com/tobyzerner/inclusive-elements/commit/f842b6dd471c410f79e4a1bf08a904bd56fbbda8))
+
 ### [0.4.6](https://github.com/tobyzerner/inclusive-elements/compare/v0.4.5...v0.4.6) (2023-06-29)
 
 
