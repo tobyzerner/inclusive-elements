@@ -62,10 +62,6 @@ type AlertOptions = {
     // If -1, the alert will not automatically disappear.
     // If undefined, the default value will be used.
     duration?: number;
-    
-    // Whether or not to animate the alert in, using a hello-goodbye transition.
-    // Defaults to true.
-    animate?: boolean;
 };
 
 // The `key` and `duration` options can also be specified as [data-*] attributes
@@ -89,23 +85,6 @@ ui-alerts {
     display: flex;
     flex-direction: column-reverse;
     align-items: flex-end;
-}
-
-/* Transitions can be applied to alerts using hello-goodbye */
-@media (prefers-reduced-motion: no-preference) {
-    ui-alerts > .enter-active,
-    ui-alerts > .leave-active,
-    ui-alerts > .move {
-        transition: all 0.5s;
-    }
-
-    ui-alerts > .enter-from {
-        transform: translateY(-100%);
-    }
-
-    ui-alerts > .leave-to {
-        opacity: 0;
-    }
 }
 ```
 

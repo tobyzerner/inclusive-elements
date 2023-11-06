@@ -1,9 +1,6 @@
-import { hello, goodbye, move } from 'hello-goodbye';
-
 export type AlertOptions = {
     key?: string;
     duration?: number;
-    animate?: boolean;
 };
 
 export default class AlertsElement extends HTMLElement {
@@ -42,7 +39,7 @@ export default class AlertsElement extends HTMLElement {
         }
 
         for (const child of this.children) {
-            this.show(child as HTMLElement, { animate: false });
+            this.show(child as HTMLElement);
         }
     }
 
@@ -54,16 +51,7 @@ export default class AlertsElement extends HTMLElement {
         el.dataset.key = key;
 
         if (!this.contains(el)) {
-            if (options.animate === false) {
-                this.append(el);
-            } else {
-                move(this.children, () => {
-                    this.append(el);
-                    hello(el);
-                });
-            }
-        } else {
-            hello(el);
+            this.append(el);
         }
 
         this.added.add(el);
@@ -105,9 +93,7 @@ export default class AlertsElement extends HTMLElement {
 
         this.added.delete(elOrKey);
 
-        move(this.children, () =>
-            goodbye(elOrKey).then(() => elOrKey.remove())
-        );
+        elOrKey.remove();
 
         this.clearTimeout(elOrKey);
     }
