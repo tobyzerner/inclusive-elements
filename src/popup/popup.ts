@@ -146,7 +146,7 @@ export default class PopupElement extends HTMLElement {
         if (!this.content.hidden) return;
 
         this.content.hidden = false;
-        this.content.style.position = 'absolute';
+        this.content.style.position = 'fixed';
 
         this.backdrop.hidden = false;
 
@@ -160,6 +160,7 @@ export default class PopupElement extends HTMLElement {
             this.content,
             () => {
                 computePosition(this.button, this.content, {
+                    strategy: 'fixed',
                     placement:
                         (this.getAttribute('placement') as any) || 'bottom',
                     middleware: [
