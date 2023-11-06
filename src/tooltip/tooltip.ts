@@ -13,9 +13,12 @@ export default class TooltipElement extends HTMLElement {
     private showing: boolean = false;
     private cleanup?: () => void;
     private prevInnerHTML?: string;
+    private tabPressed: boolean = false;
 
     private onMouseEnter = this.afterDelay.bind(this, this.show);
-    private onFocus = this.show.bind(this);
+    private onFocus = () => {
+        if (this.tabPressed) this.show();
+    };
     private onMouseLeave = this.afterDelay.bind(this, this.hide);
     private onBlur = this.hide.bind(this);
 
@@ -41,6 +44,7 @@ export default class TooltipElement extends HTMLElement {
         }
 
         document.addEventListener('keydown', this.onKeyDown);
+        document.addEventListener('keyup', this.onKeyUp);
         document.addEventListener('scroll', this.onBlur);
     }
 
@@ -62,6 +66,7 @@ export default class TooltipElement extends HTMLElement {
         }
 
         document.removeEventListener('keydown', this.onKeyDown);
+        document.removeEventListener('keyup', this.onKeyUp);
         document.removeEventListener('scroll', this.onBlur);
 
         this.disabledObserver?.disconnect();
@@ -81,9 +86,14 @@ export default class TooltipElement extends HTMLElement {
     }
 
     private onKeyDown = (e: KeyboardEvent): void => {
+        if (e.key === 'Tab') this.tabPressed = true;
         if (e.key === 'Escape') {
             this.hide();
         }
+    };
+
+    private onKeyUp = (e: KeyboardEvent): void => {
+        if (e.key === 'Tab') this.tabPressed = false;
     };
 
     private show() {
