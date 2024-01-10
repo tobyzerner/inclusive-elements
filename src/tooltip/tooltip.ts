@@ -96,7 +96,7 @@ export default class TooltipElement extends HTMLElement {
         if (e.key === 'Tab') this.tabPressed = false;
     };
 
-    private show() {
+    public show() {
         if (this.disabled) return;
 
         const tooltip = this.createTooltip();
@@ -132,7 +132,7 @@ export default class TooltipElement extends HTMLElement {
         );
     }
 
-    private hide() {
+    public hide() {
         clearTimeout(this.timeout);
 
         this.cleanup?.();
