@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.5.0-beta.2](https://github.com/tobyzerner/inclusive-elements/compare/v0.5.0-beta.1...v0.5.0-beta.2) (2024-01-10)
+
+
+### ⚠ BREAKING CHANGES
+
+* **alerts:** alerts can no longer be added by appending to the container
+
+### Features
+
+* **tooltip:** add `open` and `close` events ([d2800e7](https://github.com/tobyzerner/inclusive-elements/commit/d2800e77f5e1c46c1e57ad3c05bf865881fcf4d8))
+* **tooltip:** expose `show` and `hide` methods ([987d933](https://github.com/tobyzerner/inclusive-elements/commit/987d933aaa74076b5d401465f4cd42869a90698f))
+
+
+### Bug Fixes
+
+* **alerts:** alerts can no longer be added by appending to the container ([4c2c433](https://github.com/tobyzerner/inclusive-elements/commit/4c2c433680eae6cf224d22c0f8f4176c48c56c99))
+* **tooltip:** keep tooltip class updated ([cb19f93](https://github.com/tobyzerner/inclusive-elements/commit/cb19f93ef4094129c39cf13192688ecebd539b8b))
+
 ## [0.5.0-beta.1](https://github.com/tobyzerner/inclusive-elements/compare/v0.4.6...v0.5.0-beta.1) (2023-11-06)
 
 
