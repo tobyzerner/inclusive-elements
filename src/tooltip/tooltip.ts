@@ -130,6 +130,8 @@ export default class TooltipElement extends HTMLElement {
                 tooltip.dataset.placement = placement;
             })
         );
+
+        this.dispatchEvent(new Event('open'));
     }
 
     public hide() {
@@ -143,6 +145,8 @@ export default class TooltipElement extends HTMLElement {
             goodbye(this.tooltip!).then(() => {
                 if (this.tooltip) this.tooltip.hidden = true;
             });
+
+            this.dispatchEvent(new Event('close'));
         }
     }
 
