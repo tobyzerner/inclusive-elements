@@ -6,24 +6,8 @@ export type AlertOptions = {
 export default class AlertsElement extends HTMLElement {
     public static duration: number = 10000;
 
-    private added: Set<HTMLElement> = new Set();
     private timeouts: WeakMap<HTMLElement, number> = new Map();
     private index: number = 0;
-
-    constructor() {
-        super();
-
-        const observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                mutation.addedNodes.forEach((node) => {
-                    if (node instanceof HTMLElement && !this.added.has(node))
-                        this.show(node);
-                });
-            });
-        });
-
-        observer.observe(this, { childList: true });
-    }
 
     public connectedCallback(): void {
         if (!this.hasAttribute('role')) {
@@ -53,8 +37,6 @@ export default class AlertsElement extends HTMLElement {
         if (!this.contains(el)) {
             this.append(el);
         }
-
-        this.added.add(el);
 
         const duration = Number(
             options.duration !== undefined
@@ -90,8 +72,6 @@ export default class AlertsElement extends HTMLElement {
             ).forEach((el) => this.dismiss(el));
             return;
         }
-
-        this.added.delete(elOrKey);
 
         elOrKey.remove();
 
