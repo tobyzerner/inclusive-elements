@@ -162,9 +162,6 @@ export default class TooltipElement extends HTMLElement {
     private createTooltip() {
         if (!this.tooltip) {
             this.tooltip = document.createElement('div');
-            this.tooltip.className =
-                this.getAttribute('tooltip-class') ||
-                TooltipElement.tooltipClass;
             this.tooltip.hidden = true;
 
             this.tooltip.addEventListener('mouseenter', this.show.bind(this));
@@ -175,6 +172,9 @@ export default class TooltipElement extends HTMLElement {
 
             document.body.appendChild(this.tooltip);
         }
+
+        this.tooltip.className =
+            this.getAttribute('tooltip-class') || TooltipElement.tooltipClass;
 
         return this.tooltip;
     }
