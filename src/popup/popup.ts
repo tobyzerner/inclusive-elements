@@ -106,7 +106,7 @@ export default class PopupElement extends HTMLElement {
 
     private onFocusOut = (e: FocusEvent) => {
         if (
-            !(e.relatedTarget instanceof Node) ||
+            e.relatedTarget instanceof Node &&
             !this.contains(e.relatedTarget)
         ) {
             this.open = false;
