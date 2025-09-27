@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.5.0-beta.3](https://github.com/tobyzerner/inclusive-elements/compare/v0.5.0-beta.2...v0.5.0-beta.3) (2025-09-27)
+
+
+### Features
+
+* **popup:** allow popup to initialize with `open` attribute ([e2e8483](https://github.com/tobyzerner/inclusive-elements/commit/e2e8483bc6f72b7c9793747a5fea940119c0f0d5))
+
+
+### Bug Fixes
+
+* **popup:** don't hide popup if losing focus to nothing ([6a72581](https://github.com/tobyzerner/inclusive-elements/commit/6a7258133d5d83ea3d7d0c4e0700e8ef335ad680))
+* **popup:** prevent `menuitem` click from bubbling up to any parent popups ([bebd0fb](https://github.com/tobyzerner/inclusive-elements/commit/bebd0fbf9b1af53662ffb529d15c962c1c1b529c))
+* **tooltip:** prevent error if tooltip element no longer exists ([eb69dd2](https://github.com/tobyzerner/inclusive-elements/commit/eb69dd2bd637849880da2b242605694b2a182f59))
+
 ## [0.5.0-beta.2](https://github.com/tobyzerner/inclusive-elements/compare/v0.5.0-beta.1...v0.5.0-beta.2) (2024-01-10)
 
 
