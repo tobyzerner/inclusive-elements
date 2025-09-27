@@ -118,7 +118,10 @@ export default class PopupElement extends HTMLElement {
 
         if (e.target.closest('[role=menuitem], [role=menuitemradio]')) {
             this.open = false;
-            this.button.focus();
+            this.button?.focus();
+
+            // Prevent the click event from bubbling up to any parent popups.
+            e.stopPropagation();
         }
     };
 
