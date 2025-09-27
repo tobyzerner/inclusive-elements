@@ -32,42 +32,50 @@ export default class PopupElement extends HTMLElement {
     }
 
     public connectedCallback(): void {
-        this.backdrop.hidden = true;
-        this.content.hidden = true;
-        this.open = false;
+        this.backdrop.hidden = !this.open;
 
-        this.button.setAttribute('aria-expanded', 'false');
+        if (this.content) {
+            this.content.hidden = !this.open;
+        }
+
+        this.button?.setAttribute(
+            'aria-expanded',
+            this.open ? 'true' : 'false'
+        );
 
         // Wait a tick before checking to see if the content is a menu, to give
         // the Menu element time to be constructed and set the role.
         setTimeout(() => {
-            if (this.content.getAttribute('role') === 'menu') {
-                this.button.setAttribute('aria-haspopup', 'true');
+            if (this.content?.getAttribute('role') === 'menu') {
+                this.button?.setAttribute('aria-haspopup', 'true');
             }
         });
 
-        this.button.addEventListener('click', this.onButtonClick);
-        this.button.addEventListener('keydown', this.onButtonKeyDown);
+        this.button?.addEventListener('click', this.onButtonClick);
+        this.button?.addEventListener('keydown', this.onButtonKeyDown);
 
         this.addEventListener('keydown', this.onKeyDown);
         this.addEventListener('focusout', this.onFocusOut);
 
-        this.content.addEventListener('click', this.onContentClick);
+        this.content?.addEventListener('click', this.onContentClick);
     }
 
     public disconnectedCallback(): void {
         cancel(this.backdrop);
-        cancel(this.content);
 
-        this.button.removeAttribute('aria-expanded');
-        this.button.removeAttribute('aria-haspopup');
-        this.button.removeEventListener('click', this.onButtonClick);
-        this.button.removeEventListener('keydown', this.onButtonKeyDown);
+        if (this.content) {
+            cancel(this.content);
+        }
+
+        this.button?.removeAttribute('aria-expanded');
+        this.button?.removeAttribute('aria-haspopup');
+        this.button?.removeEventListener('click', this.onButtonClick);
+        this.button?.removeEventListener('keydown', this.onButtonKeyDown);
 
         this.removeEventListener('keydown', this.onKeyDown);
         this.removeEventListener('focusout', this.onFocusOut);
 
-        this.content.removeEventListener('click', this.onContentClick);
+        this.content?.removeEventListener('click', this.onContentClick);
     }
 
     private onButtonClick = (e: MouseEvent) => {
@@ -81,7 +89,9 @@ export default class PopupElement extends HTMLElement {
         if (e.key === 'ArrowDown' && !this.disabled) {
             e.preventDefault();
             this.open = true;
-            focusable(this.content)[0]?.focus();
+            if (this.content) {
+                focusable(this.content)[0]?.focus();
+            }
         }
     };
 
@@ -90,7 +100,7 @@ export default class PopupElement extends HTMLElement {
             e.preventDefault();
             e.stopPropagation();
             this.open = false;
-            this.button.focus();
+            this.button?.focus();
         }
     };
 
@@ -143,7 +153,7 @@ export default class PopupElement extends HTMLElement {
     }
 
     private wasOpened() {
-        if (!this.content.hidden) return;
+        if (!this.content?.hidden) return;
 
         this.content.hidden = false;
         this.content.style.position = 'fixed';
@@ -153,68 +163,76 @@ export default class PopupElement extends HTMLElement {
         hello(this.content);
         hello(this.backdrop);
 
-        this.button.setAttribute('aria-expanded', 'true');
+        this.button?.setAttribute('aria-expanded', 'true');
 
-        this.cleanup = autoUpdate(
-            this.button,
-            this.content,
-            () => {
-                computePosition(this.button, this.content, {
-                    strategy: 'fixed',
-                    placement:
-                        (this.getAttribute('placement') as any) || 'bottom',
-                    middleware: [
-                        shift(),
-                        flip(),
-                        size({
-                            apply: ({
-                                availableWidth,
-                                availableHeight,
-                                placement,
-                            }) => {
-                                this.content.dataset.placement = placement;
+        if (this.button) {
+            this.cleanup = autoUpdate(
+                this.button,
+                this.content,
+                () => {
+                    if (!this.button || !this.content) return;
+                    computePosition(this.button, this.content, {
+                        strategy: 'fixed',
+                        placement:
+                            (this.getAttribute('placement') as any) || 'bottom',
+                        middleware: [
+                            shift(),
+                            flip(),
+                            size({
+                                apply: ({
+                                    availableWidth,
+                                    availableHeight,
+                                    placement,
+                                }) => {
+                                    if (!this.content) return;
+                                    this.content.dataset.placement = placement;
 
-                                Object.assign(this.content.style, {
-                                    maxWidth: '',
-                                    maxHeight: '',
-                                });
+                                    Object.assign(this.content.style, {
+                                        maxWidth: '',
+                                        maxHeight: '',
+                                    });
 
-                                const computed = getComputedStyle(this.content);
+                                    const computed = getComputedStyle(
+                                        this.content
+                                    );
 
-                                availableWidth -=
-                                    parseInt(computed.marginLeft) +
-                                    parseInt(computed.marginRight);
+                                    availableWidth -=
+                                        parseInt(computed.marginLeft) +
+                                        parseInt(computed.marginRight);
 
-                                if (
-                                    computed.maxWidth === 'none' ||
-                                    availableWidth < parseInt(computed.maxWidth)
-                                ) {
-                                    this.content.style.maxWidth = `${availableWidth}px`;
-                                }
+                                    if (
+                                        computed.maxWidth === 'none' ||
+                                        availableWidth <
+                                            parseInt(computed.maxWidth)
+                                    ) {
+                                        this.content.style.maxWidth = `${availableWidth}px`;
+                                    }
 
-                                availableHeight -=
-                                    parseInt(computed.marginTop) +
-                                    parseInt(computed.marginBottom);
+                                    availableHeight -=
+                                        parseInt(computed.marginTop) +
+                                        parseInt(computed.marginBottom);
 
-                                if (
-                                    computed.maxHeight === 'none' ||
-                                    availableHeight <
-                                        parseInt(computed.maxHeight)
-                                ) {
-                                    this.content.style.maxHeight = `${availableHeight}px`;
-                                }
-                            },
-                        }),
-                    ],
-                }).then(({ x, y }) => {
-                    Object.assign(this.content.style, {
-                        left: `${x}px`,
-                        top: `${y}px`,
+                                    if (
+                                        computed.maxHeight === 'none' ||
+                                        availableHeight <
+                                            parseInt(computed.maxHeight)
+                                    ) {
+                                        this.content.style.maxHeight = `${availableHeight}px`;
+                                    }
+                                },
+                            }),
+                        ],
+                    }).then(({ x, y }) => {
+                        if (!this.content) return;
+                        Object.assign(this.content.style, {
+                            left: `${x}px`,
+                            top: `${y}px`,
+                        });
                     });
-                });
-            },
-            { ancestorScroll: false }
-        );
+                },
+                { ancestorScroll: false }
+            );
+        }
 
         const autofocus =
             this.content.querySelector<HTMLElement>('[autofocus]');
@@ -228,14 +246,17 @@ export default class PopupElement extends HTMLElement {
     }
 
     private wasClosed() {
-        if (this.content.hidden) return;
+        if (this.content?.hidden) return;
 
-        this.button.setAttribute('aria-expanded', 'false');
+        this.button?.setAttribute('aria-expanded', 'false');
 
         this.cleanup?.();
 
         goodbye(this.backdrop).then(() => (this.backdrop.hidden = true));
-        goodbye(this.content).then(() => (this.content.hidden = true));
+
+        if (this.content) {
+            goodbye(this.content).then(() => (this.content!.hidden = true));
+        }
 
         this.dispatchEvent(new Event('close'));
     }
@@ -244,11 +265,11 @@ export default class PopupElement extends HTMLElement {
         return this.shadowRoot?.firstElementChild as HTMLElement;
     }
 
-    private get button(): HTMLElement {
-        return this.querySelector('button, [role=button]')!;
+    private get button(): HTMLElement | null {
+        return this.querySelector('button, [role=button]');
     }
 
-    private get content(): HTMLElement {
+    private get content(): HTMLElement | null {
         return this.children[1] as HTMLElement;
     }
 }
