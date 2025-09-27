@@ -18,17 +18,17 @@
         "release": "release-it"
     },
     "dependencies": {
-        "@floating-ui/dom": "^1.5.3",
-        "focus-trap": "^7.5.3",
-        "hello-goodbye": "^0.2.1",
+        "@floating-ui/dom": "^1.7.4",
+        "focus-trap": "^7.6.5",
+        "hello-goodbye": "^0.2.2",
         "tabbable": "^6.2.0"
     },
     "devDependencies": {
         "@release-it/conventional-changelog": "^5.1.1",
         "prettier": "^2.8.8",
         "release-it": "^15.11.0",
-        "typescript": "^5.2.2",
-        "vite": "^4.4.11"
+        "typescript": "^5.9.2",
+        "vite": "^4.5.14"
     },
     "release-it": {
         "git": {
@@ -52,5 +52,6 @@
     },
     "prettier": {
         "singleQuote": true
-    }
+    },
+    "packageManager": "pnpm@10.17.1+sha512.17c560fca4867ae9473a3899ad84a88334914f379be46d455cbf92e5cf4b39d34985d452d2583baf19967fa76cb5c17bc9e245529d0b98745721aa7200ecaf7a"
 }
