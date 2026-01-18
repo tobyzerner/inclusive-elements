@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/tobyzerner/inclusive-elements/compare/v0.5.0-beta.3...v0.5.0) (2026-01-18)
+
+
+### Bug Fixes
+
+* **tooltip:** prevent tooltips showing due to mouse emulation events on touch devices ([0582447](https://github.com/tobyzerner/inclusive-elements/commit/0582447d5f1f610a9d84ba56a3642dd8ff3ef8c1))
+
 ## [0.5.0-beta.3](https://github.com/tobyzerner/inclusive-elements/compare/v0.5.0-beta.2...v0.5.0-beta.3) (2025-09-27)
 
 
