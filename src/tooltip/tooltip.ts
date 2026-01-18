@@ -15,7 +15,11 @@ export default class TooltipElement extends HTMLElement {
     private prevInnerHTML?: string;
     private tabPressed: boolean = false;
 
-    private onMouseEnter = this.afterDelay.bind(this, this.show);
+    private onMouseEnter = () => {
+        if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches)
+            return;
+        this.afterDelay(this.show);
+    };
     private onFocus = () => {
         if (this.tabPressed) this.show();
     };
