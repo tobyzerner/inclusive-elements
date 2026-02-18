@@ -1,5 +1,13 @@
 # Changelog
 
+### [0.5.2](https://github.com/tobyzerner/inclusive-elements/compare/v0.5.1...v0.5.2) (2026-02-18)
+
+
+### Features
+
+* **tabs:** dispatch `change` event on tab selection changes ([a1ba27b](https://github.com/tobyzerner/inclusive-elements/commit/a1ba27b715b3f9210f8c890a7cc6ddad041735b1))
+* **tabs:** select initial tab based on `aria-selected` attribute ([9b4639a](https://github.com/tobyzerner/inclusive-elements/commit/9b4639a431a6fc5a67e173c1a931f9989ee8a7b7))
+
 ### [0.5.1](https://github.com/tobyzerner/inclusive-elements/compare/v0.5.0...v0.5.1) (2026-01-25)
 
 
