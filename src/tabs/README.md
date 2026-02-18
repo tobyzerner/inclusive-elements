@@ -35,6 +35,8 @@ window.customElements.define('ui-tabs', TabsElement);
 
 -   The `tab` with focus is automatically activated, and its corresponding `tabpanel` will become visible.
 
+-   The `ui-tabs` element dispatches a `change` event when a new tab is selected by user interaction (click or keyboard navigation).
+
 ## Further Reading
 
 -   [ARIA Authoring Practices Guide: Tabs Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/)

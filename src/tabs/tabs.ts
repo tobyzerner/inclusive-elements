@@ -7,7 +7,7 @@ export default class TabsElement extends HTMLElement {
         this.tablist.addEventListener('keydown', this.onKeyDown);
         this.tablist.addEventListener('click', this.onClick);
 
-        this.selectTab(this.initialTabIndex, false);
+        this.selectTab(this.initialTabIndex, false, false);
 
         this.tabs.forEach((tab, i) => {
             const panel = this.tabpanels[i];
@@ -29,22 +29,32 @@ export default class TabsElement extends HTMLElement {
         this.tablist.removeEventListener('click', this.onClick);
     }
 
-    private selectTab(index: number, focus = true) {
-        if (index < 0) index += this.tabs.length;
-        else if (index >= this.tabs.length) index -= this.tabs.length;
+    private selectTab(index: number, focus = true, emit = true) {
+        const tabs = this.tabs;
+        const panels = this.tabpanels;
+        const previousIndex = tabs.findIndex(
+            (tab) => tab.getAttribute('aria-selected') === 'true'
+        );
 
-        this.tabs.forEach((tab, i) => {
+        if (index < 0) index += tabs.length;
+        else if (index >= tabs.length) index -= tabs.length;
+
+        tabs.forEach((tab, i) => {
             if (i === index) {
                 tab.setAttribute('aria-selected', 'true');
                 tab.removeAttribute('tabindex');
-                this.tabpanels[i].hidden = false;
+                panels[i].hidden = false;
                 if (focus) tab.focus();
             } else {
                 tab.setAttribute('aria-selected', 'false');
                 tab.setAttribute('tabindex', '-1');
-                this.tabpanels[i].hidden = true;
+                panels[i].hidden = true;
             }
         });
+
+        if (emit && previousIndex !== index) {
+            this.dispatchEvent(new Event('change'));
+        }
     }
 
     private onKeyDown = (e: KeyboardEvent) => {
