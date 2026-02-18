@@ -29,6 +29,8 @@ window.customElements.define('ui-tabs', TabsElement);
 
 -   The active `tab` will have the `aria-selected="true"` attribute set. Inactive tabs will have their `tabindex` set to `-1` so that focus remains on the active tab.
 
+-   To set a default selected tab, set `aria-selected="true"` on exactly one `tab`. If this is not provided, the first tab is selected by default.
+
 -   When focus is on the active `tab`, pressing the `Left Arrow`, `Right Arrow`, `Home`, and `End` keys can be used for navigation. If the `tablist` has `aria-orientation="vertical"`, `Down Arrow` and `Up Arrow` are used instead.
 
 -   The `tab` with focus is automatically activated, and its corresponding `tabpanel` will become visible.

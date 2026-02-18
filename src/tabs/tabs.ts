@@ -7,7 +7,7 @@ export default class TabsElement extends HTMLElement {
         this.tablist.addEventListener('keydown', this.onKeyDown);
         this.tablist.addEventListener('click', this.onClick);
 
-        this.selectTab(0, false);
+        this.selectTab(this.initialTabIndex, false);
 
         this.tabs.forEach((tab, i) => {
             const panel = this.tabpanels[i];
@@ -88,6 +88,14 @@ export default class TabsElement extends HTMLElement {
             this.selectTab(this.tabs.indexOf(tab));
         }
     };
+
+    private get initialTabIndex(): number {
+        return (
+            this.tabs.findIndex(
+                (tab) => tab.getAttribute('aria-selected') === 'true'
+            ) || 0
+        );
+    }
 
     private get tablist(): HTMLElement {
         return this.querySelector('[role=tablist]')!;
