@@ -100,11 +100,11 @@ export default class TabsElement extends HTMLElement {
     };
 
     private get initialTabIndex(): number {
-        return (
-            this.tabs.findIndex(
-                (tab) => tab.getAttribute('aria-selected') === 'true'
-            ) || 0
+        const index = this.tabs.findIndex(
+            (tab) => tab.getAttribute('aria-selected') === 'true'
         );
+
+        return index !== -1 ? index : 0;
     }
 
     private get tablist(): HTMLElement {
