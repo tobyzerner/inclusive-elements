@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.5.3](https://github.com/tobyzerner/inclusive-elements/compare/v0.5.2...v0.5.3) (2026-02-19)
+
+
+### Bug Fixes
+
+* **tabs:** ensure correct initial tab is selected when none are `aria-selected` ([c127943](https://github.com/tobyzerner/inclusive-elements/commit/c127943f2c15801409f4bbb91b4e0c71028f4fc1))
+
 ### [0.5.2](https://github.com/tobyzerner/inclusive-elements/compare/v0.5.1...v0.5.2) (2026-02-18)
 
 
