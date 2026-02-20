@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.5.4](https://github.com/tobyzerner/inclusive-elements/compare/v0.5.3...v0.5.4) (2026-02-20)
+
+
+### Features
+
+* **tabs:** add `selectTab()` to programmatically select tabs ([f9599c8](https://github.com/tobyzerner/inclusive-elements/commit/f9599c81c77c8766697cf3df4f05dcb8833f870a))
+
 ### [0.5.3](https://github.com/tobyzerner/inclusive-elements/compare/v0.5.2...v0.5.3) (2026-02-19)
 
 
