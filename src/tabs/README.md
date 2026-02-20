@@ -35,7 +35,17 @@ window.customElements.define('ui-tabs', TabsElement);
 
 -   The `tab` with focus is automatically activated, and its corresponding `tabpanel` will become visible.
 
--   The `ui-tabs` element dispatches a `change` event when a new tab is selected by user interaction (click or keyboard navigation).
+-   The `ui-tabs` element dispatches a `change` event when a new tab is selected by user interaction (click or keyboard navigation), or by calling the `selectTab()` method.
+
+## API
+
+-   `selectTab(index, options?)`
+
+    Programmatically selects a tab and returns `true` if the active tab changed, otherwise `false`.
+
+    -   `index` (`number`): The tab index to select.
+    -   `options.focus` (`boolean`, default `false`): Moves focus to the selected tab.
+    -   `options.emit` (`boolean`, default `true`): Emits a `change` event when selection changes.
 
 ## Further Reading
 

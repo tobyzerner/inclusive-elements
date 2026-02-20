@@ -1,5 +1,10 @@
 let idCounter = 0;
 
+type SelectTabOptions = {
+    focus?: boolean;
+    emit?: boolean;
+};
+
 export default class TabsElement extends HTMLElement {
     private idPrefix = 'tabs' + ++idCounter;
 
@@ -7,7 +12,7 @@ export default class TabsElement extends HTMLElement {
         this.tablist.addEventListener('keydown', this.onKeyDown);
         this.tablist.addEventListener('click', this.onClick);
 
-        this.selectTab(this.initialTabIndex, false, false);
+        this.selectTab(this.initialTabIndex, { emit: false });
 
         this.tabs.forEach((tab, i) => {
             const panel = this.tabpanels[i];
@@ -29,15 +34,19 @@ export default class TabsElement extends HTMLElement {
         this.tablist.removeEventListener('click', this.onClick);
     }
 
-    private selectTab(index: number, focus = true, emit = true) {
+    public selectTab(index: number, options: SelectTabOptions = {}): boolean {
+        const { focus = false, emit = true } = options;
         const tabs = this.tabs;
         const panels = this.tabpanels;
+        const tabCount = tabs.length;
+
+        if (index < 0 || index >= tabCount) {
+            return false;
+        }
+
         const previousIndex = tabs.findIndex(
             (tab) => tab.getAttribute('aria-selected') === 'true'
         );
-
-        if (index < 0) index += tabs.length;
-        else if (index >= tabs.length) index -= tabs.length;
 
         tabs.forEach((tab, i) => {
             if (i === index) {
@@ -55,37 +64,47 @@ export default class TabsElement extends HTMLElement {
         if (emit && previousIndex !== index) {
             this.dispatchEvent(new Event('change'));
         }
+
+        return previousIndex !== index;
     }
 
     private onKeyDown = (e: KeyboardEvent) => {
-        const target = e.target as HTMLElement;
-        const index = this.tabs.indexOf(target);
+        const tabs = this.tabs;
+        if (tabs.length === 0) return;
+
+        let index = tabs.indexOf(e.target as HTMLElement);
+        if (index === -1) {
+            index = tabs.findIndex(
+                (tab) => tab.getAttribute('aria-selected') === 'true'
+            );
+            if (index === -1) {
+                index = 0;
+            }
+        }
+
         const vertical =
             this.tablist.getAttribute('aria-orientation') === 'vertical';
-        let captured = false;
+        let nextIndex: number | undefined;
 
         switch (e.key) {
             case vertical ? 'ArrowUp' : 'ArrowLeft':
-                this.selectTab(index - 1);
-                captured = true;
+                nextIndex = (index - 1 + tabs.length) % tabs.length;
                 break;
 
             case vertical ? 'ArrowDown' : 'ArrowRight':
-                this.selectTab(index + 1);
-                captured = true;
+                nextIndex = (index + 1) % tabs.length;
                 break;
 
             case 'Home':
-                this.selectTab(0);
-                captured = true;
+                nextIndex = 0;
                 break;
 
             case 'End':
-                this.selectTab(this.tabs.length - 1);
-                captured = true;
+                nextIndex = tabs.length - 1;
         }
 
-        if (captured) {
+        if (nextIndex !== undefined) {
+            this.selectTab(nextIndex, { focus: true });
             e.stopPropagation();
             e.preventDefault();
         }
@@ -95,7 +114,7 @@ export default class TabsElement extends HTMLElement {
         const target = e.target as HTMLElement;
         const tab = target.closest<HTMLElement>('[role=tab]');
         if (tab) {
-            this.selectTab(this.tabs.indexOf(tab));
+            this.selectTab(this.tabs.indexOf(tab), { focus: true });
         }
     };
 
