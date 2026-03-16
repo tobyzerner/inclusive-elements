@@ -34,17 +34,41 @@ export default class MenuElement extends HTMLElement {
         ).filter((item) => isFocusable(item));
     }
 
+    private get horizontal(): boolean {
+        return this.getAttribute('aria-orientation') === 'horizontal';
+    }
+
     private onKeyDown = (e: KeyboardEvent): void => {
         if (this.hidden) return;
 
-        if (e.key === 'ArrowUp') {
+        if (this.horizontal && e.key === 'ArrowLeft') {
             this.navigate(-1);
             e.preventDefault();
             return;
         }
 
-        if (e.key === 'ArrowDown') {
+        if (this.horizontal && e.key === 'ArrowRight') {
             this.navigate(1);
+            e.preventDefault();
+            return;
+        }
+
+        if (e.key === 'ArrowUp') {
+            if (this.horizontal) {
+                this.focusItemAtIndex(0);
+            } else {
+                this.navigate(-1);
+            }
+            e.preventDefault();
+            return;
+        }
+
+        if (e.key === 'ArrowDown') {
+            if (this.horizontal) {
+                this.focusItemAtIndex(this.items.length - 1);
+            } else {
+                this.navigate(1);
+            }
             e.preventDefault();
             return;
         }
@@ -83,6 +107,10 @@ export default class MenuElement extends HTMLElement {
         if (index >= items.length) {
             index = 0;
         }
-        items[index]?.focus();
+        this.focusItemAtIndex(index);
+    }
+
+    private focusItemAtIndex(index: number): void {
+        this.items[index]?.focus();
     }
 }

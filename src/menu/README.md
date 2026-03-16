@@ -33,6 +33,8 @@ window.customElements.define('ui-menu', MenuElement);
 
 -   While the menu has focus, the Up/Down Arrow keys can be used to cycle focus through child elements with a role starting with `menuitem`. These elements are given a `tabindex` of `-1` so that they cannot be reached with the Tab key.
 
+-   If `aria-orientation="horizontal"` is set on the menu, the Left/Right Arrow keys cycle focus through menu items instead. In this mode, Up Arrow moves focus to the first item and Down Arrow moves focus to the last item.
+
 -   While the menu has focus, typing a string will move focus to the first item which contains text beginning with that string. The search string is cleared after a configurable delay.
 
 ## API
@@ -41,6 +43,14 @@ window.customElements.define('ui-menu', MenuElement);
 // The number of milliseconds that must pass without a key press
 // before the search string is cleared.
 MenuElement.searchDelay = 800;
+```
+
+```html
+<ui-menu aria-orientation="horizontal">
+    <button role="menuitem">Cut</button>
+    <button role="menuitem">Copy</button>
+    <button role="menuitem">Paste</button>
+</ui-menu>
 ```
 
 ## Further Reading
