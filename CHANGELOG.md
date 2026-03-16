@@ -1,5 +1,13 @@
 # Changelog
 
+### [0.5.5](https://github.com/tobyzerner/inclusive-elements/compare/v0.5.4...v0.5.5) (2026-03-16)
+
+
+### Features
+
+* **menu:** add support for horizontal menus ([ec720f9](https://github.com/tobyzerner/inclusive-elements/commit/ec720f9ac965804a3a5dc084647824715a8c7ebd))
+* **tooltip:** handle arrow keys as tooltip focus triggers ([b50b49b](https://github.com/tobyzerner/inclusive-elements/commit/b50b49be1256e555d55cd0e7ce5780b933f62717))
+
 ### [0.5.4](https://github.com/tobyzerner/inclusive-elements/compare/v0.5.3...v0.5.4) (2026-02-20)
 
 
