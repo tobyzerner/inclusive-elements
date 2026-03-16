@@ -13,7 +13,7 @@ export default class TooltipElement extends HTMLElement {
     private showing: boolean = false;
     private cleanup?: () => void;
     private prevInnerHTML?: string;
-    private tabPressed: boolean = false;
+    private focusKeyPressed: boolean = false;
 
     private onMouseEnter = () => {
         if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches)
@@ -21,7 +21,7 @@ export default class TooltipElement extends HTMLElement {
         this.afterDelay(this.show);
     };
     private onFocus = () => {
-        if (this.tabPressed) this.show();
+        if (this.focusKeyPressed) this.show();
     };
     private onMouseLeave = this.afterDelay.bind(this, this.hide);
     private onBlur = this.hide.bind(this);
@@ -90,15 +90,25 @@ export default class TooltipElement extends HTMLElement {
     }
 
     private onKeyDown = (e: KeyboardEvent): void => {
-        if (e.key === 'Tab') this.tabPressed = true;
+        if (this.isFocusTriggerKey(e.key)) this.focusKeyPressed = true;
         if (e.key === 'Escape') {
             this.hide();
         }
     };
 
     private onKeyUp = (e: KeyboardEvent): void => {
-        if (e.key === 'Tab') this.tabPressed = false;
+        if (this.isFocusTriggerKey(e.key)) this.focusKeyPressed = false;
     };
+
+    private isFocusTriggerKey(key: string): boolean {
+        return (
+            key === 'Tab' ||
+            key === 'ArrowUp' ||
+            key === 'ArrowDown' ||
+            key === 'ArrowLeft' ||
+            key === 'ArrowRight'
+        );
+    }
 
     public show() {
         if (this.disabled) return;
