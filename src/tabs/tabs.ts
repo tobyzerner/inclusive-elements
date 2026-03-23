@@ -29,7 +29,7 @@ export default class TabsElement extends HTMLElement {
                     subtree: true,
                     childList: true,
                     attributes: true,
-                    attributeFilter: ['role', 'tabindex'],
+                    attributeFilter: ['role', 'aria-selected'],
                 },
                 () => this.syncStructure()
             );
@@ -167,7 +167,9 @@ export default class TabsElement extends HTMLElement {
         pairs.forEach(({ tab, panel }, i) => {
             const selected = i === index;
 
-            tab.setAttribute('aria-selected', String(selected));
+            if (tab.getAttribute('aria-selected') !== String(selected)) {
+                tab.setAttribute('aria-selected', String(selected));
+            }
 
             if (selected) {
                 tab.removeAttribute('tabindex');
@@ -192,10 +194,12 @@ export default class TabsElement extends HTMLElement {
     }
 
     private syncPanelTabindex(panel: HTMLElement, selected: boolean): void {
+        const tabbableDescendants = tabbable(panel).filter((el) => el !== panel);
+
         if (
             selected &&
             !this.hasAuthorManagedTabindex(panel) &&
-            tabbable(panel).length === 0
+            tabbableDescendants.length === 0
         ) {
             panel.setAttribute('tabindex', '0');
             this.managedPanelTabindex.add(panel);
