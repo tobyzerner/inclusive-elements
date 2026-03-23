@@ -1,5 +1,14 @@
 # Changelog
 
+### [0.6.1](https://github.com/tobyzerner/inclusive-elements/compare/v0.6.0...v0.6.1) (2026-03-23)
+
+
+### Bug Fixes
+
+* **demo:** hide reactions menu ([df0afa8](https://github.com/tobyzerner/inclusive-elements/commit/df0afa896688cf342f7c3d7808296f881aaaa1a7))
+* **menu:** return focus to root trigger on Escape and Tab ([9c9b28a](https://github.com/tobyzerner/inclusive-elements/commit/9c9b28ae181f42efd76abc10809ac1f4a7a6c9e6))
+* **tabs:** prevent attribute observer loop ([48e2043](https://github.com/tobyzerner/inclusive-elements/commit/48e2043350267b3fc7aa7b649b235d74d25cbc07))
+
 ## [0.6.0](https://github.com/tobyzerner/inclusive-elements/compare/v0.5.5...v0.6.0) (2026-03-23)
 
 ### Overview
