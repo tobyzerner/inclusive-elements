@@ -1,6 +1,6 @@
 {
     "name": "inclusive-elements",
-    "version": "0.5.5",
+    "version": "0.6.0",
     "description": "Accessible, lightweight, unstyled implementations of UI patterns that still need runtime help.",
     "type": "module",
     "module": "dist/index.js",

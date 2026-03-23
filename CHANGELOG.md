@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## [0.6.0](https://github.com/tobyzerner/inclusive-elements/compare/v0.5.5...v0.6.0) (2026-03-23)
 
 ### Overview
 
