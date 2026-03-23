@@ -1,80 +1,74 @@
-import { autoUpdate, computePosition, flip, shift } from '@floating-ui/dom';
-import { goodbye, hello } from 'hello-goodbye';
+import { createQueuedSync } from '../utils';
+
+let tooltipIdCounter = 0;
+
+type ManagedDescription = {
+    owner: HTMLElement;
+    id: string;
+};
 
 export default class TooltipElement extends HTMLElement {
     public static delay: number = 100;
-    public static placement: string = 'top';
-    public static tooltipClass: string = 'tooltip';
+    public static observedAttributes = ['disabled', 'for', 'id'];
 
-    private parent?: HTMLElement;
-    private tooltip?: HTMLElement;
+    private owner?: HTMLElement;
     private timeout?: number;
-    private disabledObserver?: MutationObserver;
-    private showing: boolean = false;
-    private cleanup?: () => void;
-    private prevInnerHTML?: string;
-    private focusKeyPressed: boolean = false;
-
-    private onMouseEnter = () => {
-        if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches)
-            return;
-        this.afterDelay(this.show);
-    };
-    private onFocus = () => {
-        if (this.focusKeyPressed) this.show();
-    };
-    private onMouseLeave = this.afterDelay.bind(this, this.hide);
-    private onBlur = this.hide.bind(this);
+    private sync = createQueuedSync(this, () => this.syncOwner());
+    private ownerObserver?: MutationObserver;
+    private siblingObserver?: MutationObserver;
+    private managedDescription?: ManagedDescription;
 
     public connectedCallback(): void {
-        this.parent = this.parentNode as HTMLElement;
-
-        if (this.parent) {
-            this.parent.addEventListener('mouseenter', this.onMouseEnter);
-            this.parent.addEventListener('focus', this.onFocus);
-            this.parent.addEventListener('mouseleave', this.onMouseLeave);
-            this.parent.addEventListener('blur', this.onBlur);
-            this.parent.addEventListener('click', this.onBlur);
-
-            this.disabledObserver = new MutationObserver((mutations) => {
-                mutations.forEach((mutation) => {
-                    if (mutation.attributeName === 'disabled') {
-                        this.hide();
-                    }
-                });
-            });
-
-            this.disabledObserver.observe(this.parent, { attributes: true });
+        if (!this.hasAttribute('popover')) {
+            this.setAttribute('popover', 'hint');
         }
 
-        document.addEventListener('keydown', this.onKeyDown);
-        document.addEventListener('keyup', this.onKeyUp);
-        document.addEventListener('scroll', this.onBlur);
+        if (!this.hasAttribute('role')) {
+            this.setAttribute('role', 'tooltip');
+        }
+
+        this.ensureTooltipId();
+
+        this.addEventListener('toggle', this.onToggle);
+        this.addEventListener('pointerenter', this.onTooltipPointerEnter);
+        this.addEventListener('pointerleave', this.onInteractivePointerLeave);
+
+        this.syncOwner();
     }
 
     public disconnectedCallback(): void {
-        this.cleanup?.();
+        this.removeEventListener('toggle', this.onToggle);
+        this.removeEventListener('pointerenter', this.onTooltipPointerEnter);
+        this.removeEventListener(
+            'pointerleave',
+            this.onInteractivePointerLeave
+        );
 
-        if (this.tooltip) {
-            this.tooltip.remove();
-            this.tooltip = undefined;
-        }
+        this.ownerDocument.removeEventListener(
+            'keydown',
+            this.onDocumentKeyDown
+        );
 
-        if (this.parent) {
-            this.parent.removeEventListener('mouseenter', this.onMouseEnter);
-            this.parent.removeEventListener('focus', this.onFocus);
-            this.parent.removeEventListener('mouseleave', this.onMouseLeave);
-            this.parent.removeEventListener('blur', this.onBlur);
-            this.parent.removeEventListener('click', this.onBlur);
-            this.parent = undefined;
-        }
+        this.siblingObserver?.disconnect();
+        this.sync.disconnect();
 
-        document.removeEventListener('keydown', this.onKeyDown);
-        document.removeEventListener('keyup', this.onKeyUp);
-        document.removeEventListener('scroll', this.onBlur);
+        this.setOwner(undefined);
 
-        this.disabledObserver?.disconnect();
         clearTimeout(this.timeout);
+    }
+
+    public attributeChangedCallback(
+        name: string,
+        oldValue: string | null,
+        newValue: string | null
+    ): void {
+        if (!this.isConnected || oldValue === newValue) return;
+
+        if (name === 'id' && !newValue) {
+            this.ensureTooltipId();
+        }
+
+        this.syncOwner();
     }
 
     get disabled() {
@@ -89,109 +83,281 @@ export default class TooltipElement extends HTMLElement {
         }
     }
 
-    private onKeyDown = (e: KeyboardEvent): void => {
-        if (this.isFocusTriggerKey(e.key)) this.focusKeyPressed = true;
-        if (e.key === 'Escape') {
-            this.hide();
-        }
-    };
-
-    private onKeyUp = (e: KeyboardEvent): void => {
-        if (this.isFocusTriggerKey(e.key)) this.focusKeyPressed = false;
-    };
-
-    private isFocusTriggerKey(key: string): boolean {
-        return (
-            key === 'Tab' ||
-            key === 'ArrowUp' ||
-            key === 'ArrowDown' ||
-            key === 'ArrowLeft' ||
-            key === 'ArrowRight'
-        );
-    }
-
-    public show() {
-        if (this.disabled) return;
-
-        const tooltip = this.createTooltip();
-
+    public show(owner: HTMLElement | undefined = this.resolveOwner()) {
         clearTimeout(this.timeout);
 
-        if (!this.showing) {
-            tooltip.hidden = false;
-            hello(tooltip);
-            this.showing = true;
+        this.syncOwner(owner);
+
+        const resolvedOwner = this.owner;
+        if (!resolvedOwner || this.matches(':popover-open')) {
+            return;
         }
 
-        if (this.innerHTML !== this.prevInnerHTML) {
-            this.prevInnerHTML = tooltip.innerHTML = this.innerHTML;
-        }
-
-        tooltip.style.position = 'absolute';
-
-        this.cleanup?.();
-        this.cleanup = autoUpdate(this.parent!, tooltip, () =>
-            computePosition(this.parent!, tooltip, {
-                placement:
-                    (this.getAttribute('placement') as any) ||
-                    TooltipElement.placement,
-                middleware: [shift(), flip()],
-            }).then(({ x, y, placement }) => {
-                Object.assign(tooltip.style, {
-                    left: `${x}px`,
-                    top: `${y}px`,
-                });
-                tooltip.dataset.placement = placement;
-            })
-        );
-
-        this.dispatchEvent(new Event('open'));
+        (
+            this as HTMLElement & {
+                showPopover?: (options?: { source?: HTMLElement }) => void;
+            }
+        ).showPopover?.({ source: resolvedOwner });
     }
 
     public hide() {
         clearTimeout(this.timeout);
 
-        this.cleanup?.();
-
-        if (this.showing) {
-            this.showing = false;
-
-            if (this.tooltip) {
-                goodbye(this.tooltip).then(() => {
-                    if (this.tooltip) this.tooltip.hidden = true;
-                });
-            }
-
-            this.dispatchEvent(new Event('close'));
+        if (this.matches(':popover-open')) {
+            this.hidePopover();
         }
     }
 
-    private afterDelay(callback: Function) {
+    private onToggle = (e: Event) => {
+        if (e.target !== this) return;
+
+        if ((e as ToggleEvent).newState === 'open') {
+            this.ownerDocument.addEventListener(
+                'keydown',
+                this.onDocumentKeyDown
+            );
+            return;
+        }
+
+        this.ownerDocument.removeEventListener(
+            'keydown',
+            this.onDocumentKeyDown
+        );
+    };
+
+    private onDocumentKeyDown = (e: KeyboardEvent): void => {
+        if (e.key === 'Escape') {
+            this.hide();
+        }
+    };
+
+    private syncOwner(owner: HTMLElement | undefined = this.resolveOwner()) {
+        this.siblingObserver ??= new MutationObserver(this.sync.queue);
+        this.siblingObserver.disconnect();
+
+        if (!this.hasAttribute('for') && this.parentElement) {
+            this.siblingObserver.observe(this.parentElement, {
+                childList: true,
+            });
+        }
+
+        if (!owner) {
+            this.hide();
+            this.setOwner(undefined);
+            return;
+        }
+
+        if (
+            this.owner &&
+            this.owner !== owner &&
+            this.matches(':popover-open')
+        ) {
+            this.hide();
+        }
+
+        this.setOwner(owner);
+    }
+
+    private resolveOwner(owner?: HTMLElement): HTMLElement | undefined {
+        const candidate =
+            owner ??
+            (this.hasAttribute('for')
+                ? this.resolveExplicitOwner()
+                : this.previousElementSibling instanceof HTMLElement
+                ? this.previousElementSibling
+                : undefined);
+
+        if (
+            this.disabled ||
+            !candidate ||
+            !candidate.isConnected ||
+            candidate === this ||
+            this.isOwnerDisabled(candidate)
+        ) {
+            return undefined;
+        }
+
+        return candidate;
+    }
+
+    private resolveExplicitOwner(): HTMLElement | undefined {
+        const ownerId = this.getAttribute('for');
+        if (!ownerId) return undefined;
+
+        const root = this.getRootNode();
+        const owner =
+            (root instanceof ShadowRoot &&
+                root.querySelector(`#${CSS.escape(ownerId)}`)) ||
+            this.ownerDocument.getElementById(ownerId);
+
+        return owner instanceof HTMLElement ? owner : undefined;
+    }
+
+    private setOwner(owner: HTMLElement | undefined) {
+        const ownerChanged = this.owner !== owner;
+
+        if (ownerChanged && this.owner) {
+            this.owner.removeEventListener('focusin', this.onOwnerFocusIn);
+            this.owner.removeEventListener('focusout', this.onOwnerFocusOut);
+            this.owner.removeEventListener(
+                'pointerenter',
+                this.onOwnerPointerEnter
+            );
+            this.owner.removeEventListener(
+                'pointerleave',
+                this.onInteractivePointerLeave
+            );
+            this.owner.removeEventListener('click', this.onOwnerClick);
+        }
+
+        this.owner = owner;
+        this.updateManagedDescription(owner);
+
+        this.ownerObserver?.disconnect();
+        if (!owner) return;
+
+        this.ownerObserver ??= new MutationObserver(this.sync.queue);
+
+        this.ownerObserver.observe(owner, {
+            attributes: true,
+            attributeFilter: ['aria-describedby', 'aria-disabled', 'disabled'],
+        });
+
+        if (ownerChanged) {
+            owner.addEventListener('focusin', this.onOwnerFocusIn);
+            owner.addEventListener('focusout', this.onOwnerFocusOut);
+            owner.addEventListener('pointerenter', this.onOwnerPointerEnter);
+            owner.addEventListener(
+                'pointerleave',
+                this.onInteractivePointerLeave
+            );
+            owner.addEventListener('click', this.onOwnerClick);
+        }
+    }
+
+    private onOwnerFocusIn = (): void => {
+        if (!this.owner || !this.owner.matches(':focus-visible')) return;
+        this.show(this.owner);
+    };
+
+    private onOwnerFocusOut = (e: FocusEvent): void => {
+        if (this.containsInteractiveTarget(e.relatedTarget)) {
+            return;
+        }
+
+        this.hide();
+    };
+
+    private onOwnerPointerEnter = (e: PointerEvent): void => {
+        if (!this.supportsHoverInteraction(e)) return;
+        if (!this.owner) return;
+        if (this.containsInteractiveTarget(e.relatedTarget)) return;
+
+        this.afterDelay(() => this.show(this.owner));
+    };
+
+    private onTooltipPointerEnter = (e: PointerEvent): void => {
+        if (!this.supportsHoverInteraction(e)) return;
+
+        if (!this.containsInteractiveTarget(e.relatedTarget)) {
+            clearTimeout(this.timeout);
+        }
+    };
+
+    private onInteractivePointerLeave = (e: PointerEvent): void => {
+        if (e.pointerType && e.pointerType !== 'mouse') return;
+        if (this.containsInteractiveTarget(e.relatedTarget)) {
+            return;
+        }
+
+        this.afterDelay(this.hide);
+    };
+
+    private onOwnerClick = (): void => {
+        this.hide();
+    };
+
+    private afterDelay(callback: () => void) {
         clearTimeout(this.timeout);
         const delay = parseInt(this.getAttribute('delay') || '');
         this.timeout = window.setTimeout(
-            callback.bind(this),
+            callback,
             isNaN(delay) ? TooltipElement.delay : delay
         );
     }
 
-    private createTooltip() {
-        if (!this.tooltip) {
-            this.tooltip = document.createElement('div');
-            this.tooltip.hidden = true;
+    private containsInteractiveTarget(
+        target: EventTarget | null
+    ): target is Node {
+        return (
+            target instanceof Node &&
+            (this.contains(target) ||
+                (!!this.owner && this.owner.contains(target)))
+        );
+    }
 
-            this.tooltip.addEventListener('mouseenter', this.show.bind(this));
-            this.tooltip.addEventListener(
-                'mouseleave',
-                this.afterDelay.bind(this, this.hide)
-            );
+    private updateManagedDescription(owner: HTMLElement | undefined) {
+        const tooltipId = owner ? this.ensureTooltipId() : undefined;
 
-            document.body.appendChild(this.tooltip);
+        if (
+            this.managedDescription &&
+            (this.managedDescription.owner !== owner ||
+                this.managedDescription.id !== tooltipId)
+        ) {
+            const managedDescription = this.managedDescription;
+            const tokens = this.getDescriptionTokens(
+                managedDescription.owner
+            ).filter((token) => token !== managedDescription.id);
+
+            if (tokens.length) {
+                managedDescription.owner.setAttribute(
+                    'aria-describedby',
+                    tokens.join(' ')
+                );
+            } else {
+                managedDescription.owner.removeAttribute('aria-describedby');
+            }
+
+            this.managedDescription = undefined;
         }
 
-        this.tooltip.className =
-            this.getAttribute('tooltip-class') || TooltipElement.tooltipClass;
+        if (!owner || !tooltipId || this.managedDescription) return;
 
-        return this.tooltip;
+        const tokens = this.getDescriptionTokens(owner);
+        if (tokens.includes(tooltipId)) return;
+
+        owner.setAttribute(
+            'aria-describedby',
+            [...tokens, tooltipId].join(' ')
+        );
+        this.managedDescription = { owner, id: tooltipId };
+    }
+
+    private getDescriptionTokens(owner: HTMLElement): string[] {
+        return (owner.getAttribute('aria-describedby') || '')
+            .split(/\s+/)
+            .filter(Boolean);
+    }
+
+    private ensureTooltipId(): string {
+        if (!this.id) {
+            this.id = `ui-tooltip-${++tooltipIdCounter}`;
+        }
+
+        return this.id;
+    }
+
+    private supportsHoverInteraction(event: PointerEvent): boolean {
+        return (
+            (!event.pointerType || event.pointerType === 'mouse') &&
+            window.matchMedia('(hover: hover) and (pointer: fine)').matches
+        );
+    }
+
+    private isOwnerDisabled(owner: HTMLElement): boolean {
+        return (
+            owner.hasAttribute('disabled') ||
+            owner.getAttribute('aria-disabled') === 'true'
+        );
     }
 }

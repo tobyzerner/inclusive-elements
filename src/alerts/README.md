@@ -1,12 +1,8 @@
 # Alerts
 
-**A custom element for building accessible alerts.**
+**An accessible alert pattern with a supporting custom element.**
 
-An alert is an element that displays a brief, important message in a way that attracts the user's attention without interrupting the user's task.
-
-The Alerts element provides a container to push alerts into, ensuring they are announced appropriately. It also manages automatic disappearance of alerts after a certain period of time.
-
-It may be styled as a "toasts" container, but careful consideration should be given to the accessibility implications of this pattern (see [Further Reading](#further-reading)).
+`ui-alerts` manages a stack of alert elements, normalizes their announcement semantics, and handles timed dismissal.
 
 ## Example
 
@@ -15,11 +11,9 @@ import { AlertsElement } from 'inclusive-elements';
 
 window.customElements.define('ui-alerts', AlertsElement);
 
-// 1. Create the element and append it to the <body>
 const alerts = document.createElement('ui-alerts');
 document.body.appendChild(alerts);
 
-// 2. Create your own alert template
 function createAlert(type, message) {
     const el = document.createElement('div');
     el.className = type;
@@ -27,69 +21,113 @@ function createAlert(type, message) {
     return el;
 }
 
-// 3. Show an alert
 alerts.show(createAlert('error', 'There was an error'));
-
-// You can also send a visually-hidden message to be spoken
-alerts.speak('There was an error');
+alerts.speak('Hello stranger!');
 ```
 
 ## Behavior
 
--   The `<ui-alerts>` container is given the attributes `role="status"`, `aria-live="polite"` and `aria-relevant="additions"` so that any content additions will be announced.
+### Container
+
+-   `<ui-alerts>` is the container and timing manager for a stack of alert elements.
+-   Any alerts already present as children when the element connects are reprocessed in place so they are announced and animated.
+
+### Announcement Semantics
+
+-   Each alert can be announced politely or assertively.
+-   `show(..., { politeness })` takes precedence. Otherwise, existing authored live-region semantics on the alert are preserved before falling back to the element default.
+-   Polite alerts use `role="status"` and `aria-live="polite"`.
+-   Assertive alerts use `role="alert"` and `aria-live="assertive"`.
+
+### Timing And Replacement
+
+-   Alerts auto-dismiss after their configured duration.
+-   Hovering or focusing an alert clears its dismissal timer, and the full duration starts again when pointer or focus leaves the alert.
+-   Showing a new alert with an existing `key` dismisses the previous alert with that key before the new one is announced.
 
 ## API
 
 ```ts
-// The default number of milliseconds that alerts will be visible for.
-// If -1, alerts will not automatically disappear.
+import type { AlertOptions } from 'inclusive-elements';
+
+// Default dismissal time for alerts that do not provide one.
+// Use 0 or a negative value to disable auto-dismiss by default.
 AlertsElement.duration = 10000;
 
-const alerts = document.querySelector('ui-alerts');
+// Default politeness for alerts that do not provide one.
+AlertsElement.politeness = 'polite';
 
-// Show an alert
-alerts.show(
-    el: HTMLElement,
-    options?: AlertOptions
-);
+const options: AlertOptions = {
+    // Reuse this key to replace an earlier alert with the same key.
+    key: 'save-complete',
 
-type AlertOptions = {
-    // A unique key that represents this alert. Any previous alerts with the
-    // same key will be dismissed before the new one is shown.
-    key?: string;
+    // Override the default dismissal time for this alert only.
+    // Use 0 or a negative value to require manual dismissal.
+    duration: 5000,
 
-    // The number of milliseconds to show the alert for.
-    // If -1, the alert will not automatically disappear.
-    // If undefined, the default value will be used.
-    duration?: number;
+    // Use 'assertive' for urgent announcements that should interrupt.
+    politeness: 'assertive',
 };
 
-// The `key` and `duration` options can also be specified as [data-*] attributes
-// on the alert element being shown. eg:
-// <div data-key="foo" data-duration="1000">Alert</div>
+// Appends the element, announces it, starts dismissal timing,
+// and returns the key used for this alert.
+const key = alerts.show(el, options);
 
-// Dismiss an alert by passing its element or unique key
-alerts.dismiss(el: HTMLElement);
-alerts.dismiss(key: string);
+// Dismiss a specific alert element.
+alerts.dismiss(el);
 
-// Speak a visually-hidden message
-alerts.speak(message: string);
+// Dismiss any current alerts using this key.
+alerts.dismiss(key);
+
+// Dismiss every alert in the container.
+alerts.clear();
+
+// Announce plain text without creating your own element.
+alerts.speak(message, { politeness: 'polite' });
 ```
 
+## Styling
+
+`ui-alerts` is unstyled. The supported animation hooks are:
+
+-   New alerts receive `enter-*` classes so CSS can animate them in.
+-   Dismissed alerts animate out using `leave-*` classes and are then removed.
+-   Existing alerts animate into their new positions using the `move` class.
+
 ```css
-/* Basic styles for the alert container */
 ui-alerts {
     position: fixed;
     top: 0;
     right: 0;
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
     align-items: flex-end;
+    pointer-events: none;
+}
+
+ui-alerts > * {
+    pointer-events: auto;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    ui-alerts > .enter-active,
+    ui-alerts > .leave-active,
+    ui-alerts > .move {
+        transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    ui-alerts > .move {
+        transition: transform 0.2s ease;
+    }
+
+    ui-alerts > .enter-from,
+    ui-alerts > .leave-to {
+        opacity: 0;
+        transform: translateY(-0.5rem);
+    }
 }
 ```
 
 ## Further Reading
 
 -   [ARIA Authoring Practices Guide: Alert Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/alert/)
--   [Scott O'Hara: A toast to an accessible toast...](https://www.scottohara.me/blog/2019/07/08/a-toast-to-a11y-toasts.html)
--   [Adrian Roselli: Defining 'Toast' Messages](https://adrianroselli.com/2020/01/defining-toast-messages.html)

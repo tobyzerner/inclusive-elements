@@ -1,5 +1,40 @@
 # Changelog
 
+## Unreleased
+
+### Overview
+
+This beta moves the library further toward a platform-native shape. Instead of treating every pattern as a runtime widget, `inclusive-elements` now combines:
+
+- native-first pattern guidance where the platform already provides the right primitives
+- focused custom elements for the patterns that still need runtime coordination
+
+The runtime surface is now centered on `ui-alerts`, `ui-menu`, `ui-tabs`, `ui-toolbar`, and `ui-tooltip`, while the other patterns are documented as native recommendations.
+
+### Breaking Changes
+
+- `modal` has been removed as a runtime custom element. Use the native `<dialog>` pattern instead.
+- `popup` has been removed as a runtime custom element. Use the native Popover API pattern instead.
+- `accordion` is now documented as a native pattern based on grouped `<details name>`, not shipped as a runtime custom element.
+- `disclosure` is now documented as a native pattern based on `<details>` and `<summary>`, not shipped as a runtime custom element.
+
+### Component Changes
+
+- **alerts:** clarified and simplified the alert stack behavior around announcement politeness, timing, replacement by key, and styling hooks for enter, leave, and move transitions.
+- **menu:** rebuilt around native popovers with managed menu semantics, root-trigger keyboard opening, submenu coordination, typeahead, horizontal menu support, and clearer trigger ownership rules.
+- **tabs:** simplified the internal structure syncing, kept selection and panel relationships normalized from the DOM, and tightened keyboard, panel visibility, and managed `tabindex` behavior.
+- **toolbar:** aligned the toolbar around a single-tab-stop roving focus model with automatic syncing when controls are added, removed, hidden, or disabled.
+- **tooltip:** moved to a native hint-popover model with explicit or adjacent-sibling owner resolution, managed `aria-describedby`, disabled-owner handling, and cleaner focus and hover interaction rules.
+
+### Documentation
+
+- Reworked the component READMEs into a more consistent format with clearer behavior sections, platform requirement notes, and updated examples.
+- Added native-first guidance for `accordion`, `disclosure`, `dialog`, and `popover`.
+
+### Tooling
+
+- Add automated test suites around core functionality for `alerts`, `menu`, `tabs`, `toolbar`, and `tooltip`.
+
 ### [0.5.5](https://github.com/tobyzerner/inclusive-elements/compare/v0.5.4...v0.5.5) (2026-03-16)
 
 

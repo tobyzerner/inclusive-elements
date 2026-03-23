@@ -1,56 +1,28 @@
-# Disclosure Widget
+# Disclosure
 
-**A custom element for building accessible disclosure widgets.**
+**A native-first disclosure pattern using `<details>` and `<summary>`.**
 
 ## Example
 
-```js
-import { DisclosureElement } from 'inclusive-elements';
-
-window.customElements.define('ui-disclosure', DisclosureElement);
-```
-
 ```html
-<ui-disclosure>
-    <button type="button">Summary</button>
-    <div>Details</div>
-</ui-disclosure>
+<details>
+    <summary>Shipping information</summary>
+    <div>
+        <p>Ships in 2–3 business days.</p>
+    </div>
+</details>
 ```
 
 ## Behavior
 
--   The first descendant that is a `<button>` or has `role="button"` will be given the `aria-expanded` attribute, which will reflect the open state of the disclosure widget.
+-   `<summary>` acts as the built-in control for toggling the disclosure.
+-   The browser manages the open state and accessibility semantics.
 
--   Clicking the button will toggle the disclosure widget. The `hidden` attribute will be toggled on the content element.
+## Accessibility Notes
 
-## API
-
-```js
-const disclosure = document.querySelector('ui-disclosure');
-
-// Programatically open and close the widget.
-disclosure.open = true;
-
-disclosure.addEventListener('toggle', callback);
-```
-
-```css
-/* Transitions can be applied to the content using hello-goodbye */
-@media (prefers-reduced-motion: no-preference) {
-    ui-disclosure > .enter-active,
-    ui-disclosure > .leave-active {
-        transition: all 0.5s;
-    }
-
-    ui-disclosure > .enter-from,
-    ui-disclosure > .leave-to {
-        opacity: 0;
-        transform: scale(0.5);
-    }
-}
-```
+-   Write summary text that clearly describes the hidden content, not generic labels such as "More" without context.
 
 ## Further Reading
 
+-   [MDN: `<details>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details)
 -   [ARIA Authoring Practices Guide: Disclosure Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/)
--   [Scott O'Hara: The details and summary elements, again](https://www.scottohara.me/blog/2022/09/12/details-summary.html)

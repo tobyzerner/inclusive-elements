@@ -1,60 +1,103 @@
 # Menu
 
-**A custom element for building accessible menus.**
+**An accessible menu pattern built on native popovers with a supporting custom element.**
 
-A menu is a widget that offers a list of choices to the user, such as a set of actions or functions.
-
-Usually you will want to compose this element with the [Popup](../popup) element to create a "menu button". This use-case is demonstrated in the markup below.
+`ui-menu` keeps the popup surface native and adds the menu behaviors the platform does not provide by itself, including arrow-key navigation, typeahead, and submenu coordination.
 
 ## Example
 
 ```js
-import { PopupElement, MenuElement } from 'inclusive-elements';
+import { MenuElement } from 'inclusive-elements';
 
-window.customElements.define('ui-popup', PopupElement);
 window.customElements.define('ui-menu', MenuElement);
 ```
 
 ```html
-<ui-popup placement="bottom-start">
-    <button type="button">Menu <span aria-hidden="true">&#x25be;</span></button>
+<button type="button" popovertarget="actions-menu" aria-haspopup="menu">
+    Actions
+</button>
 
-    <ui-menu hidden>
-        <button role="menuitem">Item 1</button>
-        <button role="menuitem">Item 2</button>
-        <button role="menuitem">Item 3</button>
-    </ui-menu>
-</ui-popup>
+<ui-menu id="actions-menu" popover data-placement="bottom-start">
+    <button type="button" role="menuitem">Edit</button>
+    <button type="button" role="menuitem">Archive</button>
+    <button
+        type="button"
+        role="menuitem"
+        popovertarget="more-menu"
+        aria-haspopup="menu"
+    >
+        More
+    </button>
+</ui-menu>
+
+<ui-menu id="more-menu" popover data-placement="right-start">
+    <button type="button" role="menuitem">Duplicate</button>
+    <button type="button" role="menuitem">Delete</button>
+</ui-menu>
 ```
+
+## Platform Requirements
+
+-   Requires modern browser support for the Popover API.
+-   The styling examples use CSS anchor positioning.
 
 ## Behavior
 
--   The `<ui-menu>` element will be given a role of `menu`.
+### Structure
 
--   While the menu has focus, the Up/Down Arrow keys can be used to cycle focus through child elements with a role starting with `menuitem`. These elements are given a `tabindex` of `-1` so that they cannot be reached with the Tab key.
+-   Add `popover` to the root `<ui-menu>` and point a button at it with `popovertarget` and `aria-haspopup="menu"`.
+-   Give direct children a menu item role such as `role="menuitem"`. `ui-menu` adds `role="menu"` and `tabindex="-1"` to the menu itself and manages direct menuitem children with `tabindex="-1"` as well.
 
--   If `aria-orientation="horizontal"` is set on the menu, the Left/Right Arrow keys cycle focus through menu items instead. In this mode, Up Arrow moves focus to the first item and Down Arrow moves focus to the last item.
+### Navigation
 
--   While the menu has focus, typing a string will move focus to the first item which contains text beginning with that string. The search string is cleared after a configurable delay.
+-   By default, menus are vertical. Arrow Down and Arrow Up move through the enabled items and wrap at the ends.
+-   Pressing Arrow Down or Arrow Up on the root trigger opens the menu and focuses the first or last enabled item.
+-   Typeahead matches and moves focus to enabled items by their `aria-label` when present, otherwise by their text content.
+
+### Horizontal Menus
+
+-   To make a horizontal popup menu, set `aria-orientation="horizontal"` on `<ui-menu>`. This keeps the element a `menu`, not a `menubar`, and works well for patterns such as reaction pickers.
+-   In a horizontal popup menu, Left and Right move through the enabled items and wrap at the ends.
+
+### Submenus
+
+-   To create a submenu, make a menu item that points at another `<ui-menu>` with `popovertarget` and `aria-haspopup="menu"`.
+-   Submenus open on click, hover, Enter, or Space, Right Arrow in vertical menus, and Down Arrow in horizontal menus.
+-   Submenus close with Left Arrow in vertical menus and Up Arrow in horizontal menus.
+
+### Closing
+
+-   Clicking a regular menu item closes the open menu tree.
+-   Escape also closes the open menu tree.
+-   Tab closes the open menu tree before normal tab order continues.
 
 ## API
 
 ```ts
-// The number of milliseconds that must pass without a key press
-// before the search string is cleared.
+// Time in milliseconds before the accumulated typeahead search resets.
 MenuElement.searchDelay = 800;
 ```
 
-```html
-<ui-menu aria-orientation="horizontal">
-    <button role="menuitem">Cut</button>
-    <button role="menuitem">Copy</button>
-    <button role="menuitem">Paste</button>
-</ui-menu>
+## Styling
+
+`ui-menu` is unstyled. Position the popover surface with native anchor positioning:
+
+```css
+[popover] {
+    position: fixed;
+    position-anchor: auto;
+}
+
+[popover][data-placement='bottom-start'] {
+    position-area: block-end span-inline-start;
+}
+
+[popover][data-placement='right-start'] {
+    position-area: inline-end span-block-start;
+}
 ```
 
 ## Further Reading
 
--   [ARIA Authoring Practices Guide: Menu Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/)
--   [Inclusive Components: Menus & Menu Buttons](https://inclusive-components.design/menus-menu-buttons/)
--   [Adrian Roselli: Don’t Use ARIA Menu Roles for Site Nav](https://adrianroselli.com/2017/10/dont-use-aria-menu-roles-for-site-nav.html)
+-   [ARIA Authoring Practices Guide: Menu and Menubar Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/)
+-   [MDN: Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API/Using)

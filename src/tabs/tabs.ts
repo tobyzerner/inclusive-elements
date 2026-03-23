@@ -1,3 +1,6 @@
+import { tabbable } from 'tabbable';
+import { createQueuedElementSync, getRovingIndexForKey } from '../utils';
+
 let idCounter = 0;
 
 type SelectTabOptions = {
@@ -5,60 +8,180 @@ type SelectTabOptions = {
     emit?: boolean;
 };
 
+type TabPair = {
+    tab: HTMLElement;
+    panel: HTMLElement;
+};
+
 export default class TabsElement extends HTMLElement {
     private idPrefix = 'tabs' + ++idCounter;
+    private structureSync?: ReturnType<typeof createQueuedElementSync>;
+    private managedPanelTabindex: WeakSet<HTMLElement> = new WeakSet();
 
     public connectedCallback(): void {
-        this.tablist.addEventListener('keydown', this.onKeyDown);
-        this.tablist.addEventListener('click', this.onClick);
+        this.addEventListener('keydown', this.onKeyDown);
+        this.addEventListener('click', this.onClick);
 
-        this.selectTab(this.initialTabIndex, { emit: false });
+        if (!this.structureSync) {
+            this.structureSync = createQueuedElementSync(
+                this,
+                {
+                    subtree: true,
+                    childList: true,
+                    attributes: true,
+                    attributeFilter: ['role', 'tabindex'],
+                },
+                () => this.syncStructure()
+            );
+        }
 
-        this.tabs.forEach((tab, i) => {
-            const panel = this.tabpanels[i];
-            const tabId = tab.getAttribute('id') || this.idPrefix + '_tab_' + i;
-            const panelId =
-                panel.getAttribute('id') || this.idPrefix + '_panel_' + i;
-
-            tab.setAttribute('id', tabId);
-            tab.setAttribute('aria-controls', panelId);
-
-            panel.setAttribute('id', panelId);
-            panel.setAttribute('aria-labelledby', tabId);
-            panel.setAttribute('tabindex', '0');
-        });
+        this.structureSync.observe();
+        this.structureSync.queue();
     }
 
     public disconnectedCallback(): void {
-        this.tablist.removeEventListener('keydown', this.onKeyDown);
-        this.tablist.removeEventListener('click', this.onClick);
+        this.removeEventListener('keydown', this.onKeyDown);
+        this.removeEventListener('click', this.onClick);
+
+        this.structureSync?.disconnect();
     }
 
     public selectTab(index: number, options: SelectTabOptions = {}): boolean {
-        const { focus = false, emit = true } = options;
-        const tabs = this.tabs;
-        const panels = this.tabpanels;
-        const tabCount = tabs.length;
+        return this.applySelection(this.tabPairs(), index, options);
+    }
 
-        if (index < 0 || index >= tabCount) {
+    private onKeyDown = (e: KeyboardEvent) => {
+        const pairs = this.tabPairs();
+        if (!pairs.length) return;
+
+        const nextIndex = getRovingIndexForKey(e.key, {
+            currentIndex: this.getEventTabIndex(e.target, pairs),
+            length: pairs.length,
+            vertical: this.vertical,
+        });
+
+        if (nextIndex !== undefined) {
+            this.applySelection(pairs, nextIndex, { focus: true });
+            e.stopPropagation();
+            e.preventDefault();
+        }
+    };
+
+    private onClick = (e: MouseEvent) => {
+        const pairs = this.tabPairs();
+        this.applySelection(pairs, this.getEventTabIndex(e.target, pairs), {
+            focus: true,
+        });
+    };
+
+    private syncStructure(): void {
+        const pairs = this.tabPairs();
+
+        if (!pairs.length) return;
+
+        this.applySelection(pairs, this.getSelectedIndex(pairs, 0), {
+            emit: false,
+        });
+    }
+
+    private get vertical(): boolean {
+        return this.tablist?.getAttribute('aria-orientation') === 'vertical';
+    }
+
+    private get tablist(): HTMLElement | undefined {
+        return Array.from(
+            this.querySelectorAll<HTMLElement>('[role=tablist]')
+        ).find((el) => el.closest('ui-tabs') === this);
+    }
+
+    private tabPairs(): TabPair[] {
+        const tablist = this.tablist;
+
+        if (!tablist) {
+            return [];
+        }
+
+        const tabs = Array.from(
+            tablist.querySelectorAll<HTMLElement>('[role=tab]')
+        );
+
+        const panels = Array.from(
+            this.querySelectorAll<HTMLElement>('[role=tabpanel]')
+        ).filter((el) => el.closest('ui-tabs') === this);
+
+        tabs.forEach((tab, index) => {
+            if (!tab.id) {
+                tab.id = this.idPrefix + '_tab_' + index;
+            }
+        });
+
+        panels.forEach((panel, index) => {
+            if (!panel.id) {
+                panel.id = this.idPrefix + '_panel_' + index;
+            }
+        });
+
+        const pairs = tabs
+            .slice(0, Math.min(tabs.length, panels.length))
+            .map((tab, index) => ({ tab, panel: panels[index] }));
+
+        pairs.forEach(({ tab, panel }) => {
+            tab.setAttribute('aria-controls', panel.id);
+            panel.setAttribute('aria-labelledby', tab.id);
+        });
+
+        return pairs;
+    }
+
+    private getSelectedIndex(pairs: TabPair[], fallback: number = -1): number {
+        const index = pairs.findIndex(
+            ({ tab }) => tab.getAttribute('aria-selected') === 'true'
+        );
+
+        return index === -1 ? fallback : index;
+    }
+
+    private getEventTabIndex(
+        target: EventTarget | null,
+        pairs: TabPair[]
+    ): number {
+        if (!(target instanceof Element)) return -1;
+
+        const tab = target.closest<HTMLElement>('[role=tab]');
+        return tab ? pairs.findIndex((pair) => pair.tab === tab) : -1;
+    }
+
+    private applySelection(
+        pairs: TabPair[],
+        index: number,
+        options: SelectTabOptions = {}
+    ): boolean {
+        const { focus = false, emit = true } = options;
+
+        if (index < 0 || index >= pairs.length) {
             return false;
         }
 
-        const previousIndex = tabs.findIndex(
-            (tab) => tab.getAttribute('aria-selected') === 'true'
-        );
+        const previousIndex = this.getSelectedIndex(pairs);
 
-        tabs.forEach((tab, i) => {
-            if (i === index) {
-                tab.setAttribute('aria-selected', 'true');
+        pairs.forEach(({ tab, panel }, i) => {
+            const selected = i === index;
+
+            tab.setAttribute('aria-selected', String(selected));
+
+            if (selected) {
                 tab.removeAttribute('tabindex');
-                panels[i].hidden = false;
-                if (focus) tab.focus();
+                panel.hidden = false;
+
+                if (focus) {
+                    tab.focus();
+                }
             } else {
-                tab.setAttribute('aria-selected', 'false');
                 tab.setAttribute('tabindex', '-1');
-                panels[i].hidden = true;
+                panel.hidden = true;
             }
+
+            this.syncPanelTabindex(panel, selected);
         });
 
         if (emit && previousIndex !== index) {
@@ -68,73 +191,27 @@ export default class TabsElement extends HTMLElement {
         return previousIndex !== index;
     }
 
-    private onKeyDown = (e: KeyboardEvent) => {
-        const tabs = this.tabs;
-        if (tabs.length === 0) return;
-
-        let index = tabs.indexOf(e.target as HTMLElement);
-        if (index === -1) {
-            index = tabs.findIndex(
-                (tab) => tab.getAttribute('aria-selected') === 'true'
-            );
-            if (index === -1) {
-                index = 0;
-            }
+    private syncPanelTabindex(panel: HTMLElement, selected: boolean): void {
+        if (
+            selected &&
+            !this.hasAuthorManagedTabindex(panel) &&
+            tabbable(panel).length === 0
+        ) {
+            panel.setAttribute('tabindex', '0');
+            this.managedPanelTabindex.add(panel);
+            return;
         }
 
-        const vertical =
-            this.tablist.getAttribute('aria-orientation') === 'vertical';
-        let nextIndex: number | undefined;
-
-        switch (e.key) {
-            case vertical ? 'ArrowUp' : 'ArrowLeft':
-                nextIndex = (index - 1 + tabs.length) % tabs.length;
-                break;
-
-            case vertical ? 'ArrowDown' : 'ArrowRight':
-                nextIndex = (index + 1) % tabs.length;
-                break;
-
-            case 'Home':
-                nextIndex = 0;
-                break;
-
-            case 'End':
-                nextIndex = tabs.length - 1;
+        if (this.managedPanelTabindex.has(panel)) {
+            panel.removeAttribute('tabindex');
+            this.managedPanelTabindex.delete(panel);
         }
+    }
 
-        if (nextIndex !== undefined) {
-            this.selectTab(nextIndex, { focus: true });
-            e.stopPropagation();
-            e.preventDefault();
-        }
-    };
-
-    private onClick = (e: MouseEvent) => {
-        const target = e.target as HTMLElement;
-        const tab = target.closest<HTMLElement>('[role=tab]');
-        if (tab) {
-            this.selectTab(this.tabs.indexOf(tab), { focus: true });
-        }
-    };
-
-    private get initialTabIndex(): number {
-        const index = this.tabs.findIndex(
-            (tab) => tab.getAttribute('aria-selected') === 'true'
+    private hasAuthorManagedTabindex(panel: HTMLElement): boolean {
+        return (
+            panel.hasAttribute('tabindex') &&
+            !this.managedPanelTabindex.has(panel)
         );
-
-        return index !== -1 ? index : 0;
-    }
-
-    private get tablist(): HTMLElement {
-        return this.querySelector('[role=tablist]')!;
-    }
-
-    private get tabs(): HTMLElement[] {
-        return Array.from(this.querySelectorAll('[role=tab]'));
-    }
-
-    private get tabpanels(): HTMLElement[] {
-        return Array.from(this.querySelectorAll('[role=tabpanel]'));
     }
 }

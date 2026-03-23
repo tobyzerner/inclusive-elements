@@ -1,6 +1,8 @@
 # Tabs
 
-**A custom element for building accessible tabbed interfaces.**
+**An accessible tabs pattern with a supporting custom element.**
+
+`ui-tabs` connects tabs and panels, keeps selection and focus state in sync, and adds the keyboard behavior the platform does not provide by itself.
 
 ## Example
 
@@ -12,40 +14,76 @@ window.customElements.define('ui-tabs', TabsElement);
 
 ```html
 <ui-tabs>
-    <div role="tablist" aria-label="Tabs">
-        <button type="button" role="tab">Tab 1</button>
-        <button type="button" role="tab">Tab 2</button>
-        <button type="button" role="tab">Tab 3</button>
+    <div role="tablist" aria-label="Account sections">
+        <button type="button" role="tab" aria-selected="true">Profile</button>
+        <button type="button" role="tab">Security</button>
+        <button type="button" role="tab">Billing</button>
     </div>
-    <div role="tabpanel">Tab Panel 1</div>
-    <div role="tabpanel" hidden>Tab Panel 2</div>
-    <div role="tabpanel" hidden>Tab Panel 3</div>
+
+    <section role="tabpanel">
+        <h2>Profile</h2>
+        <p>Manage your public details.</p>
+    </section>
+
+    <section role="tabpanel" hidden>
+        <h2>Security</h2>
+        <p>Update your password and sign-in settings.</p>
+    </section>
+
+    <section role="tabpanel" hidden>
+        <h2>Billing</h2>
+        <p>View invoices and payment methods.</p>
+    </section>
 </ui-tabs>
 ```
 
 ## Behavior
 
--   Descendants with `role="tab"` and `role="tabpanel"` will have appropriate `id`, `aria-controls`, and `aria-labelledby` attributes generated if they are not already set.
+### Structure
 
--   The active `tab` will have the `aria-selected="true"` attribute set. Inactive tabs will have their `tabindex` set to `-1` so that focus remains on the active tab.
+-   Add one descendant with `role="tablist"`. Use `button` elements with `role="tab"` inside it. Panels are read from owned descendants with `role="tabpanel"`, and `ui-tabs` pairs them strictly by document order.
+-   For initialized pairs, `ui-tabs` preserves existing `id` values where present, fills in missing `id` values, and normalizes `aria-controls` and `aria-labelledby` so each ordered pair stays wired together.
 
--   To set a default selected tab, set `aria-selected="true"` on exactly one `tab`. If this is not provided, the first tab is selected by default.
+### Selection And Panels
 
--   When focus is on the active `tab`, pressing the `Left Arrow`, `Right Arrow`, `Home`, and `End` keys can be used for navigation. If the `tablist` has `aria-orientation="vertical"`, `Down Arrow` and `Up Arrow` are used instead.
+-   Set `aria-selected="true"` on the tab that should be active by default. If none is marked selected, the first tab is selected automatically when the element connects.
+-   The active tab gets `aria-selected="true"` and stays in the normal tab order. Inactive tabs get `aria-selected="false"` and `tabindex="-1"`.
+-   Only the active panel remains visible. Other panels get `hidden = true`.
+-   If the active panel has no tabbable content and no author-provided `tabindex`, `ui-tabs` gives the panel `tabindex="0"` so keyboard users can still reach it.
+-   The element dispatches a `change` event on the `<ui-tabs>` element when user interaction or `selectTab()` changes the active tab.
 
--   The `tab` with focus is automatically activated, and its corresponding `tabpanel` will become visible.
+### Keyboard Navigation
 
--   The `ui-tabs` element dispatches a `change` event when a new tab is selected by user interaction (click or keyboard navigation), or by calling the `selectTab()` method.
+-   In a horizontal tablist, Left and Right move between tabs and wrap at the ends. Home and End jump to the first or last tab.
+-   In a vertical tablist, set `aria-orientation="vertical"` on the tablist. Then Up and Down move between tabs instead of Left and Right.
+-   Moving focus with the keyboard automatically activates the newly focused tab.
+
+### Dynamic Changes
+
+-   Adding, removing, or re-roleing tabs and panels after connection automatically re-syncs the ordered pairs. The current selected tab is preserved when its ordered slot still has a matching panel.
 
 ## API
 
--   `selectTab(index, options?)`
+```ts
+// Select a tab by index. Returns true when the active tab changed.
+tabs.selectTab(index, {
+    // Move focus to the selected tab.
+    focus: false,
 
-    Programmatically selects a tab and returns `true` if the active tab changed, otherwise `false`.
+    // Emit a `change` event when selection changes.
+    emit: true,
+});
+```
 
-    -   `index` (`number`): The tab index to select.
-    -   `options.focus` (`boolean`, default `false`): Moves focus to the selected tab.
-    -   `options.emit` (`boolean`, default `true`): Emits a `change` event when selection changes.
+## Styling
+
+`ui-tabs` is unstyled. Style the selected tab from its ARIA state:
+
+```css
+[role='tab'][aria-selected='true'] {
+    font-weight: 600;
+}
+```
 
 ## Further Reading
 

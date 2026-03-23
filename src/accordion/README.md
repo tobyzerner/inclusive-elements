@@ -1,45 +1,36 @@
 # Accordion
 
-**A custom element for building accessible accordions.**
-
-The accordion element wraps multiple disclosure elements, and ensures only one of these is expanded at a time.
+**A native-first accordion pattern using `<details name>`.**
 
 ## Example
 
-```js
-import { AccordionElement } from 'inclusive-elements';
-
-window.customElements.define('ui-accordion', AccordionElement);
-```
-
 ```html
-<ui-accordion>
-    <ui-disclosure>
-        <h2>
-            <button type="button">Section A</button>
-        </h2>
-        <div>
-            Details
-        </div>
-    </ui-disclosure>
-    
-    <ui-disclosure>
-        <h2>
-            <button type="button">Section B</button>
-        </h2>
-        <div>
-            Details
-        </div>
-    </ui-disclosure>
-</ui-accordion>
+<details name="faq">
+    <summary>Returns</summary>
+    <div>
+        <p>30 day returns.</p>
+    </div>
+</details>
+
+<details name="faq">
+    <summary>Warranty</summary>
+    <div>
+        <p>Two years included.</p>
+    </div>
+</details>
 ```
+
+## Platform Requirements
+
+-   Requires modern browser support for grouped `<details name>` behavior.
 
 ## Behavior
 
--   Whenever a direct child `<ui-disclosure>` or `<details>` element is opened, sibling `<ui-disclosure>` and `<details>` elements will be closed.
-
--   If the `required` attribute is present, the `<ui-disclosure>` element that is currently open will be `disabled`.
+-   Giving related `<details>` elements the same `name` makes them behave like an accordion, where opening one closes the others.
+-   The browser provides the disclosure semantics and keyboard interaction.
+-   This keeps the pattern lightweight and easy to style, without a custom wrapper element.
 
 ## Further Reading
 
+-   [MDN: `<details>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details)
 -   [ARIA Authoring Practices Guide: Accordion Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/accordion/)

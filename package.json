@@ -1,34 +1,45 @@
 {
     "name": "inclusive-elements",
     "version": "0.5.5",
-    "description": "Accessible, lightweight, unstyled implementations of common UI controls.",
-    "module": "dist/inclusive-elements.js",
+    "description": "Accessible, lightweight, unstyled implementations of UI patterns that still need runtime help.",
     "type": "module",
+    "module": "dist/index.js",
     "types": "dist/types/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/types/index.d.ts",
+            "import": "./dist/index.js"
+        },
+        "./package.json": "./package.json"
+    },
     "license": "MIT",
     "repository": "tobyzerner/inclusive-elements",
     "files": [
-        "dist"
+        "dist",
+        "CHANGELOG.md",
+        "src/*/README.md"
     ],
     "sideEffects": false,
     "scripts": {
         "dev": "vite",
         "build": "tsc --noEmit && vite build && tsc --emitDeclarationOnly",
+        "prepare": "pnpm build",
+        "test": "vitest run",
         "preview": "vite preview",
         "release": "release-it"
     },
     "dependencies": {
-        "@floating-ui/dom": "^1.7.4",
-        "focus-trap": "^7.6.5",
-        "hello-goodbye": "^0.2.2",
-        "tabbable": "^6.2.0"
+        "tabbable": "^6.4.0",
+        "transition-kit": "^1.0.0"
     },
     "devDependencies": {
         "@release-it/conventional-changelog": "^5.1.1",
+        "jsdom": "^29.0.1",
         "prettier": "^2.8.8",
         "release-it": "^15.11.0",
-        "typescript": "^5.9.2",
-        "vite": "^4.5.14"
+        "typescript": "^5.9.3",
+        "vite": "^8.0.1",
+        "vitest": "^4.1.0"
     },
     "release-it": {
         "git": {
@@ -45,9 +56,6 @@
                 "infile": "CHANGELOG.md",
                 "header": "# Changelog"
             }
-        },
-        "hooks": {
-            "after:bump": "npm run build"
         }
     },
     "prettier": {
