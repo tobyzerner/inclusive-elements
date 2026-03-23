@@ -20,7 +20,7 @@ The other pattern docs are native-first guidance, including the accessibility wo
 ## Installation
 
 ```sh
-npm install inclusive-elements
+npm install inclusive-elements --save
 ```
 
 Patterns in this package rely on modern browser features such as the Popover API, hint popovers, CSS anchor positioning, `<details name>`, and `<dialog>`.
