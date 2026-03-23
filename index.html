@@ -494,13 +494,16 @@
     </template>
 
     <script type="module">
-      import {
+      const modulePath = import.meta.env?.DEV
+        ? './src/index.ts'
+        : './dist/index.js';
+      const {
         AlertsElement,
         MenuElement,
         TabsElement,
         ToolbarElement,
         TooltipElement,
-      } from 'inclusive-elements';
+      } = await import(modulePath);
 
       customElements.define('ui-menu', MenuElement);
       customElements.define('ui-tooltip', TooltipElement);
