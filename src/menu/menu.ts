@@ -134,12 +134,14 @@ export default class MenuElement extends HTMLElement {
 
         if (e.key === 'Tab') {
             this.closeMenuTree();
+            this.focusRootMenuTrigger();
             return;
         }
 
         if (e.key === 'Escape') {
             e.preventDefault();
             this.closeMenuTree();
+            this.focusRootMenuTrigger();
             return;
         }
 
@@ -373,6 +375,17 @@ export default class MenuElement extends HTMLElement {
     private closeMenuTree() {
         this.closeSelfAndDescendants();
         this.getParentMenu()?.closeMenuTree();
+    }
+
+    private focusRootMenuTrigger() {
+        this.getRootMenuTrigger()?.focus({ preventScroll: true });
+    }
+
+    private getRootMenuTrigger(): HTMLElement | null {
+        const parentMenu = this.getParentMenu();
+        return parentMenu
+            ? parentMenu.getRootMenuTrigger()
+            : this.getTriggers()[0] || null;
     }
 
     private handleTypeahead(

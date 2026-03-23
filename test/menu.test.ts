@@ -282,7 +282,7 @@ describe('MenuElement', () => {
     });
 
     it('supports closing the menu tree from item activation, Escape, and Tab', async () => {
-        const { menu, items } = await createMenu();
+        const { trigger, menu, items } = await createMenu();
 
         menu.showPopover();
         click(items[0]);
@@ -292,11 +292,29 @@ describe('MenuElement', () => {
         items[0].focus();
         pressKey(items[0], 'Escape');
         expect(menu.matches(':popover-open')).toBe(false);
+        expect(document.activeElement).toBe(trigger);
 
         menu.showPopover();
         items[0].focus();
         pressKey(items[0], 'Tab');
         expect(menu.matches(':popover-open')).toBe(false);
+    });
+
+    it('closes the whole menu tree and returns focus to the root trigger on Escape', async () => {
+        const { trigger, menu, submenuTrigger, submenu, submenuItems } =
+            await createMenuWithSubmenu();
+
+        menu.showPopover();
+        submenuTrigger.focus();
+
+        pressKey(submenuTrigger, 'ArrowRight');
+        expect(submenu.matches(':popover-open')).toBe(true);
+        expect(document.activeElement).toBe(submenuItems[0]);
+
+        pressKey(submenuItems[0], 'Escape');
+        expect(submenu.matches(':popover-open')).toBe(false);
+        expect(menu.matches(':popover-open')).toBe(false);
+        expect(document.activeElement).toBe(trigger);
     });
 
     it('supports typeahead from the current item with wrapping and repeated characters', async () => {
