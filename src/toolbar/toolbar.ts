@@ -1,9 +1,5 @@
 import { focusable } from 'tabbable';
-import {
-    createQueuedElementSync,
-    getLookupRoot,
-    getRovingIndexForKey,
-} from '../utils';
+import { createQueuedElementSync, getLookupRoot, getRovingIndexForKey } from '../utils';
 
 export default class ToolbarElement extends HTMLElement {
     private structureSync?: ReturnType<typeof createQueuedElementSync>;
@@ -29,7 +25,7 @@ export default class ToolbarElement extends HTMLElement {
                     attributes: true,
                     attributeFilter: ['disabled', 'hidden', 'aria-disabled'],
                 },
-                () => this.syncControls()
+                () => this.syncControls(),
             );
         }
 
@@ -82,9 +78,7 @@ export default class ToolbarElement extends HTMLElement {
         const current = this.hasAttribute('tabindex')
             ? controls[0]
             : controls.find((control) => control === activeElement) ||
-              controls.find(
-                  (control) => control.getAttribute('tabindex') === '0'
-              ) ||
+              controls.find((control) => control.getAttribute('tabindex') === '0') ||
               controls[0];
 
         this.syncCurrentControl(controls, current);
@@ -94,7 +88,7 @@ export default class ToolbarElement extends HTMLElement {
 
     private syncCurrentControl(
         controls: ReturnType<typeof focusable>,
-        current?: ReturnType<typeof focusable>[number]
+        current?: ReturnType<typeof focusable>[number],
     ): void {
         controls.forEach((control) => {
             control.setAttribute('tabindex', control === current ? '0' : '-1');

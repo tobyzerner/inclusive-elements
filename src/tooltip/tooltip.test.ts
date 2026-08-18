@@ -1,5 +1,5 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import TooltipElement from '../src/tooltip/tooltip';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vite-plus/test';
+import TooltipElement from './tooltip';
 
 if (!customElements.get('ui-tooltip')) {
     customElements.define('ui-tooltip', TooltipElement);
@@ -11,10 +11,7 @@ type TooltipWithPopoverState = TooltipElement & {
     hidePopover: () => void;
 };
 
-function dispatchToggle(
-    tooltip: TooltipElement,
-    newState: 'open' | 'closed'
-): void {
+function dispatchToggle(tooltip: TooltipElement, newState: 'open' | 'closed'): void {
     const event = new Event('toggle', { bubbles: false });
     Object.defineProperty(event, 'newState', {
         value: newState,
@@ -32,7 +29,7 @@ function createTooltip(
         ownerId?: string;
         forId?: string;
         attachOwner?: boolean;
-    } = {}
+    } = {},
 ): { owner: HTMLButtonElement; tooltip: TooltipWithPopoverState } {
     const owner = document.createElement('button');
     owner.type = 'button';
@@ -42,9 +39,7 @@ function createTooltip(
         owner.id = options.ownerId;
     }
 
-    const tooltip = document.createElement(
-        'ui-tooltip'
-    ) as TooltipWithPopoverState;
+    const tooltip = document.createElement('ui-tooltip') as TooltipWithPopoverState;
     tooltip.textContent = 'Save changes';
 
     if (options.forId) {
@@ -94,7 +89,7 @@ beforeEach(() => {
             dispatchEvent: vi.fn(),
             media: '',
             onchange: null,
-        }))
+        })),
     );
 });
 
@@ -129,9 +124,7 @@ describe('TooltipElement', () => {
         owner.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
         expect(tooltip.matches(':popover-open')).toBe(true);
 
-        owner.dispatchEvent(
-            new FocusEvent('focusout', { bubbles: true, relatedTarget: null })
-        );
+        owner.dispatchEvent(new FocusEvent('focusout', { bubbles: true, relatedTarget: null }));
         expect(tooltip.matches(':popover-open')).toBe(false);
     });
 
@@ -182,9 +175,7 @@ describe('TooltipElement', () => {
         await flushMicrotasks();
 
         expect(owner.hasAttribute('aria-describedby')).toBe(false);
-        expect(replacement.getAttribute('aria-describedby')).toContain(
-            tooltip.id
-        );
+        expect(replacement.getAttribute('aria-describedby')).toContain(tooltip.id);
     });
 
     it('supports explicit ownership when the referenced target appears later', async () => {
@@ -206,9 +197,7 @@ describe('TooltipElement', () => {
         tooltip.show();
 
         expect(tooltip.matches(':popover-open')).toBe(true);
-        expect(lateOwner.getAttribute('aria-describedby')).toContain(
-            tooltip.id
-        );
+        expect(lateOwner.getAttribute('aria-describedby')).toContain(tooltip.id);
     });
 
     it('supports changing explicit ownership with the for attribute', async () => {
@@ -229,9 +218,7 @@ describe('TooltipElement', () => {
         await flushMicrotasks();
 
         expect(owner.hasAttribute('aria-describedby')).toBe(false);
-        expect(nextOwner.getAttribute('aria-describedby')).toContain(
-            tooltip.id
-        );
+        expect(nextOwner.getAttribute('aria-describedby')).toContain(tooltip.id);
     });
 
     it('supports rebinding the owner while open', async () => {
@@ -255,9 +242,7 @@ describe('TooltipElement', () => {
 
         expect(tooltip.matches(':popover-open')).toBe(false);
         expect(owner.hasAttribute('aria-describedby')).toBe(false);
-        expect(nextOwner.getAttribute('aria-describedby')).toContain(
-            tooltip.id
-        );
+        expect(nextOwner.getAttribute('aria-describedby')).toContain(tooltip.id);
     });
 
     it('supports enabling and disabling the tooltip owner relationship', async () => {

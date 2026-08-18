@@ -1,5 +1,5 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
-import ToolbarElement from '../src/toolbar/toolbar';
+import { afterEach, describe, expect, it, vi } from 'vite-plus/test';
+import ToolbarElement from './toolbar';
 
 vi.mock('tabbable', () => ({
     focusable: (container: HTMLElement) =>
@@ -7,7 +7,7 @@ vi.mock('tabbable', () => ({
             (control) =>
                 !control.hidden &&
                 !control.hasAttribute('disabled') &&
-                control.getAttribute('aria-disabled') !== 'true'
+                control.getAttribute('aria-disabled') !== 'true',
         ),
 }));
 

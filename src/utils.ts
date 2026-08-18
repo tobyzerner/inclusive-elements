@@ -26,7 +26,7 @@ export function createQueuedSync(element: HTMLElement, sync: () => void) {
 export function createQueuedElementSync(
     element: HTMLElement,
     options: MutationObserverInit,
-    sync: () => void
+    sync: () => void,
 ) {
     const queuedSync = createQueuedSync(element, sync);
 
@@ -55,7 +55,7 @@ export function getRovingIndexForKey(
         currentIndex: number;
         length: number;
         vertical: boolean;
-    }
+    },
 ): number | undefined {
     const { currentIndex, length, vertical } = options;
 

@@ -39,15 +39,9 @@ export default class TooltipElement extends HTMLElement {
     public disconnectedCallback(): void {
         this.removeEventListener('toggle', this.onToggle);
         this.removeEventListener('pointerenter', this.onTooltipPointerEnter);
-        this.removeEventListener(
-            'pointerleave',
-            this.onInteractivePointerLeave
-        );
+        this.removeEventListener('pointerleave', this.onInteractivePointerLeave);
 
-        this.ownerDocument.removeEventListener(
-            'keydown',
-            this.onDocumentKeyDown
-        );
+        this.ownerDocument.removeEventListener('keydown', this.onDocumentKeyDown);
 
         this.siblingObserver?.disconnect();
         this.sync.disconnect();
@@ -60,7 +54,7 @@ export default class TooltipElement extends HTMLElement {
     public attributeChangedCallback(
         name: string,
         oldValue: string | null,
-        newValue: string | null
+        newValue: string | null,
     ): void {
         if (!this.isConnected || oldValue === newValue) return;
 
@@ -112,17 +106,11 @@ export default class TooltipElement extends HTMLElement {
         if (e.target !== this) return;
 
         if ((e as ToggleEvent).newState === 'open') {
-            this.ownerDocument.addEventListener(
-                'keydown',
-                this.onDocumentKeyDown
-            );
+            this.ownerDocument.addEventListener('keydown', this.onDocumentKeyDown);
             return;
         }
 
-        this.ownerDocument.removeEventListener(
-            'keydown',
-            this.onDocumentKeyDown
-        );
+        this.ownerDocument.removeEventListener('keydown', this.onDocumentKeyDown);
     };
 
     private onDocumentKeyDown = (e: KeyboardEvent): void => {
@@ -147,11 +135,7 @@ export default class TooltipElement extends HTMLElement {
             return;
         }
 
-        if (
-            this.owner &&
-            this.owner !== owner &&
-            this.matches(':popover-open')
-        ) {
+        if (this.owner && this.owner !== owner && this.matches(':popover-open')) {
             this.hide();
         }
 
@@ -164,8 +148,8 @@ export default class TooltipElement extends HTMLElement {
             (this.hasAttribute('for')
                 ? this.resolveExplicitOwner()
                 : this.previousElementSibling instanceof HTMLElement
-                ? this.previousElementSibling
-                : undefined);
+                  ? this.previousElementSibling
+                  : undefined);
 
         if (
             this.disabled ||
@@ -186,8 +170,7 @@ export default class TooltipElement extends HTMLElement {
 
         const root = this.getRootNode();
         const owner =
-            (root instanceof ShadowRoot &&
-                root.querySelector(`#${CSS.escape(ownerId)}`)) ||
+            (root instanceof ShadowRoot && root.querySelector(`#${CSS.escape(ownerId)}`)) ||
             this.ownerDocument.getElementById(ownerId);
 
         return owner instanceof HTMLElement ? owner : undefined;
@@ -199,14 +182,8 @@ export default class TooltipElement extends HTMLElement {
         if (ownerChanged && this.owner) {
             this.owner.removeEventListener('focusin', this.onOwnerFocusIn);
             this.owner.removeEventListener('focusout', this.onOwnerFocusOut);
-            this.owner.removeEventListener(
-                'pointerenter',
-                this.onOwnerPointerEnter
-            );
-            this.owner.removeEventListener(
-                'pointerleave',
-                this.onInteractivePointerLeave
-            );
+            this.owner.removeEventListener('pointerenter', this.onOwnerPointerEnter);
+            this.owner.removeEventListener('pointerleave', this.onInteractivePointerLeave);
             this.owner.removeEventListener('click', this.onOwnerClick);
         }
 
@@ -227,10 +204,7 @@ export default class TooltipElement extends HTMLElement {
             owner.addEventListener('focusin', this.onOwnerFocusIn);
             owner.addEventListener('focusout', this.onOwnerFocusOut);
             owner.addEventListener('pointerenter', this.onOwnerPointerEnter);
-            owner.addEventListener(
-                'pointerleave',
-                this.onInteractivePointerLeave
-            );
+            owner.addEventListener('pointerleave', this.onInteractivePointerLeave);
             owner.addEventListener('click', this.onOwnerClick);
         }
     }
@@ -270,7 +244,7 @@ export default class TooltipElement extends HTMLElement {
             return;
         }
 
-        this.afterDelay(this.hide);
+        this.afterDelay(() => this.hide());
     };
 
     private onOwnerClick = (): void => {
@@ -280,19 +254,13 @@ export default class TooltipElement extends HTMLElement {
     private afterDelay(callback: () => void) {
         clearTimeout(this.timeout);
         const delay = parseInt(this.getAttribute('delay') || '');
-        this.timeout = window.setTimeout(
-            callback,
-            isNaN(delay) ? TooltipElement.delay : delay
-        );
+        this.timeout = window.setTimeout(callback, isNaN(delay) ? TooltipElement.delay : delay);
     }
 
-    private containsInteractiveTarget(
-        target: EventTarget | null
-    ): target is Node {
+    private containsInteractiveTarget(target: EventTarget | null): target is Node {
         return (
             target instanceof Node &&
-            (this.contains(target) ||
-                (!!this.owner && this.owner.contains(target)))
+            (this.contains(target) || (!!this.owner && this.owner.contains(target)))
         );
     }
 
@@ -301,19 +269,15 @@ export default class TooltipElement extends HTMLElement {
 
         if (
             this.managedDescription &&
-            (this.managedDescription.owner !== owner ||
-                this.managedDescription.id !== tooltipId)
+            (this.managedDescription.owner !== owner || this.managedDescription.id !== tooltipId)
         ) {
             const managedDescription = this.managedDescription;
-            const tokens = this.getDescriptionTokens(
-                managedDescription.owner
-            ).filter((token) => token !== managedDescription.id);
+            const tokens = this.getDescriptionTokens(managedDescription.owner).filter(
+                (token) => token !== managedDescription.id,
+            );
 
             if (tokens.length) {
-                managedDescription.owner.setAttribute(
-                    'aria-describedby',
-                    tokens.join(' ')
-                );
+                managedDescription.owner.setAttribute('aria-describedby', tokens.join(' '));
             } else {
                 managedDescription.owner.removeAttribute('aria-describedby');
             }
@@ -326,17 +290,12 @@ export default class TooltipElement extends HTMLElement {
         const tokens = this.getDescriptionTokens(owner);
         if (tokens.includes(tooltipId)) return;
 
-        owner.setAttribute(
-            'aria-describedby',
-            [...tokens, tooltipId].join(' ')
-        );
+        owner.setAttribute('aria-describedby', [...tokens, tooltipId].join(' '));
         this.managedDescription = { owner, id: tooltipId };
     }
 
     private getDescriptionTokens(owner: HTMLElement): string[] {
-        return (owner.getAttribute('aria-describedby') || '')
-            .split(/\s+/)
-            .filter(Boolean);
+        return (owner.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean);
     }
 
     private ensureTooltipId(): string {
@@ -355,9 +314,6 @@ export default class TooltipElement extends HTMLElement {
     }
 
     private isOwnerDisabled(owner: HTMLElement): boolean {
-        return (
-            owner.hasAttribute('disabled') ||
-            owner.getAttribute('aria-disabled') === 'true'
-        );
+        return owner.hasAttribute('disabled') || owner.getAttribute('aria-disabled') === 'true';
     }
 }

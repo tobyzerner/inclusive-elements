@@ -1,8 +1,4 @@
-import {
-    createQueuedElementSync,
-    getLookupRoot,
-    getRovingIndexForKey,
-} from '../utils';
+import { createQueuedElementSync, getLookupRoot, getRovingIndexForKey } from '../utils';
 
 export default class MenuElement extends HTMLElement {
     public static searchDelay: number = 800;
@@ -33,7 +29,7 @@ export default class MenuElement extends HTMLElement {
                 attributes: true,
                 attributeFilter: ['role', 'tabindex'],
             },
-            () => this.syncItems()
+            () => this.syncItems(),
         );
 
         this.itemSync.observe();
@@ -57,7 +53,7 @@ export default class MenuElement extends HTMLElement {
     public attributeChangedCallback(
         name: string,
         oldValue: string | null,
-        newValue: string | null
+        newValue: string | null,
     ): void {
         if (oldValue === newValue) return;
         if (name !== 'id' && name !== 'popover') return;
@@ -70,16 +66,9 @@ export default class MenuElement extends HTMLElement {
     }
 
     private syncDocumentListeners(): void {
-        if (
-            this.isConnected &&
-            this.hasAttribute('popover') &&
-            !this.getParentMenuTrigger()
-        ) {
+        if (this.isConnected && this.hasAttribute('popover') && !this.getParentMenuTrigger()) {
             this.ownerDocument.addEventListener('click', this.onDocumentClick);
-            this.ownerDocument.addEventListener(
-                'keydown',
-                this.onDocumentKeyDown
-            );
+            this.ownerDocument.addEventListener('keydown', this.onDocumentKeyDown);
             return;
         }
 
@@ -88,10 +77,7 @@ export default class MenuElement extends HTMLElement {
 
     private removeDocumentListeners(): void {
         this.ownerDocument.removeEventListener('click', this.onDocumentClick);
-        this.ownerDocument.removeEventListener(
-            'keydown',
-            this.onDocumentKeyDown
-        );
+        this.ownerDocument.removeEventListener('keydown', this.onDocumentKeyDown);
     }
 
     private onDocumentClick = (e: MouseEvent): void => {
@@ -192,10 +178,7 @@ export default class MenuElement extends HTMLElement {
         const parentMenuTrigger = this.getParentMenuTrigger();
         const parentMenu = parentMenuTrigger?.closest<MenuElement>('ui-menu');
 
-        if (
-            parentMenu &&
-            e.key === (parentMenu.horizontal ? 'ArrowUp' : 'ArrowLeft')
-        ) {
+        if (parentMenu && e.key === (parentMenu.horizontal ? 'ArrowUp' : 'ArrowLeft')) {
             this.closeSelfAndDescendants();
             parentMenuTrigger?.focus({ preventScroll: true });
             return;
@@ -266,9 +249,9 @@ export default class MenuElement extends HTMLElement {
     }
 
     private getItems(): HTMLElement[] {
-        return Array.from(
-            this.querySelectorAll<HTMLElement>('[role^=menuitem]')
-        ).filter((item) => this.belongsToThisMenu(item));
+        return Array.from(this.querySelectorAll<HTMLElement>('[role^=menuitem]')).filter((item) =>
+            this.belongsToThisMenu(item),
+        );
     }
 
     private getEnabledItems(): HTMLElement[] {
@@ -298,9 +281,7 @@ export default class MenuElement extends HTMLElement {
         if (!(target instanceof Element)) return null;
 
         const item = target.closest<HTMLElement>('[role^=menuitem]');
-        return item && this.belongsToThisMenu(item) && this.isItemEnabled(item)
-            ? item
-            : null;
+        return item && this.belongsToThisMenu(item) && this.isItemEnabled(item) ? item : null;
     }
 
     private getRootTriggerForEvent(event: Event): HTMLElement | null {
@@ -322,31 +303,24 @@ export default class MenuElement extends HTMLElement {
 
         return Array.from(
             getLookupRoot(this).querySelectorAll<HTMLElement>(
-                `[popovertarget="${CSS.escape(this.id)}"]`
-            )
+                `[popovertarget="${CSS.escape(this.id)}"]`,
+            ),
         );
     }
 
     private getParentMenuTrigger(): HTMLElement | null {
-        return (
-            this.getTriggers().find((trigger) => trigger.closest('ui-menu')) ||
-            null
-        );
+        return this.getTriggers().find((trigger) => trigger.closest('ui-menu')) || null;
     }
 
     private getParentMenu(): MenuElement | null {
-        return (
-            this.getParentMenuTrigger()?.closest<MenuElement>('ui-menu') || null
-        );
+        return this.getParentMenuTrigger()?.closest<MenuElement>('ui-menu') || null;
     }
 
     private getSubmenu(item: HTMLElement): MenuElement | null {
         const id = item.getAttribute('popovertarget');
         if (!id) return null;
 
-        return getLookupRoot(this).querySelector<MenuElement>(
-            `ui-menu#${CSS.escape(id)}`
-        );
+        return getLookupRoot(this).querySelector<MenuElement>(`ui-menu#${CSS.escape(id)}`);
     }
 
     private openSubmenu(item: HTMLElement) {
@@ -359,9 +333,7 @@ export default class MenuElement extends HTMLElement {
     }
 
     private closeSubmenus() {
-        this.getItems().forEach((item) =>
-            this.getSubmenu(item)?.closeSelfAndDescendants()
-        );
+        this.getItems().forEach((item) => this.getSubmenu(item)?.closeSelfAndDescendants());
     }
 
     private closeSelfAndDescendants() {
@@ -383,15 +355,13 @@ export default class MenuElement extends HTMLElement {
 
     private getRootMenuTrigger(): HTMLElement | null {
         const parentMenu = this.getParentMenu();
-        return parentMenu
-            ? parentMenu.getRootMenuTrigger()
-            : this.getTriggers()[0] || null;
+        return parentMenu ? parentMenu.getRootMenuTrigger() : this.getTriggers()[0] || null;
     }
 
     private handleTypeahead(
         e: KeyboardEvent,
         items: HTMLElement[],
-        activeItem: HTMLElement | undefined
+        activeItem: HTMLElement | undefined,
     ): void {
         if (e.key === ' ') return;
         if (e.key.length > 1 || e.ctrlKey || e.metaKey || e.altKey) return;
@@ -415,9 +385,7 @@ export default class MenuElement extends HTMLElement {
 
         if (
             this.search.length > 1 &&
-            this.search
-                .split('')
-                .every((character) => character === this.search[0])
+            this.search.split('').every((character) => character === this.search[0])
         ) {
             return this.search[0];
         }
@@ -428,7 +396,7 @@ export default class MenuElement extends HTMLElement {
     private findTypeaheadMatch(
         items: HTMLElement[],
         search: string,
-        startIndex: number
+        startIndex: number,
     ): HTMLElement | undefined {
         for (let offset = 1; offset <= items.length; offset += 1) {
             const index = (startIndex + offset + items.length) % items.length;
@@ -443,9 +411,7 @@ export default class MenuElement extends HTMLElement {
     }
 
     private getItemLabel(item: HTMLElement): string {
-        return (item.getAttribute('aria-label') || item.textContent || '')
-            .trim()
-            .toLowerCase();
+        return (item.getAttribute('aria-label') || item.textContent || '').trim().toLowerCase();
     }
 
     private showPopoverWithSource(source: HTMLElement) {

@@ -1,12 +1,23 @@
-import { fileURLToPath } from 'node:url';
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vite-plus';
 
 export default defineConfig({
-    build: {
-        lib: {
-            entry: fileURLToPath(new URL('./src/index.ts', import.meta.url)),
-            formats: ['es'],
-            fileName: 'index',
+    lint: {
+        ignorePatterns: ['dist/**'],
+        options: { typeAware: true, typeCheck: true },
+    },
+    fmt: {
+        singleQuote: true,
+        ignorePatterns: ['CHANGELOG.md'],
+    },
+    test: {
+        environment: 'jsdom',
+        restoreMocks: true,
+    },
+    pack: {
+        platform: 'browser',
+        deps: {
+            alwaysBundle: ['tabbable', 'transition-kit'],
+            onlyBundle: false,
         },
     },
 });

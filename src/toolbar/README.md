@@ -30,22 +30,22 @@ window.customElements.define('ui-toolbar', ToolbarElement);
 
 ### Structure
 
--   `ui-toolbar` adds `role="toolbar"` if it is not already present.
+- `ui-toolbar` adds `role="toolbar"` if it is not already present.
 
 ### Focus Management
 
--   The toolbar itself starts as the entry point into the widget. When it receives focus, focus moves to the current managed control inside it.
--   The active control gets `tabindex="0"`. Other controls get `tabindex="-1"` so Tab leaves the toolbar instead of stepping through every control.
+- The toolbar itself starts as the entry point into the widget. When it receives focus, focus moves to the current managed control inside it.
+- The active control gets `tabindex="0"`. Other controls get `tabindex="-1"` so Tab leaves the toolbar instead of stepping through every control.
 
 ### Keyboard Navigation
 
--   By default, toolbars are horizontal. Left and Right move focus between controls and wrap at the ends.
--   Set `aria-orientation="vertical"` when the toolbar is arranged vertically. Then Up and Down move focus between controls instead.
--   Home and End move focus to the first or last control.
+- By default, toolbars are horizontal. Left and Right move focus between controls and wrap at the ends.
+- Set `aria-orientation="vertical"` when the toolbar is arranged vertically. Then Up and Down move focus between controls instead.
+- Home and End move focus to the first or last control.
 
 ### Dynamic Changes
 
--   Adding or removing controls after connection keeps the roving tabindex state in sync so the toolbar remains a single managed widget in the tab order.
+- Adding or removing controls after connection keeps the roving tabindex state in sync so the toolbar remains a single managed widget in the tab order.
 
 ## Styling
 
@@ -65,4 +65,4 @@ ui-toolbar[aria-orientation='vertical'] {
 
 ## Further Reading
 
--   [ARIA Authoring Practices Guide: Toolbar Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/)
+- [ARIA Authoring Practices Guide: Toolbar Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/)

@@ -1,17 +1,15 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
-import TabsElement from '../src/tabs/tabs';
+import { afterEach, describe, expect, it, vi } from 'vite-plus/test';
+import TabsElement from './tabs';
 
 vi.mock('tabbable', () => ({
     tabbable: (container: HTMLElement) =>
         Array.from(
-            container.querySelectorAll<HTMLElement>(
-                'button, a[href], input, select, textarea'
-            )
+            container.querySelectorAll<HTMLElement>('button, a[href], input, select, textarea'),
         ).filter(
             (element) =>
                 !element.hidden &&
                 !element.hasAttribute('disabled') &&
-                element.getAttribute('tabindex') !== '-1'
+                element.getAttribute('tabindex') !== '-1',
         ),
 }));
 
@@ -31,11 +29,13 @@ function click(target: HTMLElement): void {
     target.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 }
 
-async function createTabs(options: {
-    selectedIndex?: number;
-    vertical?: boolean;
-    panelWithButtonIndex?: number;
-} = {}) {
+async function createTabs(
+    options: {
+        selectedIndex?: number;
+        vertical?: boolean;
+        panelWithButtonIndex?: number;
+    } = {},
+) {
     const tabs = document.createElement('ui-tabs') as TabsElement;
     const tablist = document.createElement('div');
     const labels = ['Profile', 'Security', 'Billing'];

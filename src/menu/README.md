@@ -13,19 +13,12 @@ window.customElements.define('ui-menu', MenuElement);
 ```
 
 ```html
-<button type="button" popovertarget="actions-menu" aria-haspopup="menu">
-    Actions
-</button>
+<button type="button" popovertarget="actions-menu" aria-haspopup="menu">Actions</button>
 
 <ui-menu id="actions-menu" popover data-placement="bottom-start">
     <button type="button" role="menuitem">Edit</button>
     <button type="button" role="menuitem">Archive</button>
-    <button
-        type="button"
-        role="menuitem"
-        popovertarget="more-menu"
-        aria-haspopup="menu"
-    >
+    <button type="button" role="menuitem" popovertarget="more-menu" aria-haspopup="menu">
         More
     </button>
 </ui-menu>
@@ -38,38 +31,38 @@ window.customElements.define('ui-menu', MenuElement);
 
 ## Platform Requirements
 
--   Requires modern browser support for the Popover API.
--   The styling examples use CSS anchor positioning.
+- Requires modern browser support for the Popover API.
+- The styling examples use CSS anchor positioning.
 
 ## Behavior
 
 ### Structure
 
--   Add `popover` to the root `<ui-menu>` and point a button at it with `popovertarget` and `aria-haspopup="menu"`.
--   Give direct children a menu item role such as `role="menuitem"`. `ui-menu` adds `role="menu"` and `tabindex="-1"` to the menu itself and manages direct menuitem children with `tabindex="-1"` as well.
+- Add `popover` to the root `<ui-menu>` and point a button at it with `popovertarget` and `aria-haspopup="menu"`.
+- Give direct children a menu item role such as `role="menuitem"`. `ui-menu` adds `role="menu"` and `tabindex="-1"` to the menu itself and manages direct menuitem children with `tabindex="-1"` as well.
 
 ### Navigation
 
--   By default, menus are vertical. Arrow Down and Arrow Up move through the enabled items and wrap at the ends.
--   Pressing Arrow Down or Arrow Up on the root trigger opens the menu and focuses the first or last enabled item.
--   Typeahead matches and moves focus to enabled items by their `aria-label` when present, otherwise by their text content.
+- By default, menus are vertical. Arrow Down and Arrow Up move through the enabled items and wrap at the ends.
+- Pressing Arrow Down or Arrow Up on the root trigger opens the menu and focuses the first or last enabled item.
+- Typeahead matches and moves focus to enabled items by their `aria-label` when present, otherwise by their text content.
 
 ### Horizontal Menus
 
--   To make a horizontal popup menu, set `aria-orientation="horizontal"` on `<ui-menu>`. This keeps the element a `menu`, not a `menubar`, and works well for patterns such as reaction pickers.
--   In a horizontal popup menu, Left and Right move through the enabled items and wrap at the ends.
+- To make a horizontal popup menu, set `aria-orientation="horizontal"` on `<ui-menu>`. This keeps the element a `menu`, not a `menubar`, and works well for patterns such as reaction pickers.
+- In a horizontal popup menu, Left and Right move through the enabled items and wrap at the ends.
 
 ### Submenus
 
--   To create a submenu, make a menu item that points at another `<ui-menu>` with `popovertarget` and `aria-haspopup="menu"`.
--   Submenus open on click, hover, Enter, or Space, Right Arrow in vertical menus, and Down Arrow in horizontal menus.
--   Submenus close with Left Arrow in vertical menus and Up Arrow in horizontal menus.
+- To create a submenu, make a menu item that points at another `<ui-menu>` with `popovertarget` and `aria-haspopup="menu"`.
+- Submenus open on click, hover, Enter, or Space, Right Arrow in vertical menus, and Down Arrow in horizontal menus.
+- Submenus close with Left Arrow in vertical menus and Up Arrow in horizontal menus.
 
 ### Closing
 
--   Clicking a regular menu item closes the open menu tree.
--   Escape also closes the open menu tree.
--   Tab closes the open menu tree before normal tab order continues.
+- Clicking a regular menu item closes the open menu tree.
+- Escape also closes the open menu tree.
+- Tab closes the open menu tree before normal tab order continues.
 
 ## API
 
@@ -99,5 +92,5 @@ MenuElement.searchDelay = 800;
 
 ## Further Reading
 
--   [ARIA Authoring Practices Guide: Menu and Menubar Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/)
--   [MDN: Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API/Using)
+- [ARIA Authoring Practices Guide: Menu and Menubar Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/)
+- [MDN: Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API/Using)

@@ -29,21 +29,21 @@ alerts.speak('Hello stranger!');
 
 ### Container
 
--   `<ui-alerts>` is the container and timing manager for a stack of alert elements.
--   Any alerts already present as children when the element connects are reprocessed in place so they are announced and animated.
+- `<ui-alerts>` is the container and timing manager for a stack of alert elements.
+- Any alerts already present as children when the element connects are reprocessed in place so they are announced and animated.
 
 ### Announcement Semantics
 
--   Each alert can be announced politely or assertively.
--   `show(..., { politeness })` takes precedence. Otherwise, existing authored live-region semantics on the alert are preserved before falling back to the element default.
--   Polite alerts use `role="status"` and `aria-live="polite"`.
--   Assertive alerts use `role="alert"` and `aria-live="assertive"`.
+- Each alert can be announced politely or assertively.
+- `show(..., { politeness })` takes precedence. Otherwise, existing authored live-region semantics on the alert are preserved before falling back to the element default.
+- Polite alerts use `role="status"` and `aria-live="polite"`.
+- Assertive alerts use `role="alert"` and `aria-live="assertive"`.
 
 ### Timing And Replacement
 
--   Alerts auto-dismiss after their configured duration.
--   Hovering or focusing an alert clears its dismissal timer, and the full duration starts again when pointer or focus leaves the alert.
--   Showing a new alert with an existing `key` dismisses the previous alert with that key before the new one is announced.
+- Alerts auto-dismiss after their configured duration.
+- Hovering or focusing an alert clears its dismissal timer, and the full duration starts again when pointer or focus leaves the alert.
+- Showing a new alert with an existing `key` dismisses the previous alert with that key before the new one is announced.
 
 ## API
 
@@ -90,9 +90,9 @@ alerts.speak(message, { politeness: 'polite' });
 
 `ui-alerts` is unstyled. The supported animation hooks are:
 
--   New alerts receive `enter-*` classes so CSS can animate them in.
--   Dismissed alerts animate out using `leave-*` classes and are then removed.
--   Existing alerts animate into their new positions using the `move` class.
+- New alerts receive `enter-*` classes so CSS can animate them in.
+- Dismissed alerts animate out using `leave-*` classes and are then removed.
+- Existing alerts animate into their new positions using the `move` class.
 
 ```css
 ui-alerts {
@@ -113,7 +113,9 @@ ui-alerts > * {
     ui-alerts > .enter-active,
     ui-alerts > .leave-active,
     ui-alerts > .move {
-        transition: opacity 0.2s ease, transform 0.2s ease;
+        transition:
+            opacity 0.2s ease,
+            transform 0.2s ease;
     }
 
     ui-alerts > .move {
@@ -130,4 +132,4 @@ ui-alerts > * {
 
 ## Further Reading
 
--   [ARIA Authoring Practices Guide: Alert Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/alert/)
+- [ARIA Authoring Practices Guide: Alert Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/alert/)

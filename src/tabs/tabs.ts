@@ -31,7 +31,7 @@ export default class TabsElement extends HTMLElement {
                     attributes: true,
                     attributeFilter: ['role', 'aria-selected'],
                 },
-                () => this.syncStructure()
+                () => this.syncStructure(),
             );
         }
 
@@ -89,9 +89,9 @@ export default class TabsElement extends HTMLElement {
     }
 
     private get tablist(): HTMLElement | undefined {
-        return Array.from(
-            this.querySelectorAll<HTMLElement>('[role=tablist]')
-        ).find((el) => el.closest('ui-tabs') === this);
+        return Array.from(this.querySelectorAll<HTMLElement>('[role=tablist]')).find(
+            (el) => el.closest('ui-tabs') === this,
+        );
     }
 
     private tabPairs(): TabPair[] {
@@ -101,13 +101,11 @@ export default class TabsElement extends HTMLElement {
             return [];
         }
 
-        const tabs = Array.from(
-            tablist.querySelectorAll<HTMLElement>('[role=tab]')
-        );
+        const tabs = Array.from(tablist.querySelectorAll<HTMLElement>('[role=tab]'));
 
-        const panels = Array.from(
-            this.querySelectorAll<HTMLElement>('[role=tabpanel]')
-        ).filter((el) => el.closest('ui-tabs') === this);
+        const panels = Array.from(this.querySelectorAll<HTMLElement>('[role=tabpanel]')).filter(
+            (el) => el.closest('ui-tabs') === this,
+        );
 
         tabs.forEach((tab, index) => {
             if (!tab.id) {
@@ -134,17 +132,12 @@ export default class TabsElement extends HTMLElement {
     }
 
     private getSelectedIndex(pairs: TabPair[], fallback: number = -1): number {
-        const index = pairs.findIndex(
-            ({ tab }) => tab.getAttribute('aria-selected') === 'true'
-        );
+        const index = pairs.findIndex(({ tab }) => tab.getAttribute('aria-selected') === 'true');
 
         return index === -1 ? fallback : index;
     }
 
-    private getEventTabIndex(
-        target: EventTarget | null,
-        pairs: TabPair[]
-    ): number {
+    private getEventTabIndex(target: EventTarget | null, pairs: TabPair[]): number {
         if (!(target instanceof Element)) return -1;
 
         const tab = target.closest<HTMLElement>('[role=tab]');
@@ -154,7 +147,7 @@ export default class TabsElement extends HTMLElement {
     private applySelection(
         pairs: TabPair[],
         index: number,
-        options: SelectTabOptions = {}
+        options: SelectTabOptions = {},
     ): boolean {
         const { focus = false, emit = true } = options;
 
@@ -196,11 +189,7 @@ export default class TabsElement extends HTMLElement {
     private syncPanelTabindex(panel: HTMLElement, selected: boolean): void {
         const tabbableDescendants = tabbable(panel).filter((el) => el !== panel);
 
-        if (
-            selected &&
-            !this.hasAuthorManagedTabindex(panel) &&
-            tabbableDescendants.length === 0
-        ) {
+        if (selected && !this.hasAuthorManagedTabindex(panel) && tabbableDescendants.length === 0) {
             panel.setAttribute('tabindex', '0');
             this.managedPanelTabindex.add(panel);
             return;
@@ -213,9 +202,6 @@ export default class TabsElement extends HTMLElement {
     }
 
     private hasAuthorManagedTabindex(panel: HTMLElement): boolean {
-        return (
-            panel.hasAttribute('tabindex') &&
-            !this.managedPanelTabindex.has(panel)
-        );
+        return panel.hasAttribute('tabindex') && !this.managedPanelTabindex.has(panel);
     }
 }

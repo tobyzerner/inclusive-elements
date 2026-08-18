@@ -1,20 +1,14 @@
 {
     "compilerOptions": {
         "target": "ESNext",
-        "useDefineForClassFields": true,
         "module": "ESNext",
         "lib": ["ESNext", "DOM", "DOM.Iterable"],
-        "moduleResolution": "Node",
+        "moduleResolution": "Bundler",
         "strict": true,
-        "sourceMap": true,
-        "resolveJsonModule": true,
         "isolatedModules": true,
-        "esModuleInterop": true,
         "noUnusedLocals": true,
         "noImplicitReturns": true,
-        "skipLibCheck": true,
-        "declaration": true,
-        "declarationDir": "dist/types"
+        "skipLibCheck": true
     },
     "include": ["src"]
 }

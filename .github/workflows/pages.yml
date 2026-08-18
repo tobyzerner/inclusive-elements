@@ -35,6 +35,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Check code
+        run: pnpm check
+
+      - name: Run tests
+        run: pnpm test
+
       - name: Prepare Pages artifact
         run: |
           mkdir -p _site

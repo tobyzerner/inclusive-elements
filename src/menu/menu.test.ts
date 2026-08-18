@@ -1,5 +1,5 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import MenuElement from '../src/menu/menu';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vite-plus/test';
+import MenuElement from './menu';
 
 if (!customElements.get('ui-menu')) {
     customElements.define('ui-menu', MenuElement);
@@ -62,7 +62,7 @@ function enhancePopover(menu: TestMenu): TestMenu {
 
 async function createMenu(
     labels: string[] = ['Edit', 'Archive', 'Delete'],
-    attributes: Record<string, string> = {}
+    attributes: Record<string, string> = {},
 ) {
     const trigger = createButton('Actions', {
         popovertarget: 'actions-menu',
@@ -92,7 +92,7 @@ async function createMenu(
 async function createMenuWithSubmenu(horizontal = false) {
     const { trigger, menu, items } = await createMenu(
         ['Edit', 'More', 'Delete'],
-        horizontal ? { 'aria-orientation': 'horizontal' } : {}
+        horizontal ? { 'aria-orientation': 'horizontal' } : {},
     );
     const submenuTrigger = items[1];
     const submenu = enhancePopover(document.createElement('ui-menu') as TestMenu);
@@ -222,8 +222,7 @@ describe('MenuElement', () => {
     });
 
     it('supports closing a vertical submenu with Left Arrow', async () => {
-        const { menu, submenuTrigger, submenu, submenuItems } =
-            await createMenuWithSubmenu();
+        const { menu, submenuTrigger, submenu, submenuItems } = await createMenuWithSubmenu();
 
         menu.showPopover();
         submenuTrigger.focus();
@@ -248,8 +247,7 @@ describe('MenuElement', () => {
     });
 
     it('supports opening submenus with Enter and Space', async () => {
-        const { menu, submenuTrigger, submenu, submenuItems } =
-            await createMenuWithSubmenu();
+        const { menu, submenuTrigger, submenu, submenuItems } = await createMenuWithSubmenu();
 
         menu.showPopover();
         submenuTrigger.focus();
@@ -267,8 +265,7 @@ describe('MenuElement', () => {
     });
 
     it('supports hover-driven submenu changes', async () => {
-        const { menu, items, submenuTrigger, submenu } =
-            await createMenuWithSubmenu();
+        const { menu, items, submenuTrigger, submenu } = await createMenuWithSubmenu();
 
         menu.showPopover();
         hover(submenuTrigger);
@@ -318,11 +315,7 @@ describe('MenuElement', () => {
     });
 
     it('supports typeahead from the current item with wrapping and repeated characters', async () => {
-        const { menu, items } = await createMenu([
-            'Apple',
-            'Banana',
-            'Blueberry',
-        ]);
+        const { menu, items } = await createMenu(['Apple', 'Banana', 'Blueberry']);
 
         menu.showPopover();
         items[1].focus();
@@ -346,21 +339,19 @@ describe('MenuElement', () => {
 
         expect(addSpy).toHaveBeenCalledWith(
             'click',
-            (menu as unknown as { onDocumentClick: EventListener }).onDocumentClick
+            (menu as unknown as { onDocumentClick: EventListener }).onDocumentClick,
         );
         expect(addSpy).toHaveBeenCalledWith(
             'keydown',
-            (menu as unknown as { onDocumentKeyDown: EventListener }).onDocumentKeyDown
+            (menu as unknown as { onDocumentKeyDown: EventListener }).onDocumentKeyDown,
         );
         expect(addSpy).not.toHaveBeenCalledWith(
             'click',
-            (submenu as unknown as { onDocumentClick: EventListener })
-                .onDocumentClick
+            (submenu as unknown as { onDocumentClick: EventListener }).onDocumentClick,
         );
         expect(addSpy).not.toHaveBeenCalledWith(
             'keydown',
-            (submenu as unknown as { onDocumentKeyDown: EventListener })
-                .onDocumentKeyDown
+            (submenu as unknown as { onDocumentKeyDown: EventListener }).onDocumentKeyDown,
         );
     });
 });

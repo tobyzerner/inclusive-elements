@@ -41,26 +41,26 @@ window.customElements.define('ui-tabs', TabsElement);
 
 ### Structure
 
--   Add one descendant with `role="tablist"`. Use `button` elements with `role="tab"` inside it. Panels are read from owned descendants with `role="tabpanel"`, and `ui-tabs` pairs them strictly by document order.
--   For initialized pairs, `ui-tabs` preserves existing `id` values where present, fills in missing `id` values, and normalizes `aria-controls` and `aria-labelledby` so each ordered pair stays wired together.
+- Add one descendant with `role="tablist"`. Use `button` elements with `role="tab"` inside it. Panels are read from owned descendants with `role="tabpanel"`, and `ui-tabs` pairs them strictly by document order.
+- For initialized pairs, `ui-tabs` preserves existing `id` values where present, fills in missing `id` values, and normalizes `aria-controls` and `aria-labelledby` so each ordered pair stays wired together.
 
 ### Selection And Panels
 
--   Set `aria-selected="true"` on the tab that should be active by default. If none is marked selected, the first tab is selected automatically when the element connects.
--   The active tab gets `aria-selected="true"` and stays in the normal tab order. Inactive tabs get `aria-selected="false"` and `tabindex="-1"`.
--   Only the active panel remains visible. Other panels get `hidden = true`.
--   If the active panel has no tabbable content and no author-provided `tabindex`, `ui-tabs` gives the panel `tabindex="0"` so keyboard users can still reach it.
--   The element dispatches a `change` event on the `<ui-tabs>` element when user interaction or `selectTab()` changes the active tab.
+- Set `aria-selected="true"` on the tab that should be active by default. If none is marked selected, the first tab is selected automatically when the element connects.
+- The active tab gets `aria-selected="true"` and stays in the normal tab order. Inactive tabs get `aria-selected="false"` and `tabindex="-1"`.
+- Only the active panel remains visible. Other panels get `hidden = true`.
+- If the active panel has no tabbable content and no author-provided `tabindex`, `ui-tabs` gives the panel `tabindex="0"` so keyboard users can still reach it.
+- The element dispatches a `change` event on the `<ui-tabs>` element when user interaction or `selectTab()` changes the active tab.
 
 ### Keyboard Navigation
 
--   In a horizontal tablist, Left and Right move between tabs and wrap at the ends. Home and End jump to the first or last tab.
--   In a vertical tablist, set `aria-orientation="vertical"` on the tablist. Then Up and Down move between tabs instead of Left and Right.
--   Moving focus with the keyboard automatically activates the newly focused tab.
+- In a horizontal tablist, Left and Right move between tabs and wrap at the ends. Home and End jump to the first or last tab.
+- In a vertical tablist, set `aria-orientation="vertical"` on the tablist. Then Up and Down move between tabs instead of Left and Right.
+- Moving focus with the keyboard automatically activates the newly focused tab.
 
 ### Dynamic Changes
 
--   Adding, removing, or re-roleing tabs and panels after connection automatically re-syncs the ordered pairs. The current selected tab is preserved when its ordered slot still has a matching panel.
+- Adding, removing, or re-roleing tabs and panels after connection automatically re-syncs the ordered pairs. The current selected tab is preserved when its ordered slot still has a matching panel.
 
 ## API
 
@@ -87,4 +87,4 @@ tabs.selectTab(index, {
 
 ## Further Reading
 
--   [ARIA Authoring Practices Guide: Tabs Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/)
+- [ARIA Authoring Practices Guide: Tabs Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/)

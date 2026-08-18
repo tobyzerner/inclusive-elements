@@ -94,7 +94,7 @@ export default class AlertsElement extends HTMLElement {
     private dismissAlert(el: HTMLElement) {
         void move(
             this.getAlerts().filter((alert) => alert !== el),
-            () => this.leaveAlert(el)
+            () => this.leaveAlert(el),
         );
     }
 
@@ -115,7 +115,7 @@ export default class AlertsElement extends HTMLElement {
         if (duration > 0) {
             this.timeouts.set(
                 el,
-                window.setTimeout(() => this.dismiss(el), duration)
+                window.setTimeout(() => this.dismiss(el), duration),
             );
         }
     }
@@ -138,16 +138,12 @@ export default class AlertsElement extends HTMLElement {
 
     private handleInteraction(
         event: FocusEvent | MouseEvent,
-        action: (alert: HTMLElement) => void
+        action: (alert: HTMLElement) => void,
     ): void {
         const alert = this.getAlertFromTarget(event.target);
         if (!alert) return;
 
-        if (
-            event.relatedTarget instanceof Node &&
-            alert.contains(event.relatedTarget)
-        )
-            return;
+        if (event.relatedTarget instanceof Node && alert.contains(event.relatedTarget)) return;
 
         action(alert);
     }
@@ -156,14 +152,9 @@ export default class AlertsElement extends HTMLElement {
         return Array.from(this.children, (child) => child as HTMLElement);
     }
 
-    private syncAlertPoliteness(
-        el: HTMLElement,
-        politeness: AlertPoliteness | undefined
-    ): void {
+    private syncAlertPoliteness(el: HTMLElement, politeness: AlertPoliteness | undefined): void {
         const resolvedPoliteness =
-            politeness ||
-            this.getAuthoredPoliteness(el) ||
-            AlertsElement.politeness;
+            politeness || this.getAuthoredPoliteness(el) || AlertsElement.politeness;
 
         if (resolvedPoliteness === 'assertive') {
             el.setAttribute('role', 'alert');
@@ -175,20 +166,12 @@ export default class AlertsElement extends HTMLElement {
         el.setAttribute('aria-live', 'polite');
     }
 
-    private getAuthoredPoliteness(
-        el: HTMLElement
-    ): AlertPoliteness | undefined {
-        if (
-            el.getAttribute('role') === 'alert' ||
-            el.getAttribute('aria-live') === 'assertive'
-        ) {
+    private getAuthoredPoliteness(el: HTMLElement): AlertPoliteness | undefined {
+        if (el.getAttribute('role') === 'alert' || el.getAttribute('aria-live') === 'assertive') {
             return 'assertive';
         }
 
-        if (
-            el.getAttribute('role') === 'status' ||
-            el.getAttribute('aria-live') === 'polite'
-        ) {
+        if (el.getAttribute('role') === 'status' || el.getAttribute('aria-live') === 'polite') {
             return 'polite';
         }
 
@@ -201,7 +184,7 @@ export default class AlertsElement extends HTMLElement {
         return (
             Array.from(this.children).find(
                 (child): child is HTMLElement =>
-                    child instanceof HTMLElement && child.contains(target)
+                    child instanceof HTMLElement && child.contains(target),
             ) || null
         );
     }

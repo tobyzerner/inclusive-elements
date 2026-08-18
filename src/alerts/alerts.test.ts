@@ -1,6 +1,6 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { AlertOptions } from '../src/alerts/alerts';
-import AlertsElement from '../src/alerts/alerts';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vite-plus/test';
+import type { AlertOptions } from './alerts';
+import AlertsElement from './alerts';
 
 const transitionKit = vi.hoisted(() => {
     return {
@@ -99,7 +99,7 @@ describe('AlertsElement', () => {
             new MouseEvent('mouseout', {
                 bubbles: true,
                 relatedTarget: document.body,
-            })
+            }),
         );
         vi.advanceTimersByTime(100);
         await flushMicrotasks();
@@ -129,7 +129,7 @@ describe('AlertsElement', () => {
             new FocusEvent('focusout', {
                 bubbles: true,
                 relatedTarget: document.body,
-            })
+            }),
         );
         vi.advanceTimersByTime(100);
         await flushMicrotasks();

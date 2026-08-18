@@ -14,20 +14,20 @@
 
 ## Platform Requirements
 
--   Requires modern browser support for the Popover API.
--   The styling examples use CSS anchor positioning.
+- Requires modern browser support for the Popover API.
+- The styling examples use CSS anchor positioning.
 
 ## Behavior
 
--   The button uses `popovertarget` to control the popover surface.
--   The browser manages opening, closing, and light dismiss behavior for the popover.
--   CSS anchor positioning can be used to place the popover relative to its trigger.
+- The button uses `popovertarget` to control the popover surface.
+- The browser manages opening, closing, and light dismiss behavior for the popover.
+- CSS anchor positioning can be used to place the popover relative to its trigger.
 
 ## Accessibility Notes
 
--   `popover` gives you a surface and lifecycle, not a semantic role. Choose markup and ARIA that match the actual pattern, such as menu, tooltip, or generic descriptive content.
--   Make sure the trigger has an accessible name and clearly communicates what will open.
--   Keep the content structure appropriate to the job. A simple help popover can stay plain, while interactive or decision-heavy content may be better served by a dialog.
+- `popover` gives you a surface and lifecycle, not a semantic role. Choose markup and ARIA that match the actual pattern, such as menu, tooltip, or generic descriptive content.
+- Make sure the trigger has an accessible name and clearly communicates what will open.
+- Keep the content structure appropriate to the job. A simple help popover can stay plain, while interactive or decision-heavy content may be better served by a dialog.
 
 ## Styling
 
@@ -90,5 +90,5 @@ As a simple recommendation, you can style all popover surfaces with the `popover
 
 ## Further Reading
 
--   [MDN: Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API/Using)
--   [MDN: CSS Anchor Positioning](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning)
+- [MDN: Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API/Using)
+- [MDN: CSS Anchor Positioning](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning)

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -56,18 +56,28 @@
 
       button,
       summary,
+      input,
       dialog,
       ui-menu[popover],
       ui-tooltip[popover],
+      ui-combobox [data-combobox-control],
+      ui-combobox [role='listbox'],
       ui-alerts > * {
         border: 1px solid #1d1b18;
         border-radius: 0.75rem;
       }
 
       button,
-      summary {
+      summary,
+      input,
+      ui-combobox [data-combobox-control] {
         padding: 0.65rem 0.9rem;
         background: #fff;
+        font: inherit;
+      }
+
+      label {
+        font-weight: 600;
       }
 
       details {
@@ -131,6 +141,106 @@
       ui-menu button:hover,
       ui-menu button:focus {
         background: #efe7da;
+      }
+
+      .fields {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
+        gap: 1rem;
+      }
+
+      .field-hint {
+        margin: 0 0 0.65rem;
+        color: #746c61;
+        font-size: 0.875rem;
+      }
+
+      ui-combobox [data-combobox-control] {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        align-items: center;
+      }
+
+      ui-combobox [data-combobox-control] [role='combobox'] {
+        min-width: 8rem;
+        flex: 1;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        outline: 0;
+        background: transparent;
+      }
+
+      input:focus-visible,
+      ui-combobox [data-combobox-control]:focus-within {
+        outline: 2px solid blue;
+      }
+
+      ui-combobox:has(select) [data-combobox-control]::after {
+        content: '▼';
+        font-size: 0.8em;
+        line-height: 1;
+      }
+
+      ui-combobox:has(select) [data-combobox-control]:has([aria-expanded='false']),
+      ui-combobox:has(select) [aria-expanded='false'] {
+        cursor: pointer;
+      }
+
+      ui-combobox > [role='combobox'] {
+        width: 100%;
+      }
+
+      ui-combobox [role='listbox'] {
+        width: anchor-size(width);
+        max-width: calc(100vw - 2rem);
+        max-height: 16rem;
+        overflow: auto;
+        padding: 0.35rem;
+        background: #fff;
+        position-area: block-end center;
+      }
+
+      ui-combobox [role='option'] {
+        padding: 0.55rem 0.65rem;
+        cursor: pointer;
+      }
+
+      ui-combobox [role='option'][data-active],
+      ui-combobox [role='option']:hover {
+        background: #efe7da;
+      }
+
+      ui-combobox [role='option'][aria-selected='true'] {
+        font-weight: 700;
+      }
+
+      ui-combobox [role='option'][data-placeholder] {
+        color: #746c61;
+      }
+
+      ui-combobox [data-combobox-tokens] {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2px;
+      }
+
+      ui-combobox [data-combobox-token] {
+        padding: 0 0.5em;
+        border-radius: 999rem;
+        background: #e3f2ec;
+      }
+
+      ui-combobox [data-combobox-token]:focus-within {
+        background: #cfe9df;
+      }
+
+      ui-combobox [data-combobox-token-remove] {
+        padding: 0;
+        border: 0;
+        outline: 0;
+        background: transparent;
       }
 
       .popover-demo {
@@ -224,7 +334,9 @@
 
         ui-alerts > .enter-active,
         ui-alerts > .leave-active {
-          transition: opacity 0.3s ease, transform 0.3s ease;
+          transition:
+            opacity 0.3s ease,
+            transform 0.3s ease;
         }
 
         ui-alerts > .move {
@@ -261,17 +373,15 @@
       }
     </style>
   </head>
+
   <body>
     <main>
       <h1>inclusive-elements</h1>
+      <p>Native HTML first, with runtime only where the platform still benefits from help.</p>
       <p>
-        Native HTML first, with runtime only where the platform still benefits
-        from help.
-      </p>
-      <p>
-        Each section answers the same question: if you need this pattern today,
-        what is the recommended implementation path with modern HTML plus
-        `inclusive-elements` where it still adds value?
+        Each section answers the same question: if you need this pattern today, what is the
+        recommended implementation path with modern HTML plus `inclusive-elements` where it still
+        adds value?
       </p>
 
       <section>
@@ -315,24 +425,17 @@
         <h2>Menu</h2>
         <p>
           Recommended implementation: a native popover surface plus
-          <code>ui-menu</code> for arrow-key navigation, typeahead, submenu
-          behavior, and horizontal popup menus such as reaction pickers.
+          <code>ui-menu</code> for arrow-key navigation, typeahead, submenu behavior, and horizontal
+          popup menus such as reaction pickers.
         </p>
 
         <div class="cluster">
-          <button popovertarget="actions-menu" aria-haspopup="menu">
-            Actions
-          </button>
+          <button popovertarget="actions-menu" aria-haspopup="menu">Actions</button>
 
           <ui-menu id="actions-menu" popover data-placement="bottom-start">
             <button role="menuitem">Edit</button>
             <button role="menuitem">Archive</button>
-            <button
-              id="more-item"
-              role="menuitem"
-              aria-haspopup="menu"
-              popovertarget="more-menu"
-            >
+            <button id="more-item" role="menuitem" aria-haspopup="menu" popovertarget="more-menu">
               More
             </button>
           </ui-menu>
@@ -342,9 +445,7 @@
             <button role="menuitem">Delete</button>
           </ui-menu>
 
-          <button popovertarget="reactions-menu" aria-haspopup="menu">
-            React
-          </button>
+          <button popovertarget="reactions-menu" aria-haspopup="menu">React</button>
 
           <ui-menu
             id="reactions-menu"
@@ -361,21 +462,76 @@
 
       <section>
         <h2>Popover</h2>
-        <p>
-          Recommended implementation: native <code>popover</code> with CSS
-          anchor positioning.
-        </p>
+        <p>Recommended implementation: native <code>popover</code> with CSS anchor positioning.</p>
 
         <div class="cluster">
           <button popovertarget="info-popover">More info</button>
-          <div
-            id="info-popover"
-            popover
-            data-placement="bottom-start"
-            class="popover-demo"
-          >
-            This pattern no longer needs a library wrapper. Use the platform
-            directly.
+          <div id="info-popover" popover data-placement="bottom-start" class="popover-demo">
+            This pattern no longer needs a library wrapper. Use the platform directly.
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Combobox</h2>
+        <p>
+          Recommended implementation: <code>ui-combobox</code> to progressively enhance native
+          source controls while keeping their form behavior.
+        </p>
+
+        <div class="fields">
+          <div>
+            <label for="country">Country</label>
+            <p id="country-help" class="field-hint">Choose one option.</p>
+            <ui-combobox>
+              <select id="country" name="country" aria-describedby="country-help">
+                <option value="">Choose a country</option>
+                <option value="au" selected>Australia</option>
+                <option value="ca">Canada</option>
+                <option value="jp">Japan</option>
+                <option value="nz">New Zealand</option>
+                <option value="uk">United Kingdom</option>
+                <option value="us">United States</option>
+              </select>
+            </ui-combobox>
+          </div>
+
+          <div>
+            <label for="specialties">Specialties</label>
+            <p id="specialties-help" class="field-hint">Type to filter, then select several.</p>
+            <ui-combobox>
+              <select
+                id="specialties"
+                name="specialties[]"
+                aria-describedby="specialties-help"
+                multiple
+              >
+                <option value="cardiology">Cardiology</option>
+                <option value="dermatology">Dermatology</option>
+                <option value="emergency">Emergency medicine</option>
+                <option value="paediatrics">Paediatrics</option>
+                <option value="psychiatry">Psychiatry</option>
+                <option value="radiology">Radiology</option>
+              </select>
+            </ui-combobox>
+          </div>
+
+          <div>
+            <label for="city">City</label>
+            <p id="city-help" class="field-hint">Choose a suggestion or enter another city.</p>
+            <ui-combobox>
+              <input id="city" name="city" type="text" list="cities" aria-describedby="city-help" />
+              <datalist id="cities">
+                <option value="Adelaide"></option>
+                <option value="Brisbane"></option>
+                <option value="Canberra"></option>
+                <option value="Darwin"></option>
+                <option value="Hobart"></option>
+                <option value="Melbourne"></option>
+                <option value="Perth"></option>
+                <option value="Sydney"></option>
+              </datalist>
+            </ui-combobox>
           </div>
         </div>
       </section>
@@ -384,15 +540,13 @@
         <h2>Tooltip</h2>
         <p>
           Recommended implementation: a native hint popover plus
-          <code>ui-tooltip</code> as an adjacent sibling, with optional
-          <code>for</code> when you need an explicit target.
+          <code>ui-tooltip</code> as an adjacent sibling, with optional <code>for</code> when you
+          need an explicit target.
         </p>
 
         <div class="cluster">
           <button type="button">Save</button>
-          <ui-tooltip popover="hint" data-placement="top"
-            >Save changes</ui-tooltip
-          >
+          <ui-tooltip popover="hint" data-placement="top">Save changes</ui-tooltip>
 
           <button id="share-button" type="button">Share</button>
           <ui-tooltip for="share-button" popover="hint" data-placement="top">
@@ -404,8 +558,8 @@
       <section>
         <h2>Dialog</h2>
         <p>
-          Recommended implementation: native <code>&lt;dialog&gt;</code> for
-          modality and focus management.
+          Recommended implementation: native <code>&lt;dialog&gt;</code> for modality and focus
+          management.
         </p>
 
         <div class="cluster">
@@ -425,9 +579,8 @@
       <section>
         <h2>Alerts</h2>
         <p>
-          Recommended implementation: <code>ui-alerts</code> when the platform
-          still needs runtime help for announcement orchestration and timed
-          dismissal.
+          Recommended implementation: <code>ui-alerts</code> when the platform still needs runtime
+          help for announcement orchestration and timed dismissal.
         </p>
 
         <div class="cluster">
@@ -439,8 +592,8 @@
       <section>
         <h2>Tabs</h2>
         <p>
-          Recommended implementation: <code>ui-tabs</code> to connect tab
-          selection, keyboard navigation, and panel visibility.
+          Recommended implementation: <code>ui-tabs</code> to connect tab selection, keyboard
+          navigation, and panel visibility.
         </p>
 
         <ui-tabs>
@@ -465,8 +618,8 @@
       <section>
         <h2>Toolbar</h2>
         <p>
-          Recommended implementation: <code>ui-toolbar</code> when a row of
-          controls should use arrow keys for focus movement.
+          Recommended implementation: <code>ui-toolbar</code> when a row of controls should use
+          arrow keys for focus movement.
         </p>
 
         <div class="cluster">
@@ -477,10 +630,7 @@
             <button type="button">Link</button>
           </ui-toolbar>
 
-          <ui-toolbar
-            aria-label="Vertical alignment"
-            aria-orientation="vertical"
-          >
+          <ui-toolbar aria-label="Vertical alignment" aria-orientation="vertical">
             <button type="button">Top</button>
             <button type="button">Middle</button>
             <button type="button">Bottom</button>
@@ -494,11 +644,10 @@
     </template>
 
     <script type="module">
-      const modulePath = import.meta.env?.DEV
-        ? './src/index.ts'
-        : './dist/index.js';
+      const modulePath = import.meta.env?.DEV ? './src/index.ts' : './dist/index.js';
       const {
         AlertsElement,
+        ComboboxElement,
         MenuElement,
         TabsElement,
         ToolbarElement,
@@ -506,6 +655,7 @@
       } = await import(modulePath);
 
       customElements.define('ui-menu', MenuElement);
+      customElements.define('ui-combobox', ComboboxElement);
       customElements.define('ui-tooltip', TooltipElement);
       customElements.define('ui-alerts', AlertsElement);
       customElements.define('ui-tabs', TabsElement);
