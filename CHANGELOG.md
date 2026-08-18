@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0-beta.1](https://github.com/tobyzerner/inclusive-elements/compare/v0.6.1...v0.7.0-beta.1) (2026-08-18)
+
+
+### Features
+
+* add combobox and migrate to Vite Plus ([a125405](https://github.com/tobyzerner/inclusive-elements/commit/a1254058569c252625b5b5f1269b1cc6cc4a8143))
+
 ### [0.6.1](https://github.com/tobyzerner/inclusive-elements/compare/v0.6.0...v0.6.1) (2026-03-23)
 
 

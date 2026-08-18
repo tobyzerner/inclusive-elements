@@ -1,6 +1,6 @@
 {
     "name": "inclusive-elements",
-    "version": "0.6.1",
+    "version": "0.7.0-beta.1",
     "description": "Accessible, lightweight, unstyled implementations of UI patterns that still need runtime help.",
     "license": "MIT",
     "repository": "tobyzerner/inclusive-elements",
