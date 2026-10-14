@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.5.6](https://github.com/tobyzerner/inclusive-elements/compare/v0.5.5...v0.5.6) (2026-10-14)
+
+
+### Bug Fixes
+
+* **modal:** fall back to content element when nothing is tabbable ([f146d30](https://github.com/tobyzerner/inclusive-elements/commit/f146d30bc658ad9e266861a26c4e78bee1791aa3))
+
 ### [0.5.5](https://github.com/tobyzerner/inclusive-elements/compare/v0.5.4...v0.5.5) (2026-03-16)
 
 
