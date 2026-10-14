@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.5.7](https://github.com/tobyzerner/inclusive-elements/compare/v0.5.6...v0.5.7) (2026-10-14)
+
+
+### Features
+
+* **modal:** add pauseFocusTrap() and resumeFocusTrap() ([ae7d803](https://github.com/tobyzerner/inclusive-elements/commit/ae7d803343ac441be281aceff041bc5097cc210b))
+
 ### [0.5.6](https://github.com/tobyzerner/inclusive-elements/compare/v0.5.5...v0.5.6) (2026-10-14)
 
 
