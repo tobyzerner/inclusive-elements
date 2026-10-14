@@ -45,6 +45,9 @@ export default class ModalElement extends HTMLElement {
             preventScroll: true,
             initialFocus: () =>
                 this.querySelector<HTMLElement>('[autofocus]') || undefined,
+            // Content that is still loading may have nothing tabbable yet. The
+            // content element is focusable itself, so trap focus there until it does.
+            fallbackFocus: () => this.content ?? this,
         });
     }
 
