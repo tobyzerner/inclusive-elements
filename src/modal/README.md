@@ -46,14 +46,17 @@ window.customElements.define('ui-modal', ModalElement);
 
 -   The dialog will be closed if:
 
-    -   The Escape key is pressed.
+    -   The Escape key is pressed within the dialog (only the topmost open modal is closed).
     -   The backdrop is clicked, unless the `<ui-modal>` element has the `static` attribute.
     -   The `open` attribute is removed, or the `close()` method is called.
 
 -   Upon closing:
+
     -   The `hidden` attribute on the dialog is reinstated.
     -   Focus will be returned to the element that was focused before the dialog was opened.
     -   The focus trap is deactivated.
+
+-   If another overlay that manages its own focus (e.g. a lightbox mounted directly in `<body>`) is opened from within the modal, call `pauseFocusTrap()` on the `<ui-modal>` element while it is open, and `resumeFocusTrap()` once it closes. While paused, the modal does not trap focus or close on Escape. If the modal is closed while paused, the trap is deactivated as normal and will be active again when the modal is reopened.
 
 ## API
 
@@ -78,6 +81,10 @@ modal.open = true;
 // Close the modal. You can also set open = false,
 // but this will bypass any `beforeclose` listeners.
 modal.close();
+
+// Temporarily stop trapping focus and handling Escape (see above).
+modal.pauseFocusTrap();
+modal.resumeFocusTrap();
 
 modal.addEventListener('open', callback);
 modal.addEventListener('beforeclose', (e) => e.preventDefault());

@@ -16,7 +16,8 @@ export default class ModalElement extends HTMLElement {
         return ['open'];
     }
 
-    private focusTrap?: FocusTrap;
+    private focusTrap: FocusTrap;
+    private focusTrapPaused: boolean = false;
     private connected: boolean = false;
 
     public constructor() {
@@ -43,11 +44,39 @@ export default class ModalElement extends HTMLElement {
             escapeDeactivates: false,
             allowOutsideClick: true,
             preventScroll: true,
-            initialFocus: () =>
-                this.querySelector<HTMLElement>('[autofocus]') || undefined,
+            // This runs after a delay on every activate and unpause, so the trap
+            // may be paused by then. If focus is already inside the modal (e.g.
+            // returned there by an overlay that has just closed), leave it.
+            initialFocus: () => {
+                if (this.focusTrap.paused) return false;
+                if (this.contains(document.activeElement)) return undefined;
+                return (
+                    this.querySelector<HTMLElement>('[autofocus]') || undefined
+                );
+            },
             // Content that is still loading may have nothing tabbable yet. The
             // content element is focusable itself, so trap focus there until it does.
             fallbackFocus: () => this.content ?? this,
+        });
+
+        this.addEventListener('keydown', (e) => {
+            // Handled here rather than with focus-trap's escapeDeactivates, which
+            // listens on document and so can't stop the event reaching the page.
+            // The trap is paused while another trap is stacked on top of it
+            // (e.g. a nested modal) or pauseFocusTrap() has been called; leave
+            // Escape to whatever is on top. Content inside the modal can also
+            // claim Escape by calling preventDefault().
+            if (
+                e.key === 'Escape' &&
+                this.open &&
+                !this.focusTrapPaused &&
+                !this.focusTrap.paused &&
+                !e.defaultPrevented
+            ) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.close();
+            }
         });
     }
 
@@ -65,14 +94,6 @@ export default class ModalElement extends HTMLElement {
         if (!this.content?.hasAttribute('tabindex')) {
             this.content?.setAttribute('tabindex', '-1');
         }
-
-        this.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && this.open) {
-                e.preventDefault();
-                e.stopPropagation();
-                this.close();
-            }
-        });
 
         if (this.open) {
             this.wasOpened();
@@ -105,6 +126,21 @@ export default class ModalElement extends HTMLElement {
         }
     }
 
+    /**
+     * Temporarily stop trapping focus and handling Escape, so that another
+     * overlay opened from within the modal (e.g. a lightbox mounted in
+     * <body>) can manage focus itself.
+     */
+    public pauseFocusTrap() {
+        this.focusTrapPaused = true;
+        this.focusTrap.pause();
+    }
+
+    public resumeFocusTrap() {
+        this.focusTrapPaused = false;
+        this.focusTrap.unpause();
+    }
+
     public attributeChangedCallback(
         name: string,
         oldValue: string,
@@ -126,7 +162,19 @@ export default class ModalElement extends HTMLElement {
 
         hello(this);
 
-        requestAnimationFrame(() => this.focusTrap?.activate());
+        requestAnimationFrame(() => {
+            if (!this.open) return;
+
+            this.focusTrap.activate();
+
+            // pause() is a no-op before activation, so apply it now. Otherwise
+            // clear any pause left over from the last open (deactivate() doesn't).
+            if (this.focusTrapPaused) {
+                this.focusTrap.pause();
+            } else {
+                this.focusTrap.unpause();
+            }
+        });
 
         this.dispatchEvent(new Event('open'));
     }
@@ -134,7 +182,8 @@ export default class ModalElement extends HTMLElement {
     private wasClosed() {
         document.documentElement.style.overflow = '';
 
-        this.focusTrap?.deactivate();
+        this.focusTrap.deactivate();
+        this.focusTrapPaused = false;
 
         goodbye(this).then(() => (this.hidden = true));
 
