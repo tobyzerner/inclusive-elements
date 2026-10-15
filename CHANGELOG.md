@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.5.8](https://github.com/tobyzerner/inclusive-elements/compare/v0.5.7...v0.5.8) (2026-10-15)
+
+
+### Bug Fixes
+
+* don't hide elements that are reopened mid-transition ([f2ff37b](https://github.com/tobyzerner/inclusive-elements/commit/f2ff37b6e649a4d50e453eefa6a45a6e033bbf42))
+
 ### [0.5.7](https://github.com/tobyzerner/inclusive-elements/compare/v0.5.6...v0.5.7) (2026-10-14)
 
 
