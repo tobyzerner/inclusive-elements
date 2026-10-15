@@ -14,12 +14,12 @@ importers:
       focus-trap:
         specifier: ^7.6.5
         version: 7.6.5
-      hello-goodbye:
-        specifier: ^0.2.2
-        version: 0.2.2
       tabbable:
         specifier: ^6.2.0
         version: 6.2.0
+      transition-kit:
+        specifier: ^1.0.0
+        version: 1.0.0
     devDependencies:
       '@release-it/conventional-changelog':
         specifier: ^5.1.1
@@ -996,9 +996,6 @@ packages:
   hasown@2.0.2:
     resolution: {integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==}
     engines: {node: '>= 0.4'}
-
-  hello-goodbye@0.2.2:
-    resolution: {integrity: sha512-9ksQQXugh+vUkcarhO33bWZ0bu6uVZBM+dTciCBq8u86chAZQolh1rc9J+r2ZzvXPKT3bJoZJhA0bf8AlBWWnQ==}
 
   hosted-git-info@2.8.9:
     resolution: {integrity: sha512-mxIDAb9Lsm6DoOJ7xH+5+X4y1LU/4Hi50L9C5sIswK3JzULS4bwk1FvjdBgvYR4bzT4tuUQiC15FE2f5HbLvYw==}
@@ -2087,6 +2084,9 @@ packages:
 
   tr46@0.0.3:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
+
+  transition-kit@1.0.0:
+    resolution: {integrity: sha512-t8ZHnjKr3JRd0LmLW5Hm4X/qs41Zjz2SRJUFT3fCAniMFw+NQNiynFdPHpqeL9E0cZiBx6675+1bjljdKuYlxg==}
 
   trim-newlines@3.0.1:
     resolution: {integrity: sha512-c1PTsA3tYrIsLGkJkzHF+w9F2EyxfXGo4UyJc4pFL++FMjnq0HJS69T3M7d//gKrFKwy429bouPescbjecU+Zw==}
@@ -3417,8 +3417,6 @@ snapshots:
     dependencies:
       function-bind: 1.1.2
 
-  hello-goodbye@0.2.2: {}
-
   hosted-git-info@2.8.9: {}
 
   hosted-git-info@4.1.0:
@@ -4540,6 +4538,8 @@ snapshots:
       is-number: 7.0.0
 
   tr46@0.0.3: {}
+
+  transition-kit@1.0.0: {}
 
   trim-newlines@3.0.1: {}
 

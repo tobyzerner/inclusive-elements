@@ -1,5 +1,5 @@
-import { cancel, goodbye, hello } from 'hello-goodbye';
-import { shouldOpenInNewTab } from '../utils';
+import { cancel } from 'transition-kit';
+import { hide, isLeaving, shouldOpenInNewTab, show } from '../utils';
 
 export default class DisclosureElement extends HTMLElement {
     static get observedAttributes() {
@@ -59,9 +59,8 @@ export default class DisclosureElement extends HTMLElement {
     }
 
     private wasOpened() {
-        if (this.content.hidden) {
-            this.content.hidden = false;
-            hello(this.content);
+        if (this.content.hidden || isLeaving(this.content)) {
+            show(this.content);
         }
 
         this.button.setAttribute('aria-expanded', 'true');
@@ -71,7 +70,7 @@ export default class DisclosureElement extends HTMLElement {
 
     private wasClosed() {
         if (!this.content.hidden) {
-            goodbye(this.content).then(() => (this.content.hidden = true));
+            hide(this.content);
         }
 
         this.button.setAttribute('aria-expanded', 'false');

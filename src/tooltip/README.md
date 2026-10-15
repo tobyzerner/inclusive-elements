@@ -61,7 +61,7 @@ TooltipElement.delay = 100;
     pointer-events: none;
 }
 
-/* Transitions can be applied to the tooltip using hello-goodbye */
+/* Transitions can be applied to the tooltip using transition-kit */
 @media (prefers-reduced-motion: no-preference) {
     .tooltip.enter-active,
     .tooltip.leave-active {

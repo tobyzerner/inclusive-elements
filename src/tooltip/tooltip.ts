@@ -1,5 +1,5 @@
 import { autoUpdate, computePosition, flip, shift } from '@floating-ui/dom';
-import { goodbye, hello } from 'hello-goodbye';
+import { hide, show } from '../utils';
 
 export default class TooltipElement extends HTMLElement {
     public static delay: number = 100;
@@ -118,8 +118,7 @@ export default class TooltipElement extends HTMLElement {
         clearTimeout(this.timeout);
 
         if (!this.showing) {
-            tooltip.hidden = false;
-            hello(tooltip);
+            show(tooltip);
             this.showing = true;
         }
 
@@ -157,9 +156,7 @@ export default class TooltipElement extends HTMLElement {
             this.showing = false;
 
             if (this.tooltip) {
-                goodbye(this.tooltip).then(() => {
-                    if (this.tooltip) this.tooltip.hidden = true;
-                });
+                hide(this.tooltip);
             }
 
             this.dispatchEvent(new Event('close'));

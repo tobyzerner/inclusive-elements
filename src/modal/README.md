@@ -109,7 +109,7 @@ ui-modal::part(backdrop) {
     background: rgba(0, 0, 0, 0.5);
 }
 
-/* Transitions can be applied to the modal and its parts using hello-goodbye */
+/* Transitions can be applied to the modal and its parts using transition-kit */
 @media (prefers-reduced-motion: no-preference) {
     ui-modal.enter-active,
     ui-modal.leave-active {

@@ -52,7 +52,7 @@ popup.addEventListener('close', callback);
 ui-popup::part(backdrop) {
 }
 
-/* Transitions can be applied to the popup using hello-goodbye */
+/* Transitions can be applied to the popup using transition-kit */
 @media (prefers-reduced-motion: no-preference) {
     ui-popup > .enter-active,
     ui-popup > .leave-active {

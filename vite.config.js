@@ -12,7 +12,7 @@ export default defineConfig({
             external: [
                 '@floating-ui/dom',
                 'focus-trap',
-                'hello-goodbye',
+                'transition-kit',
                 'tabbable',
             ],
             output: {

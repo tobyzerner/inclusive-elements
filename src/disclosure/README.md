@@ -35,7 +35,7 @@ disclosure.addEventListener('toggle', callback);
 ```
 
 ```css
-/* Transitions can be applied to the content using hello-goodbye */
+/* Transitions can be applied to the content using transition-kit */
 @media (prefers-reduced-motion: no-preference) {
     ui-disclosure > .enter-active,
     ui-disclosure > .leave-active {

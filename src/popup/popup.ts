@@ -5,9 +5,9 @@ import {
     shift,
     size,
 } from '@floating-ui/dom';
-import { cancel, goodbye, hello } from 'hello-goodbye';
+import { cancel } from 'transition-kit';
 import { focusable } from 'tabbable';
-import { shouldOpenInNewTab } from '../utils';
+import { hide, isLeaving, shouldOpenInNewTab, show } from '../utils';
 
 export default class PopupElement extends HTMLElement {
     cleanup?: () => void;
@@ -153,15 +153,13 @@ export default class PopupElement extends HTMLElement {
     }
 
     private wasOpened() {
-        if (!this.content?.hidden) return;
+        if (!this.content) return;
+        if (!this.content.hidden && !isLeaving(this.content)) return;
 
-        this.content.hidden = false;
         this.content.style.position = 'fixed';
 
-        this.backdrop.hidden = false;
-
-        hello(this.content);
-        hello(this.backdrop);
+        show(this.content);
+        show(this.backdrop);
 
         this.button?.setAttribute('aria-expanded', 'true');
 
@@ -252,10 +250,10 @@ export default class PopupElement extends HTMLElement {
 
         this.cleanup?.();
 
-        goodbye(this.backdrop).then(() => (this.backdrop.hidden = true));
+        hide(this.backdrop);
 
         if (this.content) {
-            goodbye(this.content).then(() => (this.content!.hidden = true));
+            hide(this.content);
         }
 
         this.dispatchEvent(new Event('close'));

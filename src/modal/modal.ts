@@ -1,5 +1,5 @@
 import { createFocusTrap, FocusTrap } from 'focus-trap';
-import { goodbye, hello } from 'hello-goodbye';
+import { hide, show } from '../utils';
 
 export default class ModalElement extends HTMLElement {
     public static attention: (el: Element) => void = (el) =>
@@ -158,9 +158,7 @@ export default class ModalElement extends HTMLElement {
     private async wasOpened() {
         document.documentElement.style.overflow = 'hidden';
 
-        this.hidden = false;
-
-        hello(this);
+        show(this);
 
         requestAnimationFrame(() => {
             if (!this.open) return;
@@ -185,7 +183,7 @@ export default class ModalElement extends HTMLElement {
         this.focusTrap.deactivate();
         this.focusTrapPaused = false;
 
-        goodbye(this).then(() => (this.hidden = true));
+        hide(this);
 
         this.dispatchEvent(new Event('close'));
     }
