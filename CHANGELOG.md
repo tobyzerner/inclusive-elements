@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.5.9](https://github.com/tobyzerner/inclusive-elements/compare/v0.5.8...v0.5.9) (2026-10-16)
+
+
+### Bug Fixes
+
+* **popup:** don't scroll the page when focusing content on open ([4a07ec7](https://github.com/tobyzerner/inclusive-elements/commit/4a07ec7f09a8f4cfd82be7188c62d68420fa3f33))
+
 ### [0.5.8](https://github.com/tobyzerner/inclusive-elements/compare/v0.5.7...v0.5.8) (2026-10-15)
 
 
