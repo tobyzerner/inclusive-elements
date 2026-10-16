@@ -90,7 +90,7 @@ export default class PopupElement extends HTMLElement {
             e.preventDefault();
             this.open = true;
             if (this.content) {
-                focusable(this.content)[0]?.focus();
+                focusable(this.content)[0]?.focus({ preventScroll: true });
             }
         }
     };
@@ -232,13 +232,11 @@ export default class PopupElement extends HTMLElement {
             );
         }
 
+        // Content is positioned asynchronously, so it may still have stale
+        // coordinates from a previous open. Don't let focus scroll the page.
         const autofocus =
             this.content.querySelector<HTMLElement>('[autofocus]');
-        if (autofocus) {
-            autofocus.focus();
-        } else {
-            this.content.focus();
-        }
+        (autofocus || this.content).focus({ preventScroll: true });
 
         this.dispatchEvent(new Event('open'));
     }
